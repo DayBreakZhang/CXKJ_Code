@@ -150,8 +150,8 @@ if (CXKJ_ENABLE_RCFF)
     list(APPEND CXKJ_COMPONENTS "RCFF")
 endif ()
 if(CXKJ_ENABLE_POCO)
-	add_subdirectory(poco)
-    list(APPEND CXKJ_COMPONENTS "POCO")
+	#add_subdirectory(poco)
+    #list(APPEND CXKJ_COMPONENTS "POCO")
 endif()
 
 #############################################################

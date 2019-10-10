@@ -88,11 +88,20 @@ if(MSVC)
     option(POCO_DISABLE_INTERNAL_OPENSSL "Disable internal OpensSSL binaries use" OFF)
 
     
-   
+    if((NOT POCO_DISABLE_INTERNAL_OPENSSL) AND (POCO_ENABLE_NETSSL OR POCO_ENABLE_CRYPTO OR (POCO_ENABLE_SQL_MYSQL AND MINGW)))
+      #include(UseEmbeddedOpenSSL)
+    endif()
 endif()
 
+if(WIN32)
+    option(POCO_ENABLE_NETSSL_WIN "NetSSL Windows" ON)
+endif()
 
-
+if(POCO_ENABLE_NETSSL OR POCO_ENABLE_CRYPTO OR (POCO_ENABLE_SQL_MYSQL AND MINGW))
+	find_package(OpenSSL REQUIRED)
+else()
+	find_package(OpenSSL)
+endif()
 
 if(OPENSSL_FOUND)
 	option(POCO_ENABLE_NETSSL "Enable NetSSL" ON)
