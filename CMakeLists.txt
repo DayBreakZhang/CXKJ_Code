@@ -88,6 +88,7 @@ option(CXKJ_ENABLE_ZLIB "Enable ZLIB" ON)
 option(CXKJ_ENABLE_RCFF "Enable RCFF" ON)
 option(CXKJ_ENABLE_RCFF_OPENSSL "Enable RCFF" ON)
 option(CXKJ_ENABLE_RCFF_ZLIB "Enable RCFF" ON)
+option(CXKJ_ENABLE_POCO "Enable POCO" ON)
 #===========================工程设置==========================================
 #设置编译静态库或者动态库
 if(CXKJ_STATIC)
@@ -148,7 +149,10 @@ if (CXKJ_ENABLE_RCFF)
     add_subdirectory(rcff)
     list(APPEND CXKJ_COMPONENTS "RCFF")
 endif ()
-
+if(CXKJ_ENABLE_POCO)
+	add_subdirectory(poco)
+    list(APPEND CXKJ_COMPONENTS "POCO")
+endif()
 
 #############################################################
 # Uninstall stuff see: http://www.vtk.org/Wiki/CMake_FAQ
@@ -201,10 +205,6 @@ install(
     COMPONENT
         Devel
 )
-
-# in tree build settings
-#configure_file(PocoBuildTreeSettings.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/PocoBuildTreeSettings.cmake @ONLY)
-
 # Install pkg-config files
 install(FILES ${CXKJ_PKG_CONFIG_FILES}
         DESTINATION lib${LIB_SUFFIX}/pkgconfig)
@@ -216,7 +216,7 @@ if(CXKJ_VERBOSE_MESSAGES)
     
         message(STATUS "")
         message(STATUS "Generated with config types: ${CMAKE_CONFIGURATION_TYPES}")
-        message(STATUS "Setting Poco build type - ${CMAKE_BUILD_TYPE}")
+        message(STATUS "Setting CSKJ build type - ${CMAKE_BUILD_TYPE}")
         message(STATUS "")
     
         message(STATUS "C_FLAGS:  =${CMAKE_C_FLAGS}")
