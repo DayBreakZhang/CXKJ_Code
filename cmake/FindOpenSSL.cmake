@@ -92,6 +92,7 @@ IF(WIN32 AND NOT CYGWIN)
         libcrypto${_OPENSSL_MSVC_ARCH_SUFFIX}MDd libeay32MDd libeay32
       PATHS
         ${OPENSSL_ROOT_DIR}/lib/VC
+		${OPENSSL_ROOT_DIR}/17x64D/lib
     )
 
     FIND_LIBRARY(LIB_EAY_RELEASE
@@ -99,6 +100,7 @@ IF(WIN32 AND NOT CYGWIN)
         libcrypto${_OPENSSL_MSVC_ARCH_SUFFIX}MD libeay32MD libeay32
       PATHS
         ${OPENSSL_ROOT_DIR}/lib/VC
+		${OPENSSL_ROOT_DIR}/17x64R/lib
     )
 
     FIND_LIBRARY(SSL_EAY_DEBUG
@@ -106,6 +108,7 @@ IF(WIN32 AND NOT CYGWIN)
         libssl${_OPENSSL_MSVC_ARCH_SUFFIX}MDd ssleay32MDd ssleay32 ssl
       PATHS
         ${OPENSSL_ROOT_DIR}/lib/VC
+		${OPENSSL_ROOT_DIR}/17x64D/lib
     )
 
     FIND_LIBRARY(SSL_EAY_RELEASE
@@ -113,6 +116,7 @@ IF(WIN32 AND NOT CYGWIN)
         libssl${_OPENSSL_MSVC_ARCH_SUFFIX}MD ssleay32MD ssleay32 ssl
       PATHS
         ${OPENSSL_ROOT_DIR}/lib/VC
+		${OPENSSL_ROOT_DIR}/17x64R/lib
     )
 
     if( CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE )

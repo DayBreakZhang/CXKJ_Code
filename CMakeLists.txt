@@ -1,5 +1,5 @@
 ﻿# CMake 最低版本号要求
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 2.8.12)
 #设置项目语言
 ENABLE_LANGUAGE(CXX)
 #设置项目名字
@@ -75,7 +75,6 @@ else()
     enable_cxx14()
   endif()
 endif()
-
 if (NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "Debug")
 endif()
@@ -85,12 +84,6 @@ set(OPENSLL_LIB_RELEASE "17x64R")
 # 添加cmake方法
 include(CXKJMacros)
 #设置项目编译开关
-option(POCO_ENABLE_TESTS
-  "Set to OFF|ON (default is OFF) to control build of CXKJ tests" OFF)
-
-option(POCO_ENABLE_SAMPLES
-  "Set to OFF|ON (default is OFF) to control build of CXKJ samples" OFF)
-  
 option(CXKJ_ENABLE_G3LOG "Enable G3LOG" ON)
 option(CXKJ_ENABLE_RAPID "Enable RAPID" ON)
 option(CXKJ_ENABLE_CRYPTOPP "Enable CRYPTOPP" ON)
@@ -132,6 +125,7 @@ set(CXKJ_PKG_CONFIG_FILES "")
 # Pthreads/threads support
 find_package(Threads REQUIRED)
 #find openssl
+set(OPENSSL_ROOT_DIR "D:/3rdlib/openssl1.0.2r")
 find_package(OpenSSL REQUIRED)
 
 #添加项目
