@@ -1,0 +1,9 @@
+# Detect 64 or 32 bit
+if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+   # 64-bit project
+   SET(64_BIT_OS TRUE)
+     message( STATUS "A 64-bit OS detected" )
+ else()
+   SET(64_BIT_OS FALSE)
+   message( STATUS "A 32-bit OS detected" )
+endif()

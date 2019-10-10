@@ -1,0 +1,10 @@
+﻿1.根据debug/release来链接不同名字的库
+set (MY_LIBS    foo bar baz)
+
+# Generate the list of files to link, per flavor.
+set (LINK_LIST "")
+foreach(x ${MY_LIBS})
+    list (APPEND LINK_LIST debug ${x}_d optimized ${x})
+endforeach()
+
+target_link_libraries (mytarget  commonlib1 commonlib2 ${LINK_LIST})

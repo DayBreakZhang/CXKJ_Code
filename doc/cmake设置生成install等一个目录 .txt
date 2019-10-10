@@ -1,0 +1,15 @@
+GLOBAL域是唯一的，并且不接特殊的任何名字。
+
+DIRECTORY域默认为当前目录，但也可以用全路径或相对路径指定其他的目录（前提是该目录已经被CMake处理）。
+
+TARGET域可命名零或多个已经存在的目标。
+
+SOURCE域可命名零或多个源文件。注意：源文件属性只对在相同目录下的目标是可见的(CMakeLists.txt)。
+
+TEST域可命名零或多个已存在的测试。
+
+CACHE域必须命名零或多个已存在条目的cache.
+
+#设置项目目录化
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMakeTargets")

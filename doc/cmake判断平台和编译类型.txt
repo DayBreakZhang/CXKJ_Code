@@ -1,0 +1,39 @@
+方法一
+IF(CMAKE_SYSTEM_NAME MATCHES "Linux")  
+    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/3rdlib/lib)
+
+ELSEIF(CMAKE_SYSTEM_NAME MATCHES "Windows") 
+ 
+     IF(CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "None")  
+    		 LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/3rdlib/lib/Debug)  
+     ELSEIF(CMAKE_BUILD_TYPE MATCHES "Release")  
+                LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/3rdlib/lib/Release)
+     ELSE()  
+     		LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/3rdlib/lib)
+     ENDIF()
+
+ELSE()  
+    LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/3rdlib/lib)
+
+ENDIF(CMAKE_SYSTEM_NAME MATCHES "Linux")
+
+方法二
+    IF (WIN32)  
+        MESSAGE(STATUS "Now is windows")  
+    ELSEIF (APPLE)  
+        MESSAGE(STATUS "Now is Apple systens.")  
+    ELSEIF (UNIX)  
+        MESSAGE(STATUS "Now is UNIX-like OS's. Including aPPLE os x  and CygWin")  
+    ENDIF ()  
+
+栗子
+if(UNIX AND NOT APPLE)
+   # Linux
+   target_link_libraries(SQLiteCpp_Example SQLiteCpp sqlite3 pthread dl)
+else(UNIX AND APPLE)
+   # Mac OS
+   target_link_libraries(SQLiteCpp_Example SQLiteCpp sqlite3 pthread)
+else()
+   # Windows
+   target_link_libraries(SQLiteCpp_Example SQLiteCpp sqlite3)
+endif()

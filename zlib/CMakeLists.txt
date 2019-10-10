@@ -1,0 +1,44 @@
+﻿# Sources
+file(GLOB SRCS_G "src/*.*")
+CXKJ_SOURCES_AUTO( SRCS ${SRCS_G})
+
+# Headers
+file(GLOB_RECURSE HDRS_G "include/*.h" )
+CXKJ_HEADERS_AUTO( SRCS ${HDRS_G})
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/CXKJ)
+
+add_library(ZLIB ${SRCS} )
+add_library(CXKJ::ZLIB ALIAS ZLIB)
+set_target_properties(ZLIB
+    PROPERTIES
+    VERSION ${SHARED_LIBRARY_VERSION} SOVERSION ${SHARED_LIBRARY_VERSION}
+	OUTPUT_NAME CXKJZLIB
+    DEFINE_SYMBOL Util_EXPORTS
+    )
+target_include_directories(ZLIB
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
+    )
+if(BUILD_SHARED_LIBS)
+ADD_DEFINITIONS( -DZLIB_DLL)
+endif()
+if(NOT BUILD_SHARED_LIBS)
+    target_compile_definitions(ZLIB
+        PUBLIC
+            CXKJ_STATIC
+    )
+elseif(MINGW)
+	target_compile_definitions(ZLIB
+		PUBLIC
+			_DLL)
+endif()
+
+CXKJ_INSTALL(ZLIB)
+CXKJ_GENERATE_PACKAGE(ZLIB)
+
+configure_file(CXKJZLIB.pc.in ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/CXKJZLIB.pc @ONLY)
+list(APPEND CXKJ_PKG_CONFIG_FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/CXKJZLIB.pc)
+set(CXKJ_PKG_CONFIG_FILES ${CXKJ_PKG_CONFIG_FILES} PARENT_SCOPE)
