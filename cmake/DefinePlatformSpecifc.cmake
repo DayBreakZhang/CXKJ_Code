@@ -23,7 +23,7 @@
 #   - PocoXmtd.lib for /MT debug build
 
 if(MSVC)
-    if(XTTO_MT)
+    if(POCO_MT)
         set(CompilerFlags
             CMAKE_CXX_FLAGS
             CMAKE_CXX_FLAGS_DEBUG
@@ -37,11 +37,11 @@ if(MSVC)
         endforeach()
 
         set(STATIC_POSTFIX "mt" CACHE STRING "Set static library postfix" FORCE)
-    else(XTTO_MT)
+    else(POCO_MT)
         set(STATIC_POSTFIX "md" CACHE STRING "Set static library postfix" FORCE)
-    endif(XTTO_MT)
+    endif(POCO_MT)
 
-    if (XTTO_ENABLE_MSVC_MP)
+    if (POCO_ENABLE_MSVC_MP)
       add_definitions(/MP)
     endif()
 
@@ -49,16 +49,16 @@ else(MSVC)
     # Other compilers then MSVC don't have a static STATIC_POSTFIX at the moment
     set(STATIC_POSTFIX "" CACHE STRING "Set static library postfix" FORCE)
 endif(MSVC)
-set(CMAKE_C_FLAGS_DEBUG   "${CMAKE_C_FLAGS_DEBUG}   -D_DEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG")
+
+
 
 # Add a d postfix to the debug libraries
-if(XTTO_STATIC)
+if(POCO_STATIC)
         set(CMAKE_DEBUG_POSTFIX "${STATIC_POSTFIX}d" CACHE STRING "Set Debug library postfix" FORCE)
         set(CMAKE_RELEASE_POSTFIX "${STATIC_POSTFIX}" CACHE STRING "Set Release library postfix" FORCE)
         set(CMAKE_MINSIZEREL_POSTFIX "${STATIC_POSTFIX}" CACHE STRING "Set MinSizeRel library postfix" FORCE)
         set(CMAKE_RELWITHDEBINFO_POSTFIX "${STATIC_POSTFIX}" CACHE STRING "Set RelWithDebInfo library postfix" FORCE)
-else(XTTO_STATIC)
+else(POCO_STATIC)
         set(CMAKE_DEBUG_POSTFIX "d" CACHE STRING "Set Debug library postfix" FORCE)
         set(CMAKE_RELEASE_POSTFIX "" CACHE STRING "Set Release library postfix" FORCE)
         set(CMAKE_MINSIZEREL_POSTFIX "" CACHE STRING "Set MinSizeRel library postfix" FORCE)

@@ -6,6 +6,8 @@ POCO_SOURCES_AUTO( SRCS ${SRCS_G})
 file(GLOB_RECURSE HDRS_G "include/*.h" )
 POCO_HEADERS_AUTO( SRCS ${HDRS_G})
 
+include_directories(${OPENSSL_INCLUDE_DIR})
+
 add_library(Crypto ${SRCS} )
 add_library(Poco::Crypto ALIAS Crypto)
 set_target_properties(Crypto
@@ -15,7 +17,11 @@ set_target_properties(Crypto
     DEFINE_SYMBOL Crypto_EXPORTS
     )
 
-target_link_libraries(Crypto PUBLIC Poco::Foundation OpenSSL::SSL OpenSSL::Crypto)
+target_link_libraries(Crypto Poco::Foundation)
+		target_link_libraries(Crypto debug ${LIB_EAY_DEBUG})
+		target_link_libraries(Crypto optimized ${LIB_EAY_RELEASE})
+		target_link_libraries(Crypto debug ${SSL_EAY_DEBUG})
+		target_link_libraries(Crypto optimized ${SSL_EAY_RELEASE})
 target_include_directories(Crypto
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

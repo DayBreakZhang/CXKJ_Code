@@ -35,10 +35,6 @@ IF ( NOT VERSION )
    SET(MINOR_VERSION 1)
    math(EXPR VERSION-BASE ${GIT_VERSION}/255)
    math(EXPR VERSION-REMAINDER ${GIT_VERSION}%255)
-   #message( STATUS "git build version: ${GIT_VERSION}" )
-   #message( STATUS "version base: ${VERSION-BASE}" )
-   #message( STATUS "version remainder: ${VERSION-REMAINDER}" )
-   #SET(BUILD_NUMBER ${GIT_VERSION})
    SET(BUILD_NUMBER ${VERSION-BASE})
    SET(VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}-${VERSION-REMAINDER})
 ENDIF()
@@ -51,7 +47,9 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 #设置cmake模块路径
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-
+if(${CMAKE_VERSION} VERSION_LESS "3.4")
+	list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/V33)
+endif()
 # Call configure files on ver.h.in to set the version.
 # Uses the standard ${VARIABLE} syntax in the file
 #拷贝文件到指定目录
@@ -61,6 +59,8 @@ configure_file(ver.h.in ${CMAKE_INSTALL_PREFIX}/include/ver.h)
 # Setup C/C++ compiler options
 #设置c++ 选项
 #################################################################################
+set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
 option(DISABLE_CPP14 "Disable C++14 if available" OFF)
 
 if (DISABLE_CPP14)
@@ -150,8 +150,8 @@ if (CXKJ_ENABLE_RCFF)
     list(APPEND CXKJ_COMPONENTS "RCFF")
 endif ()
 if(CXKJ_ENABLE_POCO)
-	#add_subdirectory(poco)
-    #list(APPEND CXKJ_COMPONENTS "POCO")
+	add_subdirectory(poco)
+    list(APPEND CXKJ_COMPONENTS "POCO")
 endif()
 
 #############################################################
