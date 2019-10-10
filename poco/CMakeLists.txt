@@ -89,7 +89,7 @@ if(MSVC)
 
     
     if((NOT POCO_DISABLE_INTERNAL_OPENSSL) AND (POCO_ENABLE_NETSSL OR POCO_ENABLE_CRYPTO OR (POCO_ENABLE_SQL_MYSQL AND MINGW)))
-      #include(UseEmbeddedOpenSSL)
+      include(UseEmbeddedOpenSSL)
     endif()
 endif()
 
@@ -432,6 +432,16 @@ if(EXISTS ${PROJECT_SOURCE_DIR}/Encodings/Compiler AND POCO_ENABLE_ENCODINGS_COM
     list(APPEND Poco_COMPONENTS "EncodingsCompiler")
 endif()
 
+
+#############################################################
+# Uninstall stuff see: http://www.vtk.org/Wiki/CMake_FAQ
+configure_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+  IMMEDIATE @ONLY)
+
+add_custom_target(uninstall
+  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
 #############################################################
 # Enable packaging
