@@ -13,6 +13,10 @@ target_include_directories(Rcff
         $<INSTALL_INTERFACE:include>
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
+
+
+IF(MSVC)
+if (CXKJ_ENABLE_RCFF_OPENSSL)
 if(NOT LIB_EAY_DEBUG)
 set(LIB_EAY_DEBUG "${OPENSSL_INCLUDE_DIR}/../${OPENSLL_LIB_DEBUG}/lib/libeay32.lib")
 endif()
@@ -40,9 +44,6 @@ endif()
 if(NOT SSL_EAY_LIBRARY_RELEASE)
 set(SSL_EAY_LIBRARY_RELEASE "${OPENSSL_INCLUDE_DIR}/../${OPENSLL_LIB_RELEASE}/lib/static/ssleay32.lib")
 endif()
-
-IF(MSVC)
-if (CXKJ_ENABLE_RCFF_OPENSSL)
    ADD_DEFINITIONS( -DRCF_USE_OPENSSL)
    include_directories(${OPENSSL_INCLUDE_DIR})
    if(BUILD_SHARED_LIBS)#动态库
