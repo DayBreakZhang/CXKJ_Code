@@ -78,9 +78,6 @@ endif()
 if (NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE "Debug")
 endif()
-#设置opengsll lib目录
-set(OPENSLL_LIB_DEBUG "17x64D")
-set(OPENSLL_LIB_RELEASE "17x64R")
 # 添加cmake方法
 include(CXKJMacros)
 #设置项目编译开关
