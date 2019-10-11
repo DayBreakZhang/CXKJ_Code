@@ -1,0 +1,5 @@
+ 配合option和if一起使用，可以灵活多变的针对编译环境做各种定制化处理，包括项目中宏的各种替换和使用等等。
+OPTION(USE_MACRO "Build the project using macro" OFF)
+IF(USE_MACRO)
+	add_definitions("-DUSE_MACRO")
+endif(USE_MACRO)

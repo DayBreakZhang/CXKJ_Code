@@ -1,0 +1,509 @@
+﻿if(BUILD_SHARED_LIBS)
+   # Sources
+   CXKJ_SOURCES( SRCS Cryptopp
+            src/algebra.cpp
+            src/algparam.cpp
+            src/asn.cpp
+            src/authenc.cpp
+            src/basecode.cpp
+            src/cbcmac.cpp
+            src/ccm.cpp
+            src/channels.cpp
+            src/cmac.cpp
+            src/cpu.cpp
+            src/cryptlib.cpp
+            src/des.cpp
+            src/dessp.cpp
+            src/dh.cpp
+            src/dll.cpp
+            src/dsa.cpp
+            src/ec2n.cpp
+            src/eccrypto.cpp
+            src/ecp.cpp
+            src/emsa2.cpp
+            src/eprecomp.cpp
+            src/files.cpp
+            src/filters.cpp
+            src/fips140.cpp
+            src/fipstest.cpp
+            src/gcm-simd.cpp
+            src/gcm.cpp
+            src/gf2n.cpp
+            src/gfpcrypt.cpp
+            src/hex.cpp
+            src/hmac.cpp
+            src/hrtimer.cpp
+            src/integer.cpp
+            src/iterhash.cpp
+            src/misc.cpp
+            src/modes.cpp
+            src/mqueue.cpp
+            src/nbtheory.cpp
+            src/oaep.cpp
+            src/osrng.cpp
+            src/pch.cpp
+            src/pkcspad.cpp
+            src/pssr.cpp
+            src/pubkey.cpp
+            src/queue.cpp
+            src/randpool.cpp
+            src/rdtables.cpp
+            src/rijndael-simd.cpp
+            src/rijndael.cpp
+            src/rng.cpp
+            src/rsa.cpp
+            src/rw.cpp
+            src/sha-simd.cpp
+            src/sha.cpp
+            src/simple.cpp
+            src/skipjack.cpp
+            src/sse-simd.cpp
+            src/strciphr.cpp
+    )
+   # Headers
+   CXKJ_HEADERS( SRCS Cryptopp
+            include/CXKJ/Cryptopp/aes.h
+            include/CXKJ/Cryptopp/algebra.h
+            include/CXKJ/Cryptopp/algparam.h
+            include/CXKJ/Cryptopp/argnames.h
+            include/CXKJ/Cryptopp/asn.h
+            include/CXKJ/Cryptopp/authenc.h
+            include/CXKJ/Cryptopp/basecode.h
+            include/CXKJ/Cryptopp/cbcmac.h
+            include/CXKJ/Cryptopp/ccm.h
+            include/CXKJ/Cryptopp/channels.h
+            include/CXKJ/Cryptopp/cmac.h
+            include/CXKJ/Cryptopp/config.h
+            include/CXKJ/Cryptopp/cpu.h
+            include/CXKJ/Cryptopp/cryptlib.h
+            include/CXKJ/Cryptopp/des.h
+            include/CXKJ/Cryptopp/dh.h
+            include/CXKJ/Cryptopp/dll.h
+            include/CXKJ/Cryptopp/dsa.h
+            include/CXKJ/Cryptopp/ec2n.h
+            include/CXKJ/Cryptopp/eccrypto.h
+            include/CXKJ/Cryptopp/ecp.h
+            include/CXKJ/Cryptopp/ecpoint.h
+            include/CXKJ/Cryptopp/emsa2.h
+            include/CXKJ/Cryptopp/eprecomp.h
+            include/CXKJ/Cryptopp/files.h
+            include/CXKJ/Cryptopp/filters.h
+            include/CXKJ/Cryptopp/fips140.h
+            include/CXKJ/Cryptopp/fltrimpl.h
+            include/CXKJ/Cryptopp/gcm.h
+            include/CXKJ/Cryptopp/gf2n.h
+            include/CXKJ/Cryptopp/gfpcrypt.h
+            include/CXKJ/Cryptopp/hex.h
+            include/CXKJ/Cryptopp/hmac.h
+            include/CXKJ/Cryptopp/integer.h
+            include/CXKJ/Cryptopp/iterhash.h
+            include/CXKJ/Cryptopp/mdc.h
+            include/CXKJ/Cryptopp/misc.h
+            include/CXKJ/Cryptopp/modarith.h
+            include/CXKJ/Cryptopp/modes.h
+            include/CXKJ/Cryptopp/modexppc.h
+            include/CXKJ/Cryptopp/mqueue.h
+            include/CXKJ/Cryptopp/mqv.h
+            include/CXKJ/Cryptopp/nbtheory.h
+            include/CXKJ/Cryptopp/oaep.h
+            include/CXKJ/Cryptopp/oids.h
+            include/CXKJ/Cryptopp/osrng.h
+            include/CXKJ/Cryptopp/pch.h
+            include/CXKJ/Cryptopp/pkcspad.h
+            include/CXKJ/Cryptopp/pssr.h
+            include/CXKJ/Cryptopp/pubkey.h
+            include/CXKJ/Cryptopp/queue.h
+            include/CXKJ/Cryptopp/randpool.h
+            include/CXKJ/Cryptopp/rijndael.h
+            include/CXKJ/Cryptopp/rng.h
+            include/CXKJ/Cryptopp/rsa.h
+            include/CXKJ/Cryptopp/rw.h
+            include/CXKJ/Cryptopp/secblock.h
+            include/CXKJ/Cryptopp/seckey.h
+            include/CXKJ/Cryptopp/sha.h
+            include/CXKJ/Cryptopp/simple.h
+            include/CXKJ/Cryptopp/skipjack.h
+            include/CXKJ/Cryptopp/smartptr.h
+            include/CXKJ/Cryptopp/stdcpp.h
+            include/CXKJ/Cryptopp/strciphr.h
+            include/CXKJ/Cryptopp/trap.h
+            include/CXKJ/Cryptopp/words.h
+   )
+else()
+   # Sources
+   CXKJ_SOURCES( SRCS Cryptopp
+            src/3way.cpp
+            src/adler32.cpp
+            src/algebra.cpp
+            src/algparam.cpp
+            src/arc4.cpp
+            src/aria-simd.cpp
+            src/aria.cpp
+            src/ariatab.cpp
+            src/asn.cpp
+            src/authenc.cpp
+            src/base32.cpp
+            src/base64.cpp
+            src/basecode.cpp
+            src/bfinit.cpp
+            src/blake2-simd.cpp
+            src/blake2.cpp
+            src/blowfish.cpp
+            src/blumshub.cpp
+            src/camellia.cpp
+            src/cast.cpp
+            src/casts.cpp
+            src/cbcmac.cpp
+            src/ccm.cpp
+            src/chacha-simd.cpp
+            src/chacha.cpp
+            src/cham-simd.cpp
+            src/cham.cpp
+            src/channels.cpp
+            src/cmac.cpp
+            src/cpu.cpp
+            src/crc-simd.cpp
+            src/crc.cpp
+            src/cryptlib.cpp
+            src/default.cpp
+            src/des.cpp
+            src/dessp.cpp
+            src/dh.cpp
+            src/dh2.cpp
+            src/dll.cpp
+            src/dsa.cpp
+            src/eax.cpp
+            src/ec2n.cpp
+            src/eccrypto.cpp
+            src/ecp.cpp
+            src/elgamal.cpp
+            src/emsa2.cpp
+            src/eprecomp.cpp
+            src/esign.cpp
+            src/files.cpp
+            src/filters.cpp
+            src/fips140.cpp
+            src/fipstest.cpp
+            src/gcm-simd.cpp
+            src/gcm.cpp
+            src/gf256.cpp
+            src/gf2_32.cpp
+            src/gf2n.cpp
+            src/gfpcrypt.cpp
+            src/gost.cpp
+            src/gzip.cpp
+            src/hc128.cpp
+            src/hc256.cpp
+            src/hex.cpp
+            src/hight.cpp
+            src/hmac.cpp
+            src/hrtimer.cpp
+            src/ida.cpp
+            src/idea.cpp
+            src/integer.cpp
+            src/iterhash.cpp
+            src/kalyna.cpp
+            src/kalynatab.cpp
+            src/keccak.cpp
+            src/keccakc.cpp
+            src/lea-simd.cpp
+            src/lea.cpp
+            src/luc.cpp
+            src/mars.cpp
+            src/marss.cpp
+            src/md2.cpp
+            src/md4.cpp
+            src/md5.cpp
+            src/misc.cpp
+            src/modes.cpp
+            src/mqueue.cpp
+            src/mqv.cpp
+            src/nbtheory.cpp
+            src/oaep.cpp
+            src/osrng.cpp
+            src/padlkrng.cpp
+            src/panama.cpp
+            src/pch.cpp
+            src/pkcspad.cpp
+            src/poly1305.cpp
+            src/polynomi.cpp
+            src/pssr.cpp
+            src/pubkey.cpp
+            src/queue.cpp
+            src/rabbit.cpp
+            src/rabin.cpp
+            src/randpool.cpp
+            src/rc2.cpp
+            src/rc5.cpp
+            src/rc6.cpp
+            src/rdrand.cpp
+            src/rdtables.cpp
+            src/rijndael-simd.cpp
+            src/rijndael.cpp
+            src/ripemd.cpp
+            src/rng.cpp
+            src/rsa.cpp
+            src/rw.cpp
+            src/safer.cpp
+            src/salsa.cpp
+            src/scrypt.cpp
+            src/seal.cpp
+            src/seed.cpp
+            src/serpent.cpp
+            src/sha-simd.cpp
+            src/sha.cpp
+            src/sha3.cpp
+            src/shacal2-simd.cpp
+            src/shacal2.cpp
+            src/shark.cpp
+            src/sharkbox.cpp
+            src/simeck-simd.cpp
+            src/simeck.cpp
+            src/simon.cpp
+            src/simon128-simd.cpp
+            src/simon64-simd.cpp
+            src/simple.cpp
+            src/skipjack.cpp
+            src/sm3.cpp
+            src/sm4-simd.cpp
+            src/sm4.cpp
+            src/sosemanuk.cpp
+            src/speck.cpp
+            src/speck128-simd.cpp
+            src/speck64-simd.cpp
+            src/square.cpp
+            src/squaretb.cpp
+            src/sse-simd.cpp
+            src/strciphr.cpp
+            src/tea.cpp
+            src/tftables.cpp
+            src/threefish.cpp
+            src/tiger.cpp
+            src/tigertab.cpp
+            src/ttmac.cpp
+            src/tweetnacl.cpp
+            src/twofish.cpp
+            src/vmac.cpp
+            src/wake.cpp
+            src/whrlpool.cpp
+            src/xtr.cpp
+            src/xtrcrypt.cpp
+            src/zdeflate.cpp
+            src/zinflate.cpp
+            src/zlib.cpp
+   )
+   # Headers
+   CXKJ_HEADERS( SRCS Cryptopp
+            include/CXKJ/Cryptopp/3way.h
+            include/CXKJ/Cryptopp/adler32.h
+            include/CXKJ/Cryptopp/adv-simd.h
+            include/CXKJ/Cryptopp/aes.h
+            include/CXKJ/Cryptopp/algebra.h
+            include/CXKJ/Cryptopp/algparam.h
+            include/CXKJ/Cryptopp/arc4.h
+            include/CXKJ/Cryptopp/argnames.h
+            include/CXKJ/Cryptopp/aria.h
+            include/CXKJ/Cryptopp/asn.h
+            include/CXKJ/Cryptopp/authenc.h
+            include/CXKJ/Cryptopp/base32.h
+            include/CXKJ/Cryptopp/base64.h
+            include/CXKJ/Cryptopp/basecode.h
+            include/CXKJ/Cryptopp/blake2.h
+            include/CXKJ/Cryptopp/blowfish.h
+            include/CXKJ/Cryptopp/blumshub.h
+            include/CXKJ/Cryptopp/camellia.h
+            include/CXKJ/Cryptopp/cast.h
+            include/CXKJ/Cryptopp/cbcmac.h
+            include/CXKJ/Cryptopp/ccm.h
+            include/CXKJ/Cryptopp/chacha.h
+            include/CXKJ/Cryptopp/cham.h
+            include/CXKJ/Cryptopp/channels.h
+            include/CXKJ/Cryptopp/cmac.h
+            include/CXKJ/Cryptopp/config.h
+            include/CXKJ/Cryptopp/cpu.h
+            include/CXKJ/Cryptopp/crc.h
+            include/CXKJ/Cryptopp/cryptlib.h
+            include/CXKJ/Cryptopp/default.h
+            include/CXKJ/Cryptopp/des.h
+            include/CXKJ/Cryptopp/dh.h
+            include/CXKJ/Cryptopp/dh2.h
+            include/CXKJ/Cryptopp/dmac.h
+            include/CXKJ/Cryptopp/drbg.h
+            include/CXKJ/Cryptopp/dsa.h
+            include/CXKJ/Cryptopp/eax.h
+            include/CXKJ/Cryptopp/ec2n.h
+            include/CXKJ/Cryptopp/eccrypto.h
+            include/CXKJ/Cryptopp/ecp.h
+            include/CXKJ/Cryptopp/ecpoint.h
+            include/CXKJ/Cryptopp/elgamal.h
+            include/CXKJ/Cryptopp/emsa2.h
+            include/CXKJ/Cryptopp/eprecomp.h
+            include/CXKJ/Cryptopp/esign.h
+            include/CXKJ/Cryptopp/fhmqv.h
+            include/CXKJ/Cryptopp/files.h
+            include/CXKJ/Cryptopp/filters.h
+            include/CXKJ/Cryptopp/fips140.h
+            include/CXKJ/Cryptopp/fltrimpl.h
+            include/CXKJ/Cryptopp/gcm.h
+            include/CXKJ/Cryptopp/gf256.h
+            include/CXKJ/Cryptopp/gf2_32.h
+            include/CXKJ/Cryptopp/gf2n.h
+            include/CXKJ/Cryptopp/gfpcrypt.h
+            include/CXKJ/Cryptopp/gost.h
+            include/CXKJ/Cryptopp/gzip.h
+            include/CXKJ/Cryptopp/hc128.h
+            include/CXKJ/Cryptopp/hc256.h
+            include/CXKJ/Cryptopp/hex.h
+            include/CXKJ/Cryptopp/hight.h
+            include/CXKJ/Cryptopp/hkdf.h
+            include/CXKJ/Cryptopp/hmac.h
+            include/CXKJ/Cryptopp/hmqv.h
+            include/CXKJ/Cryptopp/hrtimer.h
+            include/CXKJ/Cryptopp/ida.h
+            include/CXKJ/Cryptopp/idea.h
+            include/CXKJ/Cryptopp/integer.h
+            include/CXKJ/Cryptopp/iterhash.h
+            include/CXKJ/Cryptopp/kalyna.h
+            include/CXKJ/Cryptopp/keccak.h
+            include/CXKJ/Cryptopp/keccakc.h
+            include/CXKJ/Cryptopp/lea.h
+            include/CXKJ/Cryptopp/lubyrack.h
+            include/CXKJ/Cryptopp/luc.h
+            include/CXKJ/Cryptopp/mars.h
+            include/CXKJ/Cryptopp/md2.h
+            include/CXKJ/Cryptopp/md4.h
+            include/CXKJ/Cryptopp/md5.h
+            include/CXKJ/Cryptopp/mdc.h
+            include/CXKJ/Cryptopp/misc.h
+            include/CXKJ/Cryptopp/modarith.h
+            include/CXKJ/Cryptopp/modes.h
+            include/CXKJ/Cryptopp/modexppc.h
+            include/CXKJ/Cryptopp/mqueue.h
+            include/CXKJ/Cryptopp/mqv.h
+            include/CXKJ/Cryptopp/naclite.h
+            include/CXKJ/Cryptopp/nbtheory.h
+            include/CXKJ/Cryptopp/nr.h
+            include/CXKJ/Cryptopp/oaep.h
+            include/CXKJ/Cryptopp/oids.h
+            include/CXKJ/Cryptopp/osrng.h
+            include/CXKJ/Cryptopp/padlkrng.h
+            include/CXKJ/Cryptopp/panama.h
+            include/CXKJ/Cryptopp/pch.h
+            include/CXKJ/Cryptopp/pkcspad.h
+            include/CXKJ/Cryptopp/poly1305.h
+            include/CXKJ/Cryptopp/polynomi.h
+            include/CXKJ/Cryptopp/pssr.h
+            include/CXKJ/Cryptopp/pubkey.h
+            include/CXKJ/Cryptopp/pwdbased.h
+            include/CXKJ/Cryptopp/queue.h
+            include/CXKJ/Cryptopp/rabbit.h
+            include/CXKJ/Cryptopp/rabin.h
+            include/CXKJ/Cryptopp/randpool.h
+            include/CXKJ/Cryptopp/rc2.h
+            include/CXKJ/Cryptopp/rc5.h
+            include/CXKJ/Cryptopp/rc6.h
+            include/CXKJ/Cryptopp/rdrand.h
+            include/CXKJ/Cryptopp/rijndael.h
+            include/CXKJ/Cryptopp/ripemd.h
+            include/CXKJ/Cryptopp/rng.h
+            include/CXKJ/Cryptopp/rsa.h
+            include/CXKJ/Cryptopp/rw.h
+            include/CXKJ/Cryptopp/safer.h
+            include/CXKJ/Cryptopp/salsa.h
+            include/CXKJ/Cryptopp/scrypt.h
+            include/CXKJ/Cryptopp/seal.h
+            include/CXKJ/Cryptopp/secblock.h
+            include/CXKJ/Cryptopp/seckey.h
+            include/CXKJ/Cryptopp/seed.h
+            include/CXKJ/Cryptopp/serpent.h
+            include/CXKJ/Cryptopp/sha.h
+            include/CXKJ/Cryptopp/sha3.h
+            include/CXKJ/Cryptopp/shacal2.h
+            include/CXKJ/Cryptopp/shark.h
+            include/CXKJ/Cryptopp/simeck.h
+            include/CXKJ/Cryptopp/simon.h
+            include/CXKJ/Cryptopp/simple.h
+            include/CXKJ/Cryptopp/siphash.h
+            include/CXKJ/Cryptopp/skipjack.h
+            include/CXKJ/Cryptopp/sm3.h
+            include/CXKJ/Cryptopp/sm4.h
+            include/CXKJ/Cryptopp/smartptr.h
+            include/CXKJ/Cryptopp/sosemanuk.h
+            include/CXKJ/Cryptopp/speck.h
+            include/CXKJ/Cryptopp/square.h
+            include/CXKJ/Cryptopp/stdcpp.h
+            include/CXKJ/Cryptopp/strciphr.h
+            include/CXKJ/Cryptopp/tea.h
+            include/CXKJ/Cryptopp/threefish.h
+            include/CXKJ/Cryptopp/tiger.h
+            include/CXKJ/Cryptopp/trap.h
+            include/CXKJ/Cryptopp/trunhash.h
+            include/CXKJ/Cryptopp/ttmac.h
+            include/CXKJ/Cryptopp/tweetnacl.h
+            include/CXKJ/Cryptopp/twofish.h
+            include/CXKJ/Cryptopp/vmac.h
+            include/CXKJ/Cryptopp/wake.h
+            include/CXKJ/Cryptopp/whrlpool.h
+            include/CXKJ/Cryptopp/words.h
+            include/CXKJ/Cryptopp/xtr.h
+            include/CXKJ/Cryptopp/xtrcrypt.h
+            include/CXKJ/Cryptopp/zdeflate.h
+            include/CXKJ/Cryptopp/zinflate.h
+            include/CXKJ/Cryptopp/zlib.h
+   )
+endif()
+if (MSVC)
+  if (${CMAKE_GENERATOR} MATCHES ".*ARM")
+    message(STATUS "Disabling ASM because ARM is specified as target platform.")
+  else ()
+    enable_language(ASM_MASM)
+    #list(APPEND cryptopp_SOURCES_ASM src/rdrand.asm)
+    if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+      list(APPEND cryptopp_SOURCES_ASM src/x64dll.asm)
+      set_source_files_properties(${cryptopp_SOURCES_ASM} PROPERTIES COMPILE_DEFINITIONS "_M_X64")
+    else ()
+      set_source_files_properties(${cryptopp_SOURCES_ASM} PROPERTIES COMPILE_DEFINITIONS "_M_X86" COMPILE_FLAGS "/safeseh")
+    endif ()
+        set_source_files_properties(${cryptopp_SOURCES_ASM} PROPERTIES LANGUAGE ASM_MASM)
+  endif ()
+endif ()
+set(cryptopp_LIBRARY_SOURCES ${cryptopp_SOURCES_ASM})
+list(APPEND cryptopp_LIBRARY_SOURCES ${SRCS})
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/CXKJ/Cryptopp)
+
+add_library(Cryptopp ${cryptopp_LIBRARY_SOURCES} )
+add_library(CXKJ::Cryptopp ALIAS Cryptopp)
+if(BUILD_SHARED_LIBS)
+    set_target_properties(Cryptopp
+        PROPERTIES
+        VERSION ${SHARED_LIBRARY_VERSION} SOVERSION ${SHARED_LIBRARY_VERSION}
+        OUTPUT_NAME cryptopp
+        COMPILE_FLAGS "/wd4231 /wd4251 /wd4275 /wd4355 /wd4505" 
+    )
+    ADD_DEFINITIONS (/DCRYPTOPP_EXPORTS) 
+    ADD_DEFINITIONS (/DCRYPTOPP_ENABLE_COMPLIANCE_WITH_FIPS_140_2=1) 
+    ADD_DEFINITIONS (/DUSE_PRECOMPILED_HEADERS) 
+else()
+    set_target_properties(Cryptopp
+        PROPERTIES
+        VERSION ${SHARED_LIBRARY_VERSION} SOVERSION ${SHARED_LIBRARY_VERSION}
+        OUTPUT_NAME cryptopp
+        COMPILE_FLAGS "/wd4231 /wd4251 /wd4275 /wd4355 /wd4505" 
+    )
+    ADD_DEFINITIONS (/DUSE_PRECOMPILED_HEADERS) 
+endif()
+
+target_include_directories(Cryptopp
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
+    )
+
+CXKJ_INSTALL(Cryptopp)
+CXKJ_GENERATE_PACKAGE(Cryptopp)
+
+configure_file(CXKJCryptopp.pc.in ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/CXKJCryptopp.pc @ONLY)
+list(APPEND CXKJ_PKG_CONFIG_FILES ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/CXKJCryptopp.pc)
+set(CXKJ_PKG_CONFIG_FILES ${CXKJ_PKG_CONFIG_FILES} PARENT_SCOPE)
