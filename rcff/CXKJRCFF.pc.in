@@ -3,8 +3,8 @@ exec_prefix=@CMAKE_INSTALL_PREFIX@/bin
 libdir=@CMAKE_INSTALL_PREFIX@/lib@LIB_SUFFIX@
 includedir=@CMAKE_INSTALL_PREFIX@/include/CXKJ
 
-Name: PocoUtil
-Description: C++ Portable Components (CXKJ) Util library
+Name: CXKJRCFF
+Description: C++ Portable Components (CXKJ) RCFF library
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lPocoUtil
+Libs: -L${libdir} -lCXKJRCFF
 Cflags: -I${includedir}
