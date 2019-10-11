@@ -40,6 +40,7 @@ else()
             src/crashhandler_unix.cpp
             )
 endif()
+
 #设置g3log G3_DEFINITIONS generated_definitions.hpp
 SET(G3_DEFINITIONS "")
 #设置G3LOG编译选项
@@ -144,9 +145,9 @@ if(BUILD_SHARED_LIBS)
 endif()
 include(GenerateMacroDefinitionsFile.cmake)
 #添加generated_definitions.hpp到项目
-CXKJ_HEADERS( SRCS g3log ${CMAKE_CURRENT_BINARY_DIR}/include/g3log/generated_definitions.hpp)
 include_directories(${PROJECT_SOURCE_DIR}/g3log/include/CXKJ)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
+
 
 add_library(G3Log ${SRCS} )
 add_library(CXKJ::G3Log ALIAS G3Log)

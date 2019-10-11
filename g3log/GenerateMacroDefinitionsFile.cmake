@@ -23,6 +23,7 @@ message( STATUS "COMPILE_DEFINITIONS:\n\t[${G3_DEFINITIONS}]" )
 message( STATUS "" )
 
 SET(GENERATED_G3_DEFINITIONS "${CMAKE_CURRENT_BINARY_DIR}/include/g3log/generated_definitions.hpp")
+SET(3RDLIB_G3_DEFINITIONS "${CMAKE_INSTALL_PREFIX}/include/CXKJ/g3log/generated_definitions.hpp")
 
 # If it exists, read existing file
 set(current_content "")
@@ -42,12 +43,14 @@ ENDFOREACH(definition)
 if(NOT "${current_content}" STREQUAL "${generated_content}")
 
   message( STATUS "Generated ${GENERATED_G3_DEFINITIONS}" )
+  message( STATUS "3RDLIB ${3RDLIB_G3_DEFINITIONS}" )
 
   message( STATUS "******************** START *************************" )
   message(${generated_content})
   message( STATUS "******************** END *************************" )
 
   file(WRITE ${GENERATED_G3_DEFINITIONS} ${generated_content})
+  file(WRITE ${3RDLIB_G3_DEFINITIONS} ${generated_content})
 
 endif()
 

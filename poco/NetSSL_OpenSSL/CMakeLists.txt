@@ -6,6 +6,8 @@ POCO_SOURCES_AUTO( SRCS ${SRCS_G})
 file(GLOB_RECURSE HDRS_G "include/*.h" )
 POCO_HEADERS_AUTO( SRCS ${HDRS_G})
 
+include_directories(${OPENSSL_INCLUDE_DIR})
+
 add_library(NetSSL ${SRCS} )
 add_library(Poco::NetSSL ALIAS NetSSL)
 set_target_properties( NetSSL
@@ -15,7 +17,12 @@ set_target_properties( NetSSL
     DEFINE_SYMBOL NetSSL_EXPORTS
     )
 
-target_link_libraries(NetSSL PUBLIC Poco::Crypto Poco::Util Poco::Net)
+target_link_libraries(NetSSL Poco::Crypto Poco::Util Poco::Net)
+
+		target_link_libraries(NetSSL debug ${LIB_EAY_DEBUG})
+		target_link_libraries(NetSSL optimized ${LIB_EAY_RELEASE})
+		target_link_libraries(NetSSL debug ${SSL_EAY_DEBUG})
+		target_link_libraries(NetSSL optimized ${SSL_EAY_RELEASE})
 target_include_directories(NetSSL
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
