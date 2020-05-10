@@ -9,8 +9,8 @@
 
 
 #include "SimpleHashTableTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/SimpleHashTable.h"
 #include "Poco/NumberFormatter.h"
 
@@ -18,7 +18,7 @@
 using namespace Poco;
 
 
-SimpleHashTableTest::SimpleHashTableTest(const std::string& rName): CppUnit::TestCase(rName)
+SimpleHashTableTest::SimpleHashTableTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -102,9 +102,9 @@ void SimpleHashTableTest::testSize()
 {
 	SimpleHashTable<std::string, int> hashTable(13);
 	assertTrue (hashTable.size() == 0);
-	Poco::UInt32 h1 = hashTable.insert("1", 1);
+	Poco::UInt32 POCO_UNUSED h1 = hashTable.insert("1", 1);
 	assertTrue (hashTable.size() == 1);
-	Poco::UInt32 h2 = hashTable.update("2", 2);
+	Poco::UInt32 POCO_UNUSED h2 = hashTable.update("2", 2);
 	assertTrue (hashTable.size() == 2);
 	hashTable.clear();
 	assertTrue (hashTable.size() == 0);

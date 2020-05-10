@@ -9,8 +9,8 @@
 
 
 #include "ByteOrderTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/ByteOrder.h"
 
 
@@ -25,7 +25,7 @@ using Poco::UInt64;
 #endif
 
 
-ByteOrderTest::ByteOrderTest(const std::string& rName): CppUnit::TestCase(rName)
+ByteOrderTest::ByteOrderTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -62,46 +62,6 @@ void ByteOrderTest::testByteOrderFlip()
 		UInt32 norm = 0xAABBCCDD;
 		UInt32 flip = ByteOrder::flipBytes(norm);
 		assertTrue (flip == 0xDDCCBBAA);
-		flip = ByteOrder::flipBytes(flip);
-		assertTrue (flip == norm);
-	}
-	{
-		unsigned char  c     = 0x00;
-		float          norm  = 0;
-		unsigned char* normP = reinterpret_cast<unsigned char*>(&norm);
-		for (unsigned i = 0; i < sizeof(float); i++)
-		{
-			normP[i] |= c;
-			c += 0x11;
-		}
-
-		float          flip  = ByteOrder::flipBytes(norm);
-		unsigned char* flipP = reinterpret_cast<unsigned char*>(&flip);
-		for (unsigned i = 0; i < sizeof(float); i++)
-		{
-			assertTrue (normP[i] == flipP[sizeof(float) - 1 - i]);
-		}
-
-		flip = ByteOrder::flipBytes(flip);
-		assertTrue (flip == norm);
-	}
-	{
-		unsigned char  c     = 0x00;
-		double         norm  = 0;
-		unsigned char* normP = reinterpret_cast<unsigned char*>(&norm);
-		for (unsigned i = 0; i < sizeof(double); i++)
-		{
-			normP[i] |= c;
-			c += 0x11;
-		}
-
-		double         flip  = ByteOrder::flipBytes(norm);
-		unsigned char* flipP = reinterpret_cast<unsigned char*>(&flip);
-		for (unsigned i = 0; i < sizeof(double); i++)
-		{
-			assertTrue (normP[i] == flipP[sizeof(double) - 1 - i]);
-		}
-
 		flip = ByteOrder::flipBytes(flip);
 		assertTrue (flip == norm);
 	}

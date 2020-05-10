@@ -54,11 +54,11 @@ namespace
 		}
 		else
 		{
-			while (itFmt != endFmt && Ascii::isDigit(*itFmt))
-			{
-				width = 10*width + *itFmt - '0';
-				++itFmt;
-			}
+		while (itFmt != endFmt && Ascii::isDigit(*itFmt))
+		{
+			width = 10*width + *itFmt - '0';
+			++itFmt;
+		}
 		}
 		if (width > 0) str.width(width);
 	}
@@ -96,7 +96,7 @@ namespace
 			{
 			case 'l':
 			case 'h':
-			case 'L':
+			case 'L': 
 			case '?': mod = *itFmt++; break;
 			}
 		}
@@ -223,7 +223,7 @@ namespace
 					str << RefAnyCast<std::string>(*itVal++);
 					break;
 				case 'z':
-					str << AnyCast<std::size_t>(*itVal++);
+					str << AnyCast<std::size_t>(*itVal++); 
 					break;
 				case 'I':
 				case 'D':
@@ -241,7 +241,8 @@ namespace
 }
 
 
-std::string format(const std::string& fmt, const Any& value) {
+std::string format(const std::string& fmt, const Any& value) 
+{
 	std::string result;
 	format(result, fmt, value);
 	return result;
@@ -259,7 +260,7 @@ void format(std::string& result, const std::string& fmt, const std::vector<Any>&
 	std::string::const_iterator itFmt  = fmt.begin();
 	std::string::const_iterator endFmt = fmt.end();
 	std::vector<Any>::const_iterator itVal  = values.begin();
-	std::vector<Any>::const_iterator endVal = values.end();
+	std::vector<Any>::const_iterator endVal = values.end(); 
 	while (itFmt != endFmt)
 	{
 		switch (*itFmt)

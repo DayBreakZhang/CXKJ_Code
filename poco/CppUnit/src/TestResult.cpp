@@ -3,7 +3,7 @@
 //
 
 
-#include "Poco/CppUnit/TestResult.h"
+#include "CppUnit/TestResult.h"
 
 
 namespace CppUnit {

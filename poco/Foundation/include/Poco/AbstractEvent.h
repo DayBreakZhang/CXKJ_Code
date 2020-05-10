@@ -233,6 +233,7 @@ public:
 		/// to the caller.
 	{
 		Poco::ScopedLockWithUnlock<TMutex> lock(_mutex);
+
 		if (!_enabled) return;
 
 		// thread-safeness:

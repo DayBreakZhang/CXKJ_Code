@@ -61,7 +61,7 @@ SERVICE_STATUS        ServerApplication::_serviceStatus;
 SERVICE_STATUS_HANDLE ServerApplication::_serviceStatusHandle = 0;
 #endif
 #endif
-#if defined(POCO_VXWORKS) || POCO_OS == POCO_OS_ANDROID || defined(__NACL__) ||  defined(__EMSCRIPTEN__)
+#if defined(POCO_VXWORKS) || POCO_OS == POCO_OS_ANDROID
 Poco::Event ServerApplication::_terminate;
 #endif
 
@@ -99,7 +99,7 @@ void ServerApplication::terminate()
 {
 #if defined(POCO_OS_FAMILY_WINDOWS)
 	_terminate.set();
-#elif defined(POCO_VXWORKS) || POCO_OS == POCO_OS_ANDROID || defined(__NACL__) || defined(__EMSCRIPTEN__)
+#elif defined(POCO_VXWORKS) || POCO_OS == POCO_OS_ANDROID
 	_terminate.set();
 #else
 	Poco::Process::requestTermination(Process::id());
@@ -129,23 +129,8 @@ BOOL ServerApplication::ConsoleCtrlHandler(DWORD ctrlType)
 }
 
 
-HDEVNOTIFY ServerApplication::registerServiceDeviceNotification(LPVOID filter, DWORD flags)
+void ServerApplication::ServiceControlHandler(DWORD control)
 {
-	return RegisterDeviceNotification(_serviceStatusHandle, filter, flags);
-}
-
-
-DWORD ServerApplication::handleDeviceEvent(DWORD /*event_type*/, LPVOID /*event_data*/)
-{
-	return ERROR_CALL_NOT_IMPLEMENTED;
-}
-
-
-DWORD ServerApplication::ServiceControlHandler(DWORD control, DWORD event_type, LPVOID event_data, LPVOID context)
-{
-	DWORD result = NO_ERROR;
-	ServerApplication* pThis = reinterpret_cast<ServerApplication*>(context);
-
 	switch (control)
 	{
 	case SERVICE_CONTROL_STOP:
@@ -155,29 +140,18 @@ DWORD ServerApplication::ServiceControlHandler(DWORD control, DWORD event_type, 
 		break;
 	case SERVICE_CONTROL_INTERROGATE:
 		break;
-	case SERVICE_CONTROL_DEVICEEVENT:
-		if (pThis)
-		{
-			result = pThis->handleDeviceEvent(event_type, event_data);
-		}
-		break;
 	}
 	SetServiceStatus(_serviceStatusHandle,  &_serviceStatus);
-	return result;
 }
 
 
-#if !defined(POCO_NO_WSTRING)
 void ServerApplication::ServiceMain(DWORD argc, LPWSTR* argv)
-#endif
 {
 	ServerApplication& app = static_cast<ServerApplication&>(Application::instance());
 
 	app.config().setBool("application.runAsService", true);
 
-#if !defined(POCO_NO_WSTRING)
-	_serviceStatusHandle = RegisterServiceCtrlHandlerExW(L"", ServiceControlHandler, &app);
-#endif
+	_serviceStatusHandle = RegisterServiceCtrlHandlerW(L"", ServiceControlHandler);
 	if (!_serviceStatusHandle)
 		throw SystemException("cannot register service control handler");
 
@@ -192,7 +166,6 @@ void ServerApplication::ServiceMain(DWORD argc, LPWSTR* argv)
 
 	try
 	{
-#if !defined(POCO_NO_WSTRING)
 		std::vector<std::string> args;
 		for (DWORD i = 0; i < argc; ++i)
 		{
@@ -201,7 +174,6 @@ void ServerApplication::ServiceMain(DWORD argc, LPWSTR* argv)
 			args.push_back(arg);
 		}
 		app.init(args);
-#endif
 		_serviceStatus.dwCurrentState = SERVICE_RUNNING;
 		SetServiceStatus(_serviceStatusHandle, &_serviceStatus);
 		int rc = app.run();
@@ -305,7 +277,6 @@ int ServerApplication::run(const std::vector<std::string>& args)
 }
 
 
-#if !defined(POCO_NO_WSTRING)
 int ServerApplication::run(int argc, wchar_t** argv)
 {
 	if (!hasConsole() && isService())
@@ -340,19 +311,16 @@ int ServerApplication::run(int argc, wchar_t** argv)
 		return rc;
 	}
 }
-#endif
 
 
 bool ServerApplication::isService()
 {
-#if !defined(POCO_NO_WSTRING)
 	SERVICE_TABLE_ENTRYW svcDispatchTable[2];
 	svcDispatchTable[0].lpServiceName = L"";
 	svcDispatchTable[0].lpServiceProc = ServiceMain;
 	svcDispatchTable[1].lpServiceName = NULL;
 	svcDispatchTable[1].lpServiceProc = NULL;
 	return StartServiceCtrlDispatcherW(svcDispatchTable) != 0;
-#endif
 }
 
 
@@ -432,31 +400,31 @@ void ServerApplication::defineOptions(OptionSet& options)
 }
 
 
-void ServerApplication::handleRegisterService(const std::string& /*name*/, const std::string& /*value*/)
+void ServerApplication::handleRegisterService(const std::string& name, const std::string& value)
 {
 	_action = SRV_REGISTER;
 }
 
 
-void ServerApplication::handleUnregisterService(const std::string& /*name*/, const std::string& /*value*/)
+void ServerApplication::handleUnregisterService(const std::string& name, const std::string& value)
 {
 	_action = SRV_UNREGISTER;
 }
 
 
-void ServerApplication::handleDisplayName(const std::string& /*name*/, const std::string& value)
+void ServerApplication::handleDisplayName(const std::string& name, const std::string& value)
 {
 	_displayName = value;
 }
 
 
-void ServerApplication::handleDescription(const std::string& /*name*/, const std::string& value)
+void ServerApplication::handleDescription(const std::string& name, const std::string& value)
 {
 	_description = value;
 }
 
 
-void ServerApplication::handleStartup(const std::string& /*name*/, const std::string& value)
+void ServerApplication::handleStartup(const std::string& name, const std::string& value)
 {
 	if (Poco::icompare(value, 4, std::string("auto")) == 0)
 		_startup = "auto";
@@ -504,7 +472,6 @@ int ServerApplication::run(const std::vector<std::string>& args)
 }
 
 
-#if !defined(POCO_NO_WSTRING)
 int ServerApplication::run(int argc, wchar_t** argv)
 {
 	try
@@ -518,7 +485,6 @@ int ServerApplication::run(int argc, wchar_t** argv)
 	}
 	return run();
 }
-#endif
 
 
 #endif // _WIN32_WCE
@@ -576,7 +542,7 @@ void ServerApplication::defineOptions(OptionSet& options)
 //
 void ServerApplication::waitForTerminationRequest()
 {
-#if POCO_OS != POCO_OS_ANDROID && !defined(__NACL__) && !defined(__EMSCRIPTEN__)
+#if POCO_OS != POCO_OS_ANDROID
 	sigset_t sset;
 	sigemptyset(&sset);
 	if (!std::getenv("POCO_ENABLE_DEBUGGER"))
@@ -588,22 +554,22 @@ void ServerApplication::waitForTerminationRequest()
 	sigprocmask(SIG_BLOCK, &sset, NULL);
 	int sig;
 	sigwait(&sset, &sig);
-#else // POCO_OS != POCO_OS_ANDROID || __NACL__ || __EMSCRIPTEN__
+#else // POCO_OS != POCO_OS_ANDROID
 	_terminate.wait();
 #endif
 }
 
 
-int ServerApplication::run(int argc, char** pArgv)
+int ServerApplication::run(int argc, char** argv)
 {
-	bool runAsDaemon = isDaemon(argc, pArgv);
+	bool runAsDaemon = isDaemon(argc, argv);
 	if (runAsDaemon)
 	{
 		beDaemon();
 	}
 	try
 	{
-		init(argc, pArgv);
+		init(argc, argv);
 		if (runAsDaemon)
 		{
 			int rc = chdir("/");
@@ -622,9 +588,9 @@ int ServerApplication::run(int argc, char** pArgv)
 int ServerApplication::run(const std::vector<std::string>& args)
 {
 	bool runAsDaemon = false;
-	for (std::vector<std::string>::const_iterator it = args.begin(); it != args.end(); ++it)
+	for (const auto& arg: args)
 	{
-		if (*it == "--daemon")
+		if (arg == "--daemon")
 		{
 			runAsDaemon = true;
 			break;
@@ -652,12 +618,12 @@ int ServerApplication::run(const std::vector<std::string>& args)
 }
 
 
-bool ServerApplication::isDaemon(int argc, char** pArgv)
+bool ServerApplication::isDaemon(int argc, char** argv)
 {
 	std::string option("--daemon");
 	for (int i = 1; i < argc; ++i)
 	{
-		if (option == pArgv[i])
+		if (option == argv[i])
 			return true;
 	}
 	return false;
@@ -692,24 +658,24 @@ void ServerApplication::beDaemon()
 }
 
 
-void ServerApplication::defineOptions(OptionSet& rOptions)
+void ServerApplication::defineOptions(OptionSet& options)
 {
-	Application::defineOptions(rOptions);
+	Application::defineOptions(options);
 
-	rOptions.addOption(
+	options.addOption(
 		Option("daemon", "", "Run application as a daemon.")
 			.required(false)
 			.repeatable(false)
 			.callback(OptionCallback<ServerApplication>(this, &ServerApplication::handleDaemon)));
 
-	rOptions.addOption(
+	options.addOption(
 		Option("umask", "", "Set the daemon's umask (octal, e.g. 027).")
 			.required(false)
 			.repeatable(false)
 			.argument("mask")
 			.callback(OptionCallback<ServerApplication>(this, &ServerApplication::handleUMask)));
 
-	rOptions.addOption(
+	options.addOption(
 		Option("pidfile", "", "Write the process ID of the application to given file.")
 			.required(false)
 			.repeatable(false)
@@ -718,35 +684,35 @@ void ServerApplication::defineOptions(OptionSet& rOptions)
 }
 
 
-void ServerApplication::handleDaemon(const std::string& rName, const std::string&)
+void ServerApplication::handleDaemon(const std::string& name, const std::string& value)
 {
 	config().setBool("application.runAsDaemon", true);
 }
 
 
-void ServerApplication::handleUMask(const std::string& rName, const std::string& rValue)
+void ServerApplication::handleUMask(const std::string& name, const std::string& value)
 {
 	int mask = 0;
-	for (std::string::const_iterator it = rValue.begin(); it != rValue.end(); ++it)
+	for (const auto ch: value)
 	{
 		mask *= 8;
-		if (*it >= '0' && *it <= '7')
-			mask += *it - '0';
+		if (ch >= '0' && ch <= '7')
+			mask += ch - '0';
 		else
-			throw Poco::InvalidArgumentException("umask contains non-octal characters", rValue);
+			throw Poco::InvalidArgumentException("umask contains non-octal characters", value);
 	}
 	umask(mask);
 }
 
 
-void ServerApplication::handlePidFile(const std::string& rName, const std::string& rValue)
+void ServerApplication::handlePidFile(const std::string& name, const std::string& value)
 {
-	Poco::FileOutputStream ostr(rValue);
+	Poco::FileOutputStream ostr(value);
 	if (ostr.good())
 		ostr << Poco::Process::id() << std::endl;
 	else
-		throw Poco::CreateFileException("Cannot write PID to file", rValue);
-	Poco::TemporaryFile::registerForDeletion(rValue);
+		throw Poco::CreateFileException("Cannot write PID to file", value);
+	Poco::TemporaryFile::registerForDeletion(value);
 }
 
 

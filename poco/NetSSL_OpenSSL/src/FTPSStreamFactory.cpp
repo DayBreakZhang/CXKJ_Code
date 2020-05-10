@@ -1,8 +1,8 @@
 //
 // FTPSStreamFactory.cpp
 //
-// Library: Net
-// Package: FTP
+// Library: NetSSL_OpenSSL
+// Package: FTPS
 // Module:  FTPSStreamFactory
 //
 // Copyright (c) 2005-2006, Applied Informatics Software Engineering GmbH.
@@ -32,26 +32,26 @@ namespace Poco {
 namespace Net {
 
 
-class FTPStreamBuf: public UnbufferedStreamBuf
+class FTPSStreamBuf: public UnbufferedStreamBuf
 {
 public:
-	FTPStreamBuf(std::istream& istr):
+	FTPSStreamBuf(std::istream& istr):
 		_istr(istr)
 	{
 		// make sure exceptions from underlying string propagate
 		_istr.exceptions(std::ios::badbit);
 	}
-	
-	~FTPStreamBuf()
+
+	~FTPSStreamBuf()
 	{
 	}
-		
+
 private:
 	int readFromDevice()
 	{
 		return _istr.get();
 	}
-	
+
 	std::istream& _istr;
 };
 
@@ -64,18 +64,18 @@ public:
 	{
 		poco_ios_init(&_buf);
 	}
-	
+
 	~FTPSIOS()
 	{
 	}
-	
-	FTPStreamBuf* rdbuf()
+
+	FTPSStreamBuf* rdbuf()
 	{
 		return &_buf;
 	}
 
 protected:
-	FTPStreamBuf _buf;
+	FTPSStreamBuf _buf;
 };
 
 
@@ -88,19 +88,16 @@ public:
 		_pSession(pSession)
 	{
 	}
-		
+
 	~FTPSStream()
 	{
 		delete _pSession;
 	}
-	
+
 private:
 	FTPSClientSession* _pSession;
 };
 
-
-std::string FTPSStreamFactory::_anonymousPassword("poco@localhost");
-FTPPasswordProvider* FTPSStreamFactory::_pPasswordProvider(0);
 
 FTPSStreamFactory::FTPSStreamFactory()
 {
@@ -116,21 +113,23 @@ std::istream* FTPSStreamFactory::open(const URI& uri)
 {
 	poco_assert (uri.getScheme() == "ftps");
 
-	FTPSClientSession* pSession = new FTPSClientSession(uri.getHost(), uri.getPort());
+	Poco::UInt16 port = uri.getPort();
+	if (port == 0) port = FTPClientSession::FTP_PORT;
+	FTPSClientSession* pSession = new FTPSClientSession(uri.getHost(), port);
 	try
 	{
 		std::string username;
 		std::string password;
 		getUserInfo(uri, username, password);
-		
+
 		std::string path;
 		char        type;
 		getPathAndType(uri, path, type);
-			
+
 		pSession->login(username, password);
 		if (type == 'a')
 			pSession->setFileType(FTPClientSession::TYPE_TEXT);
-			
+
 		Path p(path, Path::PATH_UNIX);
 		p.makeFile();
 		for (int i = 0; i < p.depth(); ++i)
@@ -143,76 +142,6 @@ std::istream* FTPSStreamFactory::open(const URI& uri)
 	{
 		delete pSession;
 		throw;
-	}
-}
-
-
-void FTPSStreamFactory::setAnonymousPassword(const std::string& password)
-{
-	_anonymousPassword = password;
-}
-
-	
-const std::string& FTPSStreamFactory::getAnonymousPassword()
-{
-	return _anonymousPassword;
-}
-
-	
-void FTPSStreamFactory::setPasswordProvider(FTPPasswordProvider* pProvider)
-{
-	_pPasswordProvider = pProvider;
-}
-
-	
-FTPPasswordProvider* FTPSStreamFactory::getPasswordProvider()
-{
-	return _pPasswordProvider;
-}
-
-
-void FTPSStreamFactory::splitUserInfo(const std::string& userInfo, std::string& username, std::string& password)
-{
-	std::string::size_type pos = userInfo.find(':');
-	if (pos != std::string::npos)
-	{
-		username.assign(userInfo, 0, pos++);
-		password.assign(userInfo, pos, userInfo.size() - pos);
-	}
-	else username = userInfo;
-}
-
-
-void FTPSStreamFactory::getUserInfo(const URI& uri, std::string& username, std::string& password)
-{
-	splitUserInfo(uri.getUserInfo(), username, password);
-	if (username.empty())
-	{
-		username = "anonymous";
-		password = _anonymousPassword;
-	}
-	else if (password.empty())
-	{
-		if (_pPasswordProvider)
-			password = _pPasswordProvider->password(username, uri.getHost());
-		else
-			throw FTPException(std::string("Password required for ") + username + "@" + uri.getHost());
-	}
-}
-
-
-void FTPSStreamFactory::getPathAndType(const Poco::URI& uri, std::string& path, char& type)
-{
-	path = uri.getPath();
-	type = 'i';
-	std::string::size_type pos = path.rfind(';');
-	if (pos != std::string::npos)
-	{
-		if (path.length() == pos + 7 && path.compare(pos + 1, 5, "type=") == 0)
-		{
-			type = path[pos + 6];
-			path.resize(pos);
-		}
 	}
 }
 

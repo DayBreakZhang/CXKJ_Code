@@ -35,7 +35,7 @@ class Foundation_API EventLogChannel: public Channel
 	/// containing the message definition resources can be found in $PATH.
 {
 public:
-	typedef AutoPtr<EventLogChannel> Ptr;
+	using Ptr = AutoPtr<EventLogChannel>;
 
 	EventLogChannel();
 		/// Creates the EventLogChannel.
@@ -64,7 +64,7 @@ public:
 		/// appropriate values for Event Log type and category.
 		
 	void setProperty(const std::string& name, const std::string& value);
-		/// Sets or changes a configuration property.
+		/// Sets or changes a configuration property. 
 		///
 		/// The following properties are supported:
 		///

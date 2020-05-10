@@ -82,13 +82,13 @@ public:
 		/// LoggingRegistry.
 
 private:
-	typedef Channel::Ptr                        ChannelPtr;
-	typedef AutoPtr<Formatter>                  FormatterPtr;
-	typedef std::map<std::string, ChannelPtr>   ChannelMap;
+	typedef Channel::Ptr ChannelPtr;
+	typedef AutoPtr<Formatter> FormatterPtr;
+	typedef std::map<std::string, ChannelPtr> ChannelMap;
 	typedef std::map<std::string, FormatterPtr> FormatterMap;
 	
-	ChannelMap        _channelMap;
-	FormatterMap      _formatterMap;
+	ChannelMap   _channelMap;
+	FormatterMap _formatterMap;
 	mutable FastMutex _mutex;
 };
 

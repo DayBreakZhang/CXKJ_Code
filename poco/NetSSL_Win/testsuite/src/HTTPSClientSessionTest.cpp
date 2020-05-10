@@ -9,8 +9,8 @@
 
 
 #include "HTTPSClientSessionTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/HTTPSClientSession.h"
 #include "Poco/Net/HTTPRequest.h"
 #include "Poco/Net/HTTPRequestHandler.h"
@@ -35,7 +35,6 @@
 #include <istream>
 #include <ostream>
 #include <sstream>
-#include <iostream>
 
 
 using namespace Poco::Net;
@@ -305,24 +304,19 @@ void HTTPSClientSessionTest::testInterop()
 	cert.extractNames(commonName, domainNames);
 
 	assertTrue (commonName == "secure.appinf.com" || commonName == "*.appinf.com");
-	assertTrue (domainNames.find("appinf.com") != domainNames.end()
+	assertTrue (domainNames.find("appinf.com") != domainNames.end() 
 		 || domainNames.find("*.appinf.com") != domainNames.end());
 }
 
 
 void HTTPSClientSessionTest::testProxy()
 {
-#ifdef FIXME
-	testProxy should use a public proxy server
-	http://www.publicproxyservers.com/proxy/list1.html
-	Really working public proxy servers - page 1 of 6.
-#endif
 	HTTPSTestServer srv;
 	HTTPSClientSession s("secure.appinf.com");
 	s.setProxy(
-		Application::instance().config().getString("testsuite.proxy.host"),
+		Application::instance().config().getString("testsuite.proxy.host"), 
 		Application::instance().config().getInt("testsuite.proxy.port")
-		);
+	);
 	HTTPRequest request(HTTPRequest::HTTP_GET, "/public/poco/NetSSL.txt");
 	s.sendRequest(request);
 	Poco::Net::X509Certificate cert = s.serverCertificate();
@@ -353,7 +347,7 @@ void HTTPSClientSessionTest::testCachedSession()
 	HTTPSTestServer srv(pServerContext);
 
 	Context::Ptr pClientContext = new Context(
-		Context::CLIENT_USE,
+		Context::CLIENT_USE, 
 		"");
 	//pClientContext->enableSessionCache(true);
 

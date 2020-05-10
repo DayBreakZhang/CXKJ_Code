@@ -54,13 +54,13 @@ UTF32Encoding::UTF32Encoding(ByteOrderType byteOrder)
 	setByteOrder(byteOrder);
 }
 
-	
+
 UTF32Encoding::UTF32Encoding(int byteOrderMark)
 {
 	setByteOrder(byteOrderMark);
 }
 
-	
+
 UTF32Encoding::~UTF32Encoding()
 {
 }
@@ -75,7 +75,7 @@ UTF32Encoding::ByteOrderType UTF32Encoding::getByteOrder() const
 #endif
 }
 
-	
+
 void UTF32Encoding::setByteOrder(ByteOrderType byteOrder)
 {
 #if defined(POCO_ARCH_BIG_ENDIAN)
@@ -85,7 +85,7 @@ void UTF32Encoding::setByteOrder(ByteOrderType byteOrder)
 #endif
 }
 
-	
+
 void UTF32Encoding::setByteOrder(int byteOrderMark)
 {
 	_flipBytes = byteOrderMark != 0xFEFF;
@@ -126,7 +126,7 @@ int UTF32Encoding::convert(const unsigned char* bytes) const
 
 	if (_flipBytes)
 	{
-		ByteOrder::flipBytes(uc);
+		uc = ByteOrder::flipBytes(uc);
 	}
 
 	return uc;
@@ -161,7 +161,9 @@ int UTF32Encoding::queryConvert(const unsigned char* bytes, int length) const
 		*p++ = *bytes++;
 		*p++ = *bytes++;
 		if (_flipBytes)
-			ByteOrder::flipBytes(uc);
+		{
+			uc = ByteOrder::flipBytes(uc);
+		}
 		return uc;
 	}
 
@@ -169,7 +171,7 @@ int UTF32Encoding::queryConvert(const unsigned char* bytes, int length) const
 }
 
 
-int UTF32Encoding::sequenceLength(const unsigned char* /*bytes*/, int /*length*/) const
+int UTF32Encoding::sequenceLength(const unsigned char* bytes, int length) const
 {
 	return 4;
 }

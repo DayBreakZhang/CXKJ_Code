@@ -15,7 +15,7 @@
 
 
 #include "Poco/XML/XML.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class NodeAppenderTest: public CppUnit::TestCase

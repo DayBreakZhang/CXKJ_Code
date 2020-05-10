@@ -9,11 +9,10 @@
 
 
 #include "ClassLoaderTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/ClassLoader.h"
 #include "Poco/Manifest.h"
-#include "Poco/Path.h"
 #include "Poco/Exception.h"
 #include "TestPlugin.h"
 
@@ -24,10 +23,9 @@ using Poco::SharedLibrary;
 using Poco::AbstractMetaObject;
 using Poco::NotFoundException;
 using Poco::InvalidAccessException;
-using Poco::Path;
 
 
-ClassLoaderTest::ClassLoaderTest(const std::string& rName): CppUnit::TestCase(rName)
+ClassLoaderTest::ClassLoaderTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -39,8 +37,7 @@ ClassLoaderTest::~ClassLoaderTest()
 
 void ClassLoaderTest::testClassLoader1()
 {
-	std::string self = Path(Path::self()).makeParent().toString();
-	std::string path = self + "TestLibrary";
+	std::string path = "TestLibrary";
 	path.append(SharedLibrary::suffix());
 
 	ClassLoader<TestPlugin> cl;
@@ -53,7 +50,7 @@ void ClassLoaderTest::testClassLoader1()
 	
 	try
 	{
-		const ClassLoader<TestPlugin>::Meta& meta = cl.classFor("PluginA");
+		const ClassLoader<TestPlugin>::Meta& POCO_UNUSED meta = cl.classFor("PluginA");
 		fail("not found - must throw exception");
 	}
 	catch (NotFoundException&)
@@ -66,7 +63,7 @@ void ClassLoaderTest::testClassLoader1()
 
 	try
 	{
-		const ClassLoader<TestPlugin>::Manif& manif = cl.manifestFor(path);
+		const ClassLoader<TestPlugin>::Manif& POCO_UNUSED manif = cl.manifestFor(path);
 		fail("not found - must throw exception");
 	}
 	catch (NotFoundException&)
@@ -81,8 +78,7 @@ void ClassLoaderTest::testClassLoader1()
 
 void ClassLoaderTest::testClassLoader2()
 {
-	std::string self = Path(Path::self()).makeParent().toString();
-	std::string path = self + "TestLibrary";
+	std::string path = "TestLibrary";
 	path.append(SharedLibrary::suffix());
 
 	ClassLoader<TestPlugin> cl;
@@ -126,7 +122,7 @@ void ClassLoaderTest::testClassLoader2()
 	
 	try
 	{
-		TestPlugin& plgB = cl.instance("PluginB");
+		TestPlugin& POCO_UNUSED plgB = cl.instance("PluginB");
 		fail("not a singleton - must throw");
 	}
 	catch (InvalidAccessException&)
@@ -135,7 +131,7 @@ void ClassLoaderTest::testClassLoader2()
 	
 	try
 	{
-		TestPlugin* pPluginC = cl.create("PluginC");
+		TestPlugin* POCO_UNUSED pPluginC = cl.create("PluginC");
 		fail("cannot create a singleton - must throw");
 	}
 	catch (InvalidAccessException&)
@@ -172,8 +168,7 @@ void ClassLoaderTest::testClassLoader2()
 
 void ClassLoaderTest::testClassLoader3()
 {
-	std::string self = Path(Path::self()).makeParent().toString();
-	std::string path = self + "TestLibrary";
+	std::string path = "TestLibrary";
 	path.append(SharedLibrary::suffix());
 
 	ClassLoader<TestPlugin> cl;

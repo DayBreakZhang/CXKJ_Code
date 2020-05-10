@@ -9,8 +9,8 @@
 
 
 #include "DialogSocketTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "EchoServer.h"
 #include "Poco/Net/DialogSocket.h"
 #include "Poco/Net/SocketAddress.h"

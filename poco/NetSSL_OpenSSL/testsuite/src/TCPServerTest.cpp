@@ -9,8 +9,8 @@
 
 
 #include "TCPServerTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/TCPServer.h"
 #include "Poco/Net/TCPServerConnection.h"
 #include "Poco/Net/TCPServerConnectionFactory.h"
@@ -41,7 +41,6 @@ using Poco::Net::SSLManager;
 using Poco::Thread;
 using Poco::Util::Application;
 
-static const int closeSleepTime = 3000;
 
 namespace
 {
@@ -51,7 +50,7 @@ namespace
 		EchoConnection(const StreamSocket& s): TCPServerConnection(s)
 		{
 		}
-		
+
 		void run()
 		{
 			StreamSocket& ss = socket();
@@ -93,7 +92,7 @@ void TCPServerTest::testOneConnection()
 	assertTrue (srv.currentThreads() == 0);
 	assertTrue (srv.queuedConnections() == 0);
 	assertTrue (srv.totalConnections() == 0);
-	
+
 	SocketAddress sa("127.0.0.1", svs.address().port());
 	SecureStreamSocket ss1(sa);
 	std::string data("hello, world");
@@ -107,7 +106,7 @@ void TCPServerTest::testOneConnection()
 	assertTrue (srv.queuedConnections() == 0);
 	assertTrue (srv.totalConnections() == 1);
 	ss1.close();
-	Thread::sleep(closeSleepTime);
+	Thread::sleep(300);
 	assertTrue (srv.currentConnections() == 0);
 }
 
@@ -121,7 +120,7 @@ void TCPServerTest::testTwoConnections()
 	assertTrue (srv.currentThreads() == 0);
 	assertTrue (srv.queuedConnections() == 0);
 	assertTrue (srv.totalConnections() == 0);
-	
+
 	SocketAddress sa("127.0.0.1", svs.address().port());
 	SecureStreamSocket ss1(sa);
 	SecureStreamSocket ss2(sa);
@@ -137,7 +136,7 @@ void TCPServerTest::testTwoConnections()
 	n = ss2.receiveBytes(buffer, sizeof(buffer));
 	assertTrue (n > 0);
 	assertTrue (std::string(buffer, n) == data);
-	
+
 	assertTrue (srv.currentConnections() == 2);
 	assertTrue (srv.currentThreads() == 2);
 	assertTrue (srv.queuedConnections() == 0);
@@ -150,7 +149,7 @@ void TCPServerTest::testTwoConnections()
 	assertTrue (srv.totalConnections() == 2);
 	ss2.close();
 
-	Thread::sleep(closeSleepTime);
+	Thread::sleep(300);
 	assertTrue (srv.currentConnections() == 0);
 }
 
@@ -168,7 +167,7 @@ void TCPServerTest::testMultiConnections()
 	assertTrue (srv.currentThreads() == 0);
 	assertTrue (srv.queuedConnections() == 0);
 	assertTrue (srv.totalConnections() == 0);
-	
+
 	SocketAddress sa("127.0.0.1", svs.address().port());
 	SecureStreamSocket ss1(sa);
 	SecureStreamSocket ss2(sa);
@@ -196,12 +195,12 @@ void TCPServerTest::testMultiConnections()
 	n = ss4.receiveBytes(buffer, sizeof(buffer));
 	assertTrue (n > 0);
 	assertTrue (std::string(buffer, n) == data);
-	
+
 	assertTrue (srv.currentConnections() == 4);
 	assertTrue (srv.currentThreads() == 4);
 	assertTrue (srv.queuedConnections() == 0);
 	assertTrue (srv.totalConnections() == 4);
-	
+
 	SecureStreamSocket ss5;
 	ss5.setLazyHandshake();
 	ss5.connect(sa);
@@ -212,7 +211,7 @@ void TCPServerTest::testMultiConnections()
 	ss6.connect(sa);
 	Thread::sleep(200);
 	assertTrue (srv.queuedConnections() == 2);
-	
+
 	ss1.close();
 	Thread::sleep(300);
 	assertTrue (srv.currentConnections() == 4);
@@ -226,7 +225,7 @@ void TCPServerTest::testMultiConnections()
 	assertTrue (srv.currentThreads() == 4);
 	assertTrue (srv.queuedConnections() == 0);
 	assertTrue (srv.totalConnections() == 6);
-	
+
 	ss3.close();
 	Thread::sleep(300);
 	assertTrue (srv.currentConnections() == 3);
@@ -243,7 +242,7 @@ void TCPServerTest::testMultiConnections()
 
 	ss5.close();
 	ss6.close();
-	Thread::sleep(closeSleepTime);
+	Thread::sleep(300);
 	assertTrue (srv.currentConnections() == 0);
 }
 
@@ -257,7 +256,7 @@ void TCPServerTest::testReuseSocket()
 	assertTrue (srv.currentThreads() == 0);
 	assertTrue (srv.queuedConnections() == 0);
 	assertTrue (srv.totalConnections() == 0);
-	
+
 	SocketAddress sa("127.0.0.1", svs.address().port());
 	SecureStreamSocket ss1(sa);
 	std::string data("hello, world");
@@ -283,7 +282,7 @@ void TCPServerTest::testReuseSocket()
 	assertTrue (srv.queuedConnections() == 0);
 	assertTrue (srv.totalConnections() == 2);
 	ss1.close();
-	Thread::sleep(closeSleepTime);
+	Thread::sleep(300);
 	assertTrue (srv.currentConnections() == 0);
 }
 
@@ -293,7 +292,7 @@ void TCPServerTest::testReuseSession()
 	// ensure OpenSSL machinery is fully setup
 	Context::Ptr pDefaultServerContext = SSLManager::instance().defaultServerContext();
 	Context::Ptr pDefaultClientContext = SSLManager::instance().defaultClientContext();
-	
+
 	Context::Ptr pServerContext = new Context(
 		Context::SERVER_USE,
 		Application::instance().config().getString("openSSL.server.privateKeyFile"),
@@ -302,12 +301,12 @@ void TCPServerTest::testReuseSession()
 		Context::VERIFY_NONE,
 		9,
 		true,
-		"ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");	
+		"ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
 	pServerContext->enableSessionCache(true, "TestSuite");
 	pServerContext->setSessionTimeout(10);
 	pServerContext->setSessionCacheSize(1000);
 	pServerContext->disableStatelessSessionResumption();
-	
+
 	SecureServerSocket svs(0, 64, pServerContext);
 	TCPServer srv(new TCPServerConnectionFactoryImpl<EchoConnection>(), svs);
 	srv.start();
@@ -315,7 +314,7 @@ void TCPServerTest::testReuseSession()
 	assertTrue (srv.currentThreads() == 0);
 	assertTrue (srv.queuedConnections() == 0);
 	assertTrue (srv.totalConnections() == 0);
-	
+
 	Context::Ptr pClientContext = new Context(
 		Context::CLIENT_USE,
 		Application::instance().config().getString("openSSL.client.privateKeyFile"),
@@ -326,7 +325,7 @@ void TCPServerTest::testReuseSession()
 		true,
 		"ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
 	pClientContext->enableSessionCache(true);
-	
+
 	SocketAddress sa("127.0.0.1", svs.address().port());
 	SecureStreamSocket ss1(sa, pClientContext);
 	assertTrue (!ss1.sessionWasReused());
@@ -340,9 +339,9 @@ void TCPServerTest::testReuseSession()
 	assertTrue (srv.currentThreads() == 1);
 	assertTrue (srv.queuedConnections() == 0);
 	assertTrue (srv.totalConnections() == 1);
-	
+
 	Session::Ptr pSession = ss1.currentSession();
-	
+
 	ss1.close();
 	Thread::sleep(300);
 	assertTrue (srv.currentConnections() == 0);
@@ -364,7 +363,7 @@ void TCPServerTest::testReuseSession()
 
 	Thread::sleep(15000); // wait for session to expire
 	pServerContext->flushSessionCache();
-	
+
 	ss1.useSession(pSession);
 	ss1.connect(sa);
 	assertTrue (!ss1.sessionWasReused());
@@ -377,7 +376,7 @@ void TCPServerTest::testReuseSession()
 	assertTrue (srv.queuedConnections() == 0);
 	assertTrue (srv.totalConnections() == 3);
 	ss1.close();
-	Thread::sleep(closeSleepTime);
+	Thread::sleep(300);
 	assertTrue (srv.currentConnections() == 0);
 }
 

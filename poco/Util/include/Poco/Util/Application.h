@@ -85,9 +85,9 @@ class Util_API Application: public Subsystem
 	/// POCO_APP_MAIN supports Unicode command line arguments.
 {
 public:
-	typedef std::vector<std::string> ArgVec;
-	typedef Poco::AutoPtr<Subsystem> SubsystemPtr;
-	typedef std::vector<SubsystemPtr> SubsystemVec;
+	using ArgVec = std::vector<std::string>;
+	using SubsystemPtr = Poco::AutoPtr<Subsystem>;
+	using SubsystemVec = std::vector<SubsystemPtr>;
 
 	enum ExitCode
 		/// Commonly used exit status codes.
@@ -139,7 +139,7 @@ public:
 		/// Note that as of release 1.3.7, init() no longer
 		/// calls initialize(). This is now called from run().
 
-#if defined (POCO_OS_FAMILY_WINDOWS) && !defined(POCO_NO_WSTRING)
+#if defined(_WIN32)
 	void init(int argc, wchar_t* argv[]);
 		/// Processes the application's command line arguments
 		/// and sets the application's properties (e.g.,
@@ -379,18 +379,17 @@ private:
 	typedef LayeredConfiguration::Ptr ConfigPtr;
 	typedef Poco::Logger::Ptr LoggerPtr;
 
-	ConfigPtr         _pConfig;
-	SubsystemVec      _subsystems;
-	bool              _initialized;
-	std::string       _command;
-	ArgVec            _argv;
-	ArgVec            _unprocessedArgs;
-	OptionSet         _options;
-	bool              _unixOptions;
+	ConfigPtr       _pConfig;
+	SubsystemVec    _subsystems;
+	bool            _initialized;
+	std::string     _command;
+	ArgVec          _argv;
+	ArgVec          _unprocessedArgs;
+	OptionSet       _options;
+	bool            _unixOptions;
 	Logger*           _pLogger;
-	Poco::Timestamp   _startTime;
-	bool              _stopOptionsProcessing;
-	int               _loadedConfigs;
+	Poco::Timestamp _startTime;
+	bool            _stopOptionsProcessing;
 
 #if defined(POCO_OS_FAMILY_UNIX) && !defined(POCO_VXWORKS)
 	std::string _workingDirAtLaunch;
@@ -410,9 +409,9 @@ private:
 //
 template <class C> C& Application::getSubsystem() const
 {
-	for (SubsystemVec::const_iterator it = _subsystems.begin(); it != _subsystems.end(); ++it)
+	for (const auto& pSub: _subsystems)
 	{
-		const Subsystem* pSS(it->get());
+		const Subsystem* pSS(pSub.get());
 		const C* pC = dynamic_cast<const C*>(pSS);
 		if (pC) return *const_cast<C*>(pC);
 	}
@@ -433,7 +432,6 @@ inline bool Application::initialized() const
 
 inline LayeredConfiguration& Application::config() const
 {
-	poco_assert(!_pConfig.isNull());
 	return *const_cast<LayeredConfiguration*>(_pConfig.get());
 }
 
@@ -479,9 +477,9 @@ inline const Poco::Timestamp& Application::startTime() const
 inline Poco::Timespan Application::uptime() const
 {
 	Poco::Timestamp now;
-	Poco::Timespan ret = now - _startTime;
+	Poco::Timespan uptime = now - _startTime;
 
-	return ret;
+	return uptime;
 }
 
 
@@ -491,7 +489,7 @@ inline Poco::Timespan Application::uptime() const
 //
 // Macro to implement main()
 //
-#if defined(POCO_OS_FAMILY_WINDOWS) && !defined(POCO_NO_WSTRING)
+#if defined(_WIN32) 
 	#define POCO_APP_MAIN(App) \
 	int wmain(int argc, wchar_t** argv)		\
 	{										\
@@ -506,8 +504,7 @@ inline Poco::Timespan Application::uptime() const
 			return Poco::Util::Application::EXIT_CONFIG;\
 		}									\
 		return pApp->run();					\
-	}										\
-	POCO_WMAIN_WRAPPER()
+	}
 #elif defined(POCO_VXWORKS)
 	#define POCO_APP_MAIN(App) \
 	int pocoAppMain(const char* appName, ...) \

@@ -26,8 +26,7 @@ Client::Client():
 	_address(),
 	_socket(),
 	_input(0),
-	_output(0),
-    _authenticated(false)
+	_output(0)
 {
 }
 
@@ -36,19 +35,17 @@ Client::Client(const std::string& hostAndPort):
 	_address(hostAndPort),
 	_socket(),
 	_input(0),
-	_output(0),
-    _authenticated(false)
+	_output(0)
 {
 	connect();
 }
 
 
 Client::Client(const std::string& host, int port):
-	_address(host, static_cast<UInt16>(port)),
+	_address(host, port),
 	_socket(),
 	_input(0),
-	_output(0),
-    _authenticated(false)
+	_output(0)
 {
 	connect();
 }
@@ -58,8 +55,7 @@ Client::Client(const Net::SocketAddress& addrs):
 	_address(addrs),
 	_socket(),
 	_input(0),
-	_output(0),
-    _authenticated(false)
+	_output(0)
 {
 	connect();
 }
@@ -69,7 +65,6 @@ Client::~Client()
 {
 	delete _input;
 	delete _output;
-    _socket.close();
 }
 
 
@@ -78,8 +73,8 @@ void Client::connect()
 	poco_assert(! _input);
 	poco_assert(! _output);
 
-	_socket.connect(_address);
-    _input = new RedisInputStream(_socket);
+	_socket = Net::StreamSocket(_address);
+	_input = new RedisInputStream(_socket);
 	_output = new RedisOutputStream(_socket);
 }
 
@@ -93,7 +88,7 @@ void Client::connect(const std::string& hostAndPort)
 
 void Client::connect(const std::string& host, int port)
 {
-	_address = Net::SocketAddress(host, static_cast<UInt16>(port));
+	_address = Net::SocketAddress(host, port);
 	connect();
 }
 
@@ -110,6 +105,7 @@ void Client::connect(const Timespan& timeout)
 	poco_assert(! _input);
 	poco_assert(! _output);
 
+	_socket = Net::StreamSocket();
 	_socket.connect(_address, timeout);
 	_input = new RedisInputStream(_socket);
 	_output = new RedisOutputStream(_socket);
@@ -125,7 +121,7 @@ void Client::connect(const std::string& hostAndPort, const Timespan& timeout)
 
 void Client::connect(const std::string& host, int port, const Timespan& timeout)
 {
-	_address = Net::SocketAddress(host, static_cast<UInt16>(port));
+	_address = Net::SocketAddress(host, port);
 	connect(timeout);
 }
 
@@ -134,26 +130,6 @@ void Client::connect(const Net::SocketAddress& addrs, const Timespan& timeout)
 {
 	_address = addrs;
 	connect(timeout);
-}
-
-
-bool Client::sendAuth(const std::string& password)
-{
-    Array cmd;
-    cmd << "AUTH" << password;
-
-    bool ret = true;
-    std::string response;
-
-    try {
-        response = execute<std::string>(cmd);
-    } catch (...) {
-        ret = false;
-    }
-
-    _authenticated = (ret && (response == "OK"));
-
-    return _authenticated;
 }
 
 
@@ -190,7 +166,12 @@ RedisType::Ptr Client::readReply()
 {
 	poco_assert(_input);
 
-	char c = static_cast<char>(_input->get());
+	int c = _input->get();
+	if (c == -1)
+	{
+		disconnect();
+		throw RedisException("Lost connection to Redis server");
+	}
 	RedisType::Ptr result = RedisType::createRedisType(c);
 	if (result.isNull())
 	{

@@ -5,7 +5,7 @@
 // Package: SSLCore
 // Module:  X509Certificate
 //
-// Copyright (c) 2006-2017, Applied Informatics Software Engineering GmbH.
+// Copyright (c) 2006-2009, Applied Informatics Software Engineering GmbH.
 // and Contributors.
 //
 // SPDX-License-Identifier:	BSL-1.0
@@ -33,7 +33,7 @@ namespace Net {
 
 X509Certificate::X509Certificate(std::istream& istr):
 	Poco::Crypto::X509Certificate(istr)
-{	
+{
 }
 
 
@@ -61,10 +61,37 @@ X509Certificate::X509Certificate(const Poco::Crypto::X509Certificate& cert):
 }
 
 
+X509Certificate::X509Certificate(const X509Certificate& cert):
+	Poco::Crypto::X509Certificate(cert)
+{
+}
+
+
+X509Certificate::X509Certificate(X509Certificate&& cert) noexcept:
+	Poco::Crypto::X509Certificate(std::move(cert))
+{
+}
+
+
 X509Certificate& X509Certificate::operator = (const Poco::Crypto::X509Certificate& cert)
 {
 	X509Certificate tmp(cert);
 	swap(tmp);
+	return *this;
+}
+
+
+X509Certificate& X509Certificate::operator = (const X509Certificate& cert)
+{
+	X509Certificate tmp(cert);
+	swap(tmp);
+	return *this;
+}
+
+
+X509Certificate& X509Certificate::operator = (X509Certificate&& cert) noexcept
+{
+	Poco::Crypto::X509Certificate::operator = (std::move(cert));
 	return *this;
 }
 

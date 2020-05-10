@@ -9,13 +9,12 @@
 
 
 #include "RSATest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Crypto/RSADigestEngine.h"
 #include "Poco/Crypto/CipherFactory.h"
 #include "Poco/Crypto/Cipher.h"
 #include "Poco/Crypto/X509Certificate.h"
-#include <iostream>
 #include <sstream>
 
 
@@ -84,7 +83,7 @@ RSATest::~RSATest()
 }
 
 
-void RSATest::testRSANewKeys()
+void RSATest::testNewKeys()
 {
 	RSAKey key(RSAKey::KL_1024, RSAKey::EXP_SMALL);
 	std::ostringstream strPub;
@@ -107,7 +106,7 @@ void RSATest::testRSANewKeys()
 }
 
 
-void RSATest::testRSANewKeysNoPassphrase()
+void RSATest::testNewKeysNoPassphrase()
 {
 	RSAKey key(RSAKey::KL_1024, RSAKey::EXP_SMALL);
 	std::ostringstream strPub;
@@ -130,7 +129,7 @@ void RSATest::testRSANewKeysNoPassphrase()
 }
 
 
-void RSATest::testRSASign()
+void RSATest::testSign()
 {
 	std::string msg("Test this sign message");
 	RSAKey key(RSAKey::KL_2048, RSAKey::EXP_LARGE);
@@ -151,7 +150,7 @@ void RSATest::testRSASign()
 }
 
 
-void RSATest::testRSASignSha256()
+void RSATest::testSignSha256()
 {
 	std::string msg("Test this sign message");
 	RSAKey key(RSAKey::KL_2048, RSAKey::EXP_LARGE);
@@ -172,7 +171,7 @@ void RSATest::testRSASignSha256()
 }
 
 
-void RSATest::testRSASignManipulated()
+void RSATest::testSignManipulated()
 {
 	std::string msg("Test this sign message");
 	std::string msgManip("Test that sign message");
@@ -234,7 +233,7 @@ void RSATest::testRSACipherLarge()
 }
 
 
-void RSATest::testRSACertificate()
+void RSATest::testCertificate()
 {
 	std::istringstream str(anyPem);
 	X509Certificate cert(str);
@@ -265,14 +264,14 @@ CppUnit::Test* RSATest::suite()
 {
 	CppUnit::TestSuite* pSuite = new CppUnit::TestSuite("RSATest");
 
-	CppUnit_addTest(pSuite, RSATest, testRSANewKeys);
-	CppUnit_addTest(pSuite, RSATest, testRSANewKeysNoPassphrase);
-	CppUnit_addTest(pSuite, RSATest, testRSASign);
-	CppUnit_addTest(pSuite, RSATest, testRSASignSha256);
-	CppUnit_addTest(pSuite, RSATest, testRSASignManipulated);
+	CppUnit_addTest(pSuite, RSATest, testNewKeys);
+	CppUnit_addTest(pSuite, RSATest, testNewKeysNoPassphrase);
+	CppUnit_addTest(pSuite, RSATest, testSign);
+	CppUnit_addTest(pSuite, RSATest, testSignSha256);
+	CppUnit_addTest(pSuite, RSATest, testSignManipulated);
 	CppUnit_addTest(pSuite, RSATest, testRSACipher);
 	CppUnit_addTest(pSuite, RSATest, testRSACipherLarge);
-	CppUnit_addTest(pSuite, RSATest, testRSACertificate);
+	CppUnit_addTest(pSuite, RSATest, testCertificate);
 
 	return pSuite;
 }

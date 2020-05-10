@@ -43,7 +43,7 @@ namespace
 	std::map<std::string, std::string> parseKeyValueList(const std::string& str)
 	{
 		std::map<std::string, std::string> kvm;
-		std::string::const_iterator it = str.begin();
+		std::string::const_iterator it = str.begin(); 
 		std::string::const_iterator end = str.end();
 		while (it != end)
 		{
@@ -110,7 +110,7 @@ namespace
 		Poco::Random random;
 		for (int i = 0; i < 4; i++)
 		{
-			md5.update(static_cast<char>(randomStream.get()));
+			md5.update(randomStream.get());
 			md5.update(random.nextChar());
 		}
 		return digestToHexString(md5);
@@ -134,7 +134,7 @@ bool Database::authenticate(Connection& connection, const std::string& username,
 	if (username.empty()) throw Poco::InvalidArgumentException("empty username");
 	if (password.empty()) throw Poco::InvalidArgumentException("empty password");
 	
-	if (method == AUTH_MONGODB_CR)
+	if (method == AUTH_MONGODB_CR) 
 		return authCR(connection, username, password);
 	else if (method == AUTH_SCRAM_SHA1)
 		return authSCRAM(connection, username, password);
@@ -173,7 +173,7 @@ bool Database::authCR(Connection& connection, const std::string& username, const
 		.add<Poco::Int32>("authenticate", 1)
 		.add<std::string>("user", username)
 		.add<std::string>("nonce", nonce)
-		.add<std::string>("key", key);
+		.add<std::string>("key", key); 
 
 	connection.sendRequest(*pCommand, response);
 	if (response.documents().size() > 0)
@@ -195,7 +195,7 @@ bool Database::authSCRAM(Connection& connection, const std::string& username, co
 		.add<Poco::Int32>("saslStart", 1)
 		.add<std::string>("mechanism", AUTH_SCRAM_SHA1)
 		.add<Binary::Ptr>("payload", new Binary(Poco::format("n,,%s", clientFirstMsg)))
-		.add<bool>("authAuthorize", true);
+		.add<bool>("authAuthorize", true); 
 		
 	ResponseMessage response;
 	connection.sendRequest(*pCommand, response);

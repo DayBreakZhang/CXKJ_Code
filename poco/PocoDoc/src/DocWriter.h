@@ -155,7 +155,9 @@ protected:
 	void writeClasses(std::ostream& ostr, const Poco::CppParser::NameSpace* pNameSpace);
 	void writeClassSummary(std::ostream& ostr, const Poco::CppParser::Struct* pStruct);
 	void writeTypesSummary(std::ostream& ostr, const Poco::CppParser::NameSpace* pNameSpace);
+	void writeAliasesSummary(std::ostream& ostr, const Poco::CppParser::NameSpace* pNameSpace);
 	void writeTypes(std::ostream& ostr, const Poco::CppParser::NameSpace* pNameSpace);
+	void writeAliases(std::ostream& ostr, const Poco::CppParser::NameSpace* pNameSpace);
 	void writeType(std::ostream& ostr, const Poco::CppParser::TypeDef* pType);
 	void writeEnums(std::ostream& ostr, const Poco::CppParser::NameSpace* pNameSpace);
 	void writeEnum(std::ostream& ostr, const Poco::CppParser::Enum* pEnum);
@@ -188,11 +190,11 @@ protected:
 	static std::string projectURI(const std::string& id);
 
 	static Poco::Logger& logger();
-
+	
 	static const std::string RFC_URI;
 	static const std::string GITHUB_POCO_URI;
 	
-private:
+private:	
 	bool _prettifyCode;
 	bool _noFrames;
 	bool _htmlMode;
@@ -204,7 +206,7 @@ private:
 	bool _pendingLine;
 	int  _indent;
 	int  _titleId;
-
+	
 	static std::string _language;
 	static StringMap   _strings;
 	

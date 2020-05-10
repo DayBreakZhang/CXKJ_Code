@@ -57,9 +57,9 @@ public:
 		if (_pSocketFactory)
 			return new MongoDB::Connection(_uri, *_pSocketFactory);
 		else
-		return new MongoDB::Connection(_address);
+			return new MongoDB::Connection(_address);
 	}
-	
+
 	bool validateObject(MongoDB::Connection::Ptr pObject)
 	{
 		return true;
@@ -116,15 +116,7 @@ public:
 		return _connection;
 	}
 
-	PooledConnection(const PooledConnection&) = delete;
-	PooledConnection& operator=(const PooledConnection&) = delete;
-
-	PooledConnection(PooledConnection&& other) = default;
-	PooledConnection& operator=(PooledConnection&&) = default;
-
-
 private:
-
 	Poco::ObjectPool<Connection, Connection::Ptr>& _pool;
 	Connection::Ptr _connection;
 };

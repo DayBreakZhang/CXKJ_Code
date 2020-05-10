@@ -21,7 +21,7 @@
 #include "Poco/StringTokenizer.h"
 #include "Poco/NumberParser.h"
 #include <utility>
-#include "Util.h"
+
 
 namespace Poco {
 namespace PDF {
@@ -195,34 +195,18 @@ const Image& Document::loadPNGImageImpl(const std::string& fileName, bool doLoad
 		std::pair<ImageContainer::iterator, bool> it;
 		if (doLoad)
 		{
-			Image image(&_pdf, HPDF_LoadPngImageFromFile(_pdf, Poco::Path::transcode(fileName).c_str()));
+			Image image(&_pdf, HPDF_LoadPngImageFromFile(_pdf, fileName.c_str()));
 			it = _images.insert(ImageContainer::value_type(path.getBaseName(), image));
 		}
 		else
 		{
-			Image image(&_pdf, HPDF_LoadPngImageFromFile2(_pdf, Poco::Path::transcode(fileName).c_str()));
+			Image image(&_pdf, HPDF_LoadPngImageFromFile2(_pdf, fileName.c_str()));
 			it = _images.insert(ImageContainer::value_type(path.getBaseName(), image));
 		}
 		if (it.second) return it.first->second;
 		else throw IllegalStateException("Could not insert image.");
 	}
 	else 
-		throw NotFoundException("File not found: " + fileName);
-}
-
-const Image& Document::loadBMPImageImpl(const std::string& fileName, bool /*doLoad*/)
-{
-	Path path(fileName);
-
-	if (File(path).exists())
-	{		
-		Image image(&_pdf, LoadBMPImageFromFile(_pdf, Poco::Path::transcode(fileName).c_str()));
-		std::pair<ImageContainer::iterator, bool> it =
-			_images.insert(ImageContainer::value_type(path.getBaseName(), image));
-		if (it.second) return it.first->second;
-		else throw IllegalStateException("Could not insert image.");
-	}
-	else
 		throw NotFoundException("File not found: " + fileName);
 }
 
@@ -233,7 +217,7 @@ const Image& Document::loadJPEGImage(const std::string& fileName)
 
 	if (File(path).exists())
 	{
-		Image image(&_pdf, HPDF_LoadJpegImageFromFile(_pdf, Poco::Path::transcode(fileName).c_str()));
+		Image image(&_pdf, HPDF_LoadJpegImageFromFile(_pdf, fileName.c_str()));
 		std::pair<ImageContainer::iterator, bool> it =
 			_images.insert(ImageContainer::value_type(path.getBaseName(), image));
 		if (it.second) return it.first->second;

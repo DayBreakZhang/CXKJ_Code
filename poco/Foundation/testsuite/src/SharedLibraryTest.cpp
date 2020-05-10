@@ -9,10 +9,9 @@
 
 
 #include "SharedLibraryTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/SharedLibrary.h"
-#include "Poco/Path.h"
 #include "Poco/Exception.h"
 
 
@@ -20,13 +19,12 @@ using Poco::SharedLibrary;
 using Poco::NotFoundException;
 using Poco::LibraryLoadException;
 using Poco::LibraryAlreadyLoadedException;
-using Poco::Path;
 
 
 typedef int (*GimmeFiveFunc)();
 
 
-SharedLibraryTest::SharedLibraryTest(const std::string& rName): CppUnit::TestCase(rName)
+SharedLibraryTest::SharedLibraryTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -38,8 +36,7 @@ SharedLibraryTest::~SharedLibraryTest()
 
 void SharedLibraryTest::testSharedLibrary1()
 {
-	std::string self = Path(Path::self()).makeParent().toString();
-	std::string path = self + "TestLibrary";
+	std::string path = "TestLibrary";
 	path.append(SharedLibrary::suffix());
 	SharedLibrary sl;
 	assertTrue (!sl.isLoaded());
@@ -73,8 +70,7 @@ void SharedLibraryTest::testSharedLibrary1()
 
 void SharedLibraryTest::testSharedLibrary2()
 {
-	std::string self = Path(Path::self()).makeParent().toString();
-	std::string path = self + "TestLibrary";
+	std::string path = "TestLibrary";
 	path.append(SharedLibrary::suffix());
 	SharedLibrary sl(path);
 	assertTrue (sl.getPath() == path);
@@ -91,6 +87,7 @@ void SharedLibraryTest::testSharedLibrary2()
 void SharedLibraryTest::testSharedLibrary3()
 {
 	std::string path = "NonexistentLibrary";
+	path.append(SharedLibrary::suffix());
 	SharedLibrary sl;
 	try
 	{
@@ -106,8 +103,7 @@ void SharedLibraryTest::testSharedLibrary3()
 	}
 	assertTrue (!sl.isLoaded());
 
-	std::string self = Path(Path::self()).makeParent().toString();
-	path = self + "TestLibrary";
+	path = "TestLibrary";
 	path.append(SharedLibrary::suffix());
 	sl.load(path);
 	assertTrue (sl.isLoaded());
@@ -145,11 +141,9 @@ CppUnit::Test* SharedLibraryTest::suite()
 {
 	CppUnit::TestSuite* pSuite = new CppUnit::TestSuite("SharedLibraryTest");
 
-#ifndef _DEBUG // FIXME excluded from the Debug build temporarily for AppVeyor stability
 	CppUnit_addTest(pSuite, SharedLibraryTest, testSharedLibrary1);
 	CppUnit_addTest(pSuite, SharedLibraryTest, testSharedLibrary2);
 	CppUnit_addTest(pSuite, SharedLibraryTest, testSharedLibrary3);
-#endif
 
 	return pSuite;
 }

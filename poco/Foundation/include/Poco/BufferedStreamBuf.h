@@ -29,7 +29,7 @@
 namespace Poco {
 
 
-template <typename ch, typename tr, typename ba = BufferAllocator<ch> >
+template <typename ch, typename tr, typename ba = BufferAllocator<ch>> 
 class BasicBufferedStreamBuf: public std::basic_streambuf<ch, tr>
 	/// This is an implementation of a buffered streambuf
 	/// that greatly simplifies the implementation of
@@ -59,7 +59,7 @@ public:
 		_pBuffer(Allocator::allocate(_bufsize)),
 		_mode(mode)
 	{
-		this->setg(_pBuffer + 4, _pBuffer + 4, _pBuffer + 4);
+		this->setg(_pBuffer + 4, _pBuffer + 4, _pBuffer + 4);	
 		this->setp(_pBuffer, _pBuffer + _bufsize);
 	}
 
@@ -68,7 +68,8 @@ public:
 		try
 		{
 			Allocator::deallocate(_pBuffer, _bufsize);
-		} catch (...)
+		} 
+		catch (...)
 		{
 			poco_unexpected();
 		}
@@ -79,7 +80,7 @@ public:
 		if (!(_mode & IOS::out)) return char_traits::eof();
 
 		if (flushBuffer() == std::streamsize(-1)) return char_traits::eof();
-		if (c != char_traits::eof())
+		if (c != char_traits::eof()) 
 		{
 			*this->pptr() = char_traits::to_char_type(c);
 			this->pbump(1);
@@ -106,12 +107,12 @@ public:
 		this->setg(_pBuffer + (4 - putback), _pBuffer + 4, _pBuffer + 4 + n);
 
 		// return next character
-		return char_traits::to_int_type(*this->gptr());
+		return char_traits::to_int_type(*this->gptr());    
 	}
 
 	virtual int sync()
 	{
-		if (this->pptr() && this->pptr() > this->pbase())
+		if (this->pptr() && this->pptr() > this->pbase()) 
 		{
 			if (flushBuffer() == -1) return -1;
 		}
@@ -143,7 +144,7 @@ private:
 	int flushBuffer()
 	{
 		int n = int(this->pptr() - this->pbase());
-		if (writeToDevice(this->pbase(), n) == n)
+		if (writeToDevice(this->pbase(), n) == n) 
 		{
 			this->pbump(-n);
 			return n;
@@ -168,9 +169,9 @@ private:
 // instantiations in different libraries.
 //
 #if defined(_MSC_VER) && defined(POCO_DLL) && !defined(Foundation_EXPORTS)
-template class Foundation_API BasicBufferedStreamBuf<char, std::char_traits<char> >;
+template class Foundation_API BasicBufferedStreamBuf<char, std::char_traits<char>>;
 #endif
-typedef BasicBufferedStreamBuf<char, std::char_traits<char> > BufferedStreamBuf;
+typedef BasicBufferedStreamBuf<char, std::char_traits<char>> BufferedStreamBuf;
 
 
 } // namespace Poco

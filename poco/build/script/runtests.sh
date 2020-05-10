@@ -1,7 +1,5 @@
 #! /bin/sh
 #
-# $Id$
-#
 # A script for running the POCO testsuites.
 #
 # usage: runtests [component [test] ]
@@ -22,8 +20,6 @@
 # 5/ run the Foundation tests: build/script/runtests.sh Foundation
 #
 
-TESTRUNNER=./testrunner
-
 if [ "$POCO_BASE" = "" ] ; then
 	POCO_BASE=`pwd`
 fi
@@ -31,6 +27,8 @@ fi
 if [ "$POCO_BUILD" = "" ] ; then
 	POCO_BUILD=$POCO_BASE
 fi
+
+TESTRUNNER=./testrunner
 
 if [ "$1" = "" ] ; then
    components=`cat $POCO_BASE/components`
@@ -52,7 +50,7 @@ if [ "$OSNAME" = "" ] ; then
 	OSNAME=`uname`
         case $OSNAME in
         CYGWIN*)
-                OSNAME=Cygwin
+                OSNAME=CYGWIN
                 TESTRUNNER=$TESTRUNNER.exe
                 PATH=$POCO_BUILD/lib/$OSNAME/$OSARCH:$PATH
                 ;;
@@ -62,11 +60,11 @@ if [ "$OSNAME" = "" ] ; then
 fi
 
 BINDIR="bin/$OSNAME/$OSARCH/"
+IGNORE="-ignore $POCO_BASE/cppignore.lnx"
 
 runs=0
 failures=0
 failedTests=""
-failedExits=""
 status=0
 
 for comp in $components ;
@@ -89,13 +87,10 @@ do
 				echo ""
 
 				runs=`expr $runs + 1`
-				sh -c "cd $POCO_BUILD/$comp/testsuite/$BINDIR && LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH $TESTRUNNER $TESTRUNNERARGS"
-				rc=$?
-				if [ $rc -ne 0 ] ; then
-					echo "failed="$comp
+				sh -c "cd $POCO_BUILD/$comp/testsuite/$BINDIR && PATH=.:$PATH && LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH $TESTRUNNER $IGNORE $TESTRUNNERARGS"
+				if [ $? -ne 0 ] ; then
 					failures=`expr $failures + 1`
 					failedTests="$failedTests $comp"
-					failedExits="$failedExits $rc"
 					status=1
 				fi
 			fi
@@ -112,5 +107,5 @@ do
 	echo "Failed: $test"
 done
 echo ""
-echo "status="$status
+
 exit $status

@@ -58,7 +58,7 @@ public:
 	void reset();
 		/// Resets all counters.
 		
-	void setCurrentLineNumber(int line);
+	void setCurrentLineNumber(std::streamsize line);
 		/// Sets the current line number.
 		///
 		/// This is mainly useful when parsing C/C++

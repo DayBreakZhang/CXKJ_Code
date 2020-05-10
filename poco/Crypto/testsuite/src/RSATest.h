@@ -15,7 +15,7 @@
 
 
 #include "Poco/Crypto/Crypto.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class RSATest: public CppUnit::TestCase
@@ -24,14 +24,14 @@ public:
 	RSATest(const std::string& name);
 	~RSATest();
 
-	void testRSANewKeys();
-	void testRSANewKeysNoPassphrase();
-	void testRSASign();
-	void testRSASignSha256();
-	void testRSASignManipulated();
+	void testNewKeys();
+	void testNewKeysNoPassphrase();
+	void testSign();
+	void testSignSha256();
+	void testSignManipulated();
 	void testRSACipher();
 	void testRSACipherLarge();
-	void testRSACertificate();
+	void testCertificate();
 
 	void setUp();
 	void tearDown();

@@ -44,6 +44,7 @@ const std::string SystemConfiguration::HOMEDIR        = "system.homeDir";
 const std::string SystemConfiguration::CONFIGHOMEDIR  = "system.configHomeDir";
 const std::string SystemConfiguration::CACHEHOMEDIR   = "system.cacheHomeDir";
 const std::string SystemConfiguration::DATAHOMEDIR    = "system.dataHomeDir";
+const std::string SystemConfiguration::TEMPHOMEDIR    = "system.tempHomeDir";
 const std::string SystemConfiguration::TEMPDIR        = "system.tempDir";
 const std::string SystemConfiguration::CONFIGDIR      = "system.configDir";
 const std::string SystemConfiguration::DATETIME       = "system.dateTime";
@@ -122,6 +123,10 @@ bool SystemConfiguration::getRaw(const std::string& key, std::string& value) con
 	{
 		value = Path::dataHome();
 	}
+	else if (key == TEMPHOMEDIR)
+	{
+		value = Path::tempHome();
+	}
 	else if (key == TEMPDIR)
 	{
 		value = Path::temp();
@@ -150,7 +155,7 @@ bool SystemConfiguration::getRaw(const std::string& key, std::string& value) con
 }
 
 
-void SystemConfiguration::setRaw(const std::string& key, const std::string& /*value*/)
+void SystemConfiguration::setRaw(const std::string& key, const std::string& value)
 {
 	throw Poco::InvalidAccessException("Attempt to modify a system property", key);
 }
@@ -174,6 +179,7 @@ void SystemConfiguration::enumerate(const std::string& key, Keys& range) const
 		range.push_back("configHomeDir");
 		range.push_back("cacheHomeDir");
 		range.push_back("dataHomeDir");
+		range.push_back("tempHomeDir");
 		range.push_back("tempDir");
 		range.push_back("configDir");
 		range.push_back("dateTime");
@@ -185,7 +191,7 @@ void SystemConfiguration::enumerate(const std::string& key, Keys& range) const
 }
 
 
-void SystemConfiguration::removeRaw(const std::string& /*key*/)
+void SystemConfiguration::removeRaw(const std::string& key)
 {
 	throw Poco::NotImplementedException("Removing a key in a SystemConfiguration");
 }

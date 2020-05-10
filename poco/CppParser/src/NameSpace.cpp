@@ -108,7 +108,7 @@ Symbol* NameSpace::lookup(const std::string& name, std::set<const NameSpace*>& a
 	bool currentNSInserted = true;
 
 	
-	if (head.empty())
+	if (head.empty()) 
 	{
 		alreadyVisited.insert(this);
 		return root()->lookup(tail, alreadyVisited);
@@ -168,6 +168,12 @@ void NameSpace::typeDefs(SymbolTable& table) const
 }
 
 	
+void NameSpace::typeAliases(SymbolTable& table) const
+{
+	extract(Symbol::SYM_TYPEALIAS, table);
+}
+
+
 void NameSpace::enums(SymbolTable& table) const
 {
 	extract(Symbol::SYM_ENUM, table);
@@ -220,7 +226,7 @@ void NameSpace::splitName(const std::string& name, std::string& head, std::strin
 		head.assign(name, 0, pos);
 		pos += 2;
 		poco_assert (pos < name.length());
-		tail.assign(name, pos, name.length() - pos);
+		tail.assign(name, pos, name.length() - pos); 
 	}
 	else head = name;
 }

@@ -11,7 +11,7 @@
 #include "CoreTestSuite.h"
 #include "CoreTest.h"
 #include "ArrayTest.h"
-#include "RefPtrTest.h"
+#include "AutoPtrTest.h"
 #include "SharedPtrTest.h"
 #include "AutoReleasePoolTest.h"
 #include "ByteOrderTest.h"
@@ -45,7 +45,7 @@ CppUnit::Test* CoreTestSuite::suite()
 
 	pSuite->addTest(CoreTest::suite());
 	pSuite->addTest(ArrayTest::suite());
-	pSuite->addTest(RefPtrTest::suite());
+	pSuite->addTest(AutoPtrTest::suite());
 	pSuite->addTest(SharedPtrTest::suite());
 	pSuite->addTest(AutoReleasePoolTest::suite());
 	pSuite->addTest(ByteOrderTest::suite());
@@ -74,14 +74,3 @@ CppUnit::Test* CoreTestSuite::suite()
 
 	return pSuite;
 }
-
-#if POCO_ARCH == POCO_ARCH_AMD64
-
-// see RefPtrTest for use of this
-namespace unopt {
-
-void unoptimizer() { }
-
-}
-
-#endif

@@ -9,8 +9,8 @@
 
 
 #include "SocketTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "EchoServer.h"
 #include "Poco/Net/StreamSocket.h"
 #include "Poco/Net/ServerSocket.h"
@@ -503,7 +503,7 @@ void SocketTest::testSelect3()
 void SocketTest::testEchoUnixLocal()
 {
 #if defined(POCO_OS_FAMILY_UNIX)
-#if  POCO_OS == POCO_OS_ANDROID
+#if POCO_OS == POCO_OS_ANDROID
 	Poco::File socketFile("/data/local/tmp/SocketTest.sock");
 #else
 	Poco::File socketFile("/tmp/SocketTest.sock");
@@ -524,24 +524,7 @@ void SocketTest::testEchoUnixLocal()
 #endif
 }
 
-void SocketTest::testEchoLinuxAbstract()
-{
-#if POCO_OS == POCO_OS_LINUX || POCO_OS == POCO_OS_ANDROID
-	std::string path("sock.pocoproject.org");
-	path.insert(0, 1, '\0');
-	SocketAddress localAddr(SocketAddress::UNIX_LOCAL, path);
-	EchoServer echoServer(localAddr);
-	StreamSocket ss(SocketAddress::UNIX_LOCAL);
-	ss.connect(localAddr);
-	int n = ss.sendBytes("hello", 5);
-	assertTrue(n == 5);
-	char buffer[256];
-	n = ss.receiveBytes(buffer, sizeof(buffer));
-	assertTrue(n == 5);
-	assertTrue(std::string(buffer, n) == "hello");
-	ss.close();
-#endif
-}
+
 
 void SocketTest::onReadable(bool& b)
 {
@@ -592,7 +575,6 @@ CppUnit::Test* SocketTest::suite()
 	CppUnit_addTest(pSuite, SocketTest, testSelect2);
 	CppUnit_addTest(pSuite, SocketTest, testSelect3);
 	CppUnit_addTest(pSuite, SocketTest, testEchoUnixLocal);
-	CppUnit_addTest(pSuite, SocketTest, testEchoLinuxAbstract);
 
 	return pSuite;
 }

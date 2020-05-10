@@ -1,6 +1,4 @@
 #define _POSIX_C_SOURCE 200112L
-#include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -9,6 +7,21 @@
 
 #define JSON_FLAG_ERROR      (1u << 0)
 #define JSON_FLAG_STREAMING  (1u << 1)
+
+
+// patched for poco 1.8.x (VS 2008)
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+
+#define json_error(json, format, ...)                             \
+    if (!(json->flags & JSON_FLAG_ERROR)) {                       \
+        json->flags |= JSON_FLAG_ERROR;                           \
+        _snprintf_s(json->errmsg, sizeof(json->errmsg), _TRUNCATE,\
+                 "error: %lu: " format,                           \
+                 (unsigned long) json->lineno,                    \
+                 __VA_ARGS__);                                    \
+    }                                                             \
+
+#else
 
 #define json_error(json, format, ...)                             \
     if (!(json->flags & JSON_FLAG_ERROR)) {                       \
@@ -19,12 +32,14 @@
                  __VA_ARGS__);                                    \
     }                                                             \
 
+#endif // _MSC_VER
+
 #define STACK_INC 4
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #define strerror_r(err, buf, len) strerror_s(buf, len, err)
 #endif
-
+/*
 const char *json_typename[] = {
     [JSON_ERROR]      = "ERROR",
     [JSON_DONE]       = "DONE",
@@ -38,7 +53,7 @@ const char *json_typename[] = {
     [JSON_FALSE]      = "FALSE",
     [JSON_NULL]       = "NULL",
 };
-
+*/
 struct json_stack {
     enum json_type type;
     long count;
@@ -58,7 +73,7 @@ push(json_stream *json, enum json_type type)
 
     if (json->stack_top >= json->stack_size) {
         struct json_stack *stack;
-        stack = json->alloc.realloc(json->stack,
+        stack = (struct json_stack *) json->alloc.realloc(json->stack,
                 (json->stack_size + STACK_INC) * sizeof(*json->stack));
         if (stack == NULL) {
             json_error_s(json, errno);
@@ -120,10 +135,10 @@ static void init(json_stream *json)
     json->flags = JSON_FLAG_STREAMING;
     json->errmsg[0] = '\0';
     json->ntokens = 0;
-    json->next = 0;
+    json->next = (enum json_type) 0;
 
     json->stack = NULL;
-    json->stack_top = (size_t)(-1);
+    json->stack_top = -1;
     json->stack_size = 0;
 
     json->data.string = NULL;
@@ -149,7 +164,7 @@ static int pushchar(json_stream *json, int c)
 {
     if (json->data.string_fill == json->data.string_size) {
         size_t size = json->data.string_size * 2;
-        char *buffer = json->alloc.realloc(json->data.string, size);
+        char *buffer = (char*) json->alloc.realloc(json->data.string, size);
         if (buffer == NULL) {
             json_error_s(json, errno);
             return -1;
@@ -158,7 +173,7 @@ static int pushchar(json_stream *json, int c)
             json->data.string = buffer;
         }
     }
-    json->data.string[json->data.string_fill++] = (char)(c);
+    json->data.string[json->data.string_fill++] = c;
     return 0;
 }
 
@@ -167,7 +182,7 @@ static int init_string(json_stream *json)
     json->data.string_fill = 0;
     if (json->data.string == NULL) {
         json->data.string_size = 1024;
-        json->data.string = json->alloc.malloc(json->data.string_size);
+        json->data.string = (char*) json->alloc.malloc(json->data.string_size);
         if (json->data.string == NULL) {
             json_error_s(json, errno);
             return -1;
@@ -333,7 +348,7 @@ int read_escaped(json_stream *json)
         case '"':
             {
                 const char *codes = "\\bfnrt/\"";
-                char *p = strchr(codes, c);
+                char *p = (char*) strchr(codes, c);
                 if (pushchar(json, "\\\b\f\n\r\t/\""[p - codes]) != 0)
                     return -1;
             }
@@ -440,7 +455,7 @@ is_legal_utf8(const unsigned char *bytes, int length)
 static int
 read_utf8(json_stream* json, int next_char)
 {
-    int count = utf8_seq_length((char)(next_char));
+    int count = utf8_seq_length(next_char);
     if (!count)
     {
         json_error(json, "%s", "Bad character.");
@@ -448,10 +463,10 @@ read_utf8(json_stream* json, int next_char)
     }
 
     char buffer[4];
-    buffer[0] = (char)(next_char);
+    buffer[0] = next_char;
     for (int i = 1; i < count; ++i)
     {
-        buffer[i] = (char)(json->source.get(&json->source));
+        buffer[i] = json->source.get(&json->source);;
     }
 
     if (!is_legal_utf8((unsigned char*) buffer, count))
@@ -664,7 +679,7 @@ enum json_type json_next(json_stream *json)
         return JSON_ERROR;
     if (json->next != 0) {
         enum json_type next = json->next;
-        json->next = 0;
+        json->next = (enum json_type) 0;
         return next;
     }
     if (json->ntokens > 0 && json->stack_top == (size_t)-1) {
@@ -751,7 +766,7 @@ enum json_type json_next(json_stream *json)
 
 void json_reset(json_stream *json)
 {
-	json->stack_top = (size_t)(-1);
+    json->stack_top = -1;
     json->ntokens = 0;
     json->flags &= ~JSON_FLAG_ERROR;
     json->errmsg[0] = '\0';
@@ -798,7 +813,7 @@ void json_open_buffer(json_stream *json, const void *buffer, size_t size)
     init(json);
     json->source.get = buffer_get;
     json->source.peek = buffer_peek;
-    json->source.source.buffer.buffer = buffer;
+    json->source.source.buffer.buffer = (char*) buffer;
     json->source.source.buffer.length = size;
 }
 

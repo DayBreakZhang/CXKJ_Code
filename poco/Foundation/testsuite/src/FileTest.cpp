@@ -9,8 +9,8 @@
 
 
 #include "FileTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/File.h"
 #include "Poco/TemporaryFile.h"
 #include "Poco/Path.h"
@@ -18,11 +18,6 @@
 #include "Poco/Thread.h"
 #include <fstream>
 #include <set>
-
-
-#ifndef MAX_PATH
-    #define MAX_PATH 260
-#endif
 
 
 using Poco::File;
@@ -33,7 +28,7 @@ using Poco::Timestamp;
 using Poco::Thread;
 
 
-FileTest::FileTest(const std::string& rName): CppUnit::TestCase(rName)
+FileTest::FileTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -50,7 +45,7 @@ void FileTest::testFileAttributes1()
 
 	try
 	{
-		bool flag = f.canRead();
+		bool POCO_UNUSED flag = f.canRead();
 		failmsg("file does not exist - must throw exception");
 	}
 	catch (Exception&)
@@ -59,7 +54,7 @@ void FileTest::testFileAttributes1()
 
 	try
 	{
-		bool flag = f.canWrite();
+		bool POCO_UNUSED flag = f.canWrite();
 		failmsg("file does not exist - must throw exception");
 	}
 	catch (Exception&)
@@ -68,7 +63,7 @@ void FileTest::testFileAttributes1()
 
 	try
 	{
-		bool flag = f.isFile();
+		bool POCO_UNUSED flag = f.isFile();
 		failmsg("file does not exist - must throw exception");
 	}
 	catch (Exception&)
@@ -77,7 +72,7 @@ void FileTest::testFileAttributes1()
 
 	try
 	{
-		bool flag = f.isDirectory();
+		bool POCO_UNUSED flag = f.isDirectory();
 		failmsg("file does not exist - must throw exception");
 	}
 	catch (Exception&)
@@ -86,7 +81,7 @@ void FileTest::testFileAttributes1()
 
 	try
 	{
-		Timestamp ts = f.created();
+		Timestamp POCO_UNUSED ts = f.created();
 		failmsg("file does not exist - must throw exception");
 	}
 	catch (Exception&)
@@ -95,7 +90,7 @@ void FileTest::testFileAttributes1()
 
 	try
 	{
-		Timestamp ts = f.getLastModified();
+		Timestamp POCO_UNUSED ts = f.getLastModified();
 		failmsg("file does not exist - must throw exception");
 	}
 	catch (Exception&)
@@ -114,7 +109,7 @@ void FileTest::testFileAttributes1()
 
 	try
 	{
-		File::FileSize fs = f.getSize();
+		File::FileSize POCO_UNUSED fs = f.getSize();
 		failmsg("file does not exist - must throw exception");
 	}
 	catch (Exception&)
@@ -183,33 +178,6 @@ void FileTest::testFileAttributes1()
 	catch (Exception&)
 	{
 	}
-
-	try
-	{
-		f.totalSpace();
-		failmsg("file does not exist - must throw exception");
-	}
-	catch (Exception&)
-	{
-	}
-
-	try
-	{
-		f.usableSpace();
-		failmsg("file does not exist - must throw exception");
-	}
-	catch (Exception&)
-	{
-	}
-
-	try
-	{
-		f.freeSpace();
-		failmsg("file does not exist - must throw exception");
-	}
-	catch (Exception&)
-	{
-	}
 }
 
 
@@ -261,7 +229,7 @@ void FileTest::testFileAttributes3()
 #if POCO_OS==POCO_OS_CYGWIN
 	File f("/dev/tty");
 #else
-	File f("/dev/null");
+ 	File f("/dev/console");
 #endif
 #elif defined(POCO_OS_FAMILY_WINDOWS) && !defined(_WIN32_WCE)
 	File f("CON");
@@ -347,15 +315,6 @@ void FileTest::testSize()
 }
 
 
-void FileTest::testSpace()
-{
-	File f(Path::temp());
-	assertTrue (f.totalSpace() > 0);
-	assertTrue (f.usableSpace() > 0);
-	assertTrue (f.freeSpace() > 0);
-}
-
-
 void FileTest::testDirectory()
 {
 	File d("testdir");
@@ -421,6 +380,23 @@ void FileTest::testCopy()
 	f1.setWriteable().remove();
 }
 
+void FileTest::testCopyFailIfDestinationFileExists()
+{
+	std::ofstream ostr("testfile.dat");
+	ostr << "Hello, world!" << std::endl;
+	ostr.close();
+
+	File f1("testfile.dat");
+	TemporaryFile f2;
+	f2.createFile();
+	try {
+		f1.setReadOnly().copyTo(f2.path(), File::OPT_FAIL_ON_OVERWRITE);
+		failmsg("file exist - must throw exception");
+	} catch (Exception&) {
+	}
+	f1.setWriteable().remove();
+}
+
 
 void FileTest::testMove()
 {
@@ -438,6 +414,21 @@ void FileTest::testMove()
 	assertTrue (f1 == f2);
 }
 
+void FileTest::testMoveFailIfDestinationFileExists() {
+	std::ofstream ostr("testfile.dat");
+	ostr << "Hello, world!" << std::endl;
+	ostr.close();
+
+	File f1("testfile.dat");
+	TemporaryFile f2;
+	f2.createFile();
+	try {
+		f1.moveTo(f2.path(), File::OPT_FAIL_ON_OVERWRITE);
+		failmsg("file exist - must throw exception");
+	} catch (Exception&) {
+	}
+	f1.setWriteable().remove();
+}
 
 void FileTest::testCopyDirectory()
 {
@@ -508,6 +499,44 @@ void FileTest::testCopyDirectory()
 	fd3.remove(true);
 }
 
+void FileTest::testCopyDirectoryFailIfExists()
+{
+	Path pd1("testdir");
+	File fd1(pd1);
+	try {
+		fd1.remove(true);
+	} catch (...) {
+	}
+	fd1.createDirectories();
+	Path pf1(pd1, "testfile1.dat");
+	std::ofstream ostr1(pf1.toString().c_str());
+	ostr1 << "Hello, world!" << std::endl;
+	ostr1.close();
+	Path pf2(pd1, "testfile2.dat");
+	std::ofstream ostr2(pf2.toString().c_str());
+	ostr2 << "Hello, world!" << std::endl;
+	ostr2.close();
+
+	Path pd2("destination");
+	File fd2(pd2);
+	try {
+		fd2.remove(true);
+	} catch (...) {
+	}
+	fd2.createDirectories();
+	Path pd3(pd2, "testdir");
+	File fd3(pd3);
+	fd3.createDirectories();
+
+	try {
+		fd1.copyTo("testdir", File::OPT_FAIL_ON_OVERWRITE);
+		failmsg("Destination Directory exists - must throw exception");
+	} catch (Exception&) {
+	}
+
+	fd1.remove(true);
+	fd2.remove(true);
+}
 
 void FileTest::testRename()
 {
@@ -526,10 +555,36 @@ void FileTest::testRename()
 	f2.remove();
 }
 
+void FileTest::testRenameFailIfExists() {
+	std::ofstream ostr("testfile.dat");
+	ostr << "Hello, world!" << std::endl;
+	ostr.close();
+
+	File f1("testfile.dat");
+	File f2("testfile2.dat");
+	f2.createFile();
+
+	try {
+		f1.renameTo(f2.path(), File::OPT_FAIL_ON_OVERWRITE);
+		failmsg("file exists - must throw exception");
+	} catch (Exception&) {
+	}
+
+	f1.renameTo(f2.path());
+
+	assertTrue(f2.exists());
+	assertTrue(f1.exists());
+	assertTrue(f1 == f2);
+
+	f2.remove();
+}
+
+
+
 
 void FileTest::testLongPath()
 {
-#if defined(POCO_OS_FAMILY_WINDOWS) && !defined(_WIN32_WCE)
+#if defined(_WIN32) && !defined(_WIN32_WCE)
 	Poco::Path p("longpathtest");
 	p.makeAbsolute();
 	std::string longpath(p.toString());
@@ -588,12 +643,15 @@ CppUnit::Test* FileTest::suite()
 	CppUnit_addTest(pSuite, FileTest, testCompare);
 	CppUnit_addTest(pSuite, FileTest, testSwap);
 	CppUnit_addTest(pSuite, FileTest, testSize);
-	CppUnit_addTest(pSuite, FileTest, testSpace);
 	CppUnit_addTest(pSuite, FileTest, testDirectory);
 	CppUnit_addTest(pSuite, FileTest, testCopy);
+	CppUnit_addTest(pSuite, FileTest, testCopyFailIfDestinationFileExists);
 	CppUnit_addTest(pSuite, FileTest, testMove);
+	CppUnit_addTest(pSuite, FileTest, testMoveFailIfDestinationFileExists);
 	CppUnit_addTest(pSuite, FileTest, testCopyDirectory);
+	CppUnit_addTest(pSuite, FileTest, testCopyDirectoryFailIfExists);
 	CppUnit_addTest(pSuite, FileTest, testRename);
+	CppUnit_addTest(pSuite, FileTest, testRenameFailIfExists);
 	CppUnit_addTest(pSuite, FileTest, testRootDir);
 	CppUnit_addTest(pSuite, FileTest, testLongPath);
 

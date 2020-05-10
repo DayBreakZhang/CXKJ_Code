@@ -14,7 +14,6 @@
 
 #include "Poco/Dynamic/Var.h"
 #include "Poco/Dynamic/Struct.h"
-#include "Poco/NumberParser.h"
 #include <algorithm>
 #include <cctype>
 #include <vector>
@@ -364,18 +363,16 @@ Var& Var::getAt(std::size_t n)
 			InvalidAccessException>("Not a deque.")->operator[](n);
 	else if (isStruct())
 	{
-#ifdef POCO_ENABLE_CPP11
 		if (isOrdered())
-			return structIndexOperator(holderImpl<Struct<int, OrderedMap<int, Var>, OrderedSet<int> >,
+			return structIndexOperator(holderImpl<Struct<int, OrderedMap<int, Var>, OrderedSet<int>>,
 				InvalidAccessException>("Not a struct."), static_cast<int>(n));
 		else
-#endif // POCO_ENABLE_CPP11
-			return structIndexOperator(holderImpl<Struct<int, std::map<int, Var>, std::set<int> >,
+			return structIndexOperator(holderImpl<Struct<int, std::map<int, Var>, std::set<int>>,
 				InvalidAccessException>("Not a struct."), static_cast<int>(n));
 	}
 	else if (!isString() && !isEmpty() && (n == 0))
 		return *this;
-	
+
 	throw RangeException("Index out of bounds.");
 }
 
@@ -396,11 +393,9 @@ Var& Var::getAt(const std::string& name)
 {
 	if (isStruct())
 	{
-#ifdef POCO_ENABLE_CPP11
 		if (isOrdered())
 			return structIndexOperator(holderImpl<OrderedDynamicStruct, InvalidAccessException>("Not a struct."), name);
 		else
-#endif // POCO_ENABLE_CPP11
 			return structIndexOperator(holderImpl<DynamicStruct, InvalidAccessException>("Not a struct."), name);
 	}
 
@@ -433,55 +428,63 @@ Var Var::parse(const std::string& val, std::string::size_type& pos)
 		case '"':
 			return parseJSONString(val, pos);
 		default:
-		{
-			std::string str = parseString(val, pos);
-			if (str == "false") return false;
-			if (str == "true") return true;
-			bool isNumber = false;
-			bool isSigned = false;
-			int separators = 0;
-			int frac = 0;
-			int index = 0;
-			size_t size = str.size();
-			for (size_t i = 0; i < size ; ++i)
 			{
-				int ch = str[i];
-				if ((ch == '-' || ch == '+') && index == 0)
-				{
-					if (ch == '-') isSigned = true;
-				}
-				else if (Ascii::isDigit(ch))
-				{
-					isNumber |= true;
-				}
-				else if (ch == '.' || ch == ',')
-				{
-					frac = ch;
-					++separators;
-					if (separators > 1) return str;
-				}
-				else return str;
-				++index;
-			}
+				std::string str = parseString(val, pos);
+				if (str == "false")
+					return false;
 
-			if (frac && isNumber)
-			{
-				const double number = NumberParser::parseFloat(str, static_cast<char>(frac));
-				return Var(number);
-			}
-			else if (frac == 0 && isNumber && isSigned)
-			{
-				const Poco::Int64 number = NumberParser::parse64(str);
-				return number;
-			}
-			else if (frac == 0 && isNumber && !isSigned)
-			{
-				const Poco::UInt64 number = NumberParser::parseUnsigned64(str);
-				return number;
-			}
+				if (str == "true")
+					return true;
 
-			return str;
-		}
+				bool isNumber = false;
+				bool isSigned = false;
+				int separators = 0;
+				int frac = 0;
+				int index = 0;
+				size_t size = str.size();
+				for (size_t i = 0; i < size ; ++i)
+				{
+					int ch = str[i];
+					if ((ch == '-' || ch == '+') && index == 0)
+					{
+						if (ch == '-')
+							isSigned = true;
+					}
+					else if (Ascii::isDigit(ch))
+					{
+						isNumber |= true;
+					}
+					else if (ch == '.' || ch == ',')
+					{
+						frac = ch;
+						++separators;
+						if (separators > 1)
+							return str;
+					}
+					else
+						return str;
+
+					++index;
+				}
+
+				if (frac && isNumber)
+				{
+					const double number = NumberParser::parseFloat(str, frac);
+					return Var(number);
+				}
+				else if (frac == 0 && isNumber && isSigned)
+				{
+					const Poco::Int64 number = NumberParser::parse64(str);
+					return number;
+				}
+				else if (frac == 0 && isNumber && !isSigned)
+				{
+					const Poco::UInt64 number = NumberParser::parseUnsigned64(str);
+					return number;
+				}
+
+				return str;
+			}
 		}
 	}
 	std::string empty;
@@ -579,7 +582,7 @@ std::string Var::parseJSONString(const std::string& val, std::string::size_type&
 			++pos;
 			break;
 		case '\\':
-			if (pos < val.size())
+			if (pos < val.size() - 1)
 			{
 				++pos;
 				switch (val[pos])
@@ -603,7 +606,6 @@ std::string Var::parseJSONString(const std::string& val, std::string::size_type&
 					result += val[pos];
 					break;
 				}
-				break;
 			}
 			else
 			{
@@ -637,7 +639,7 @@ std::string Var::toString(const Var& any)
 }
 
 /*
-Var& Var::structIndexOperator(VarHolderImpl<Struct<int> >* pStr, int n) const
+Var& Var::structIndexOperator(VarHolderImpl<Struct<int>>* pStr, int n) const
 {
 	return pStr->operator[](n);
 }

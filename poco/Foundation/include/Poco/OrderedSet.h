@@ -19,6 +19,8 @@
 
 
 #include "Poco/Foundation.h"
+
+
 #ifdef min
 #undef min
 #endif

@@ -158,7 +158,7 @@ std::string WinRegistryKey::getStringExpand(const std::string& name)
 #else
 		std::string result;
 		UnicodeConverter::toUTF8(buffer.begin(), result);
-#endif // _WIN32_WCE
+#endif
 		return result;
 	}
 	return std::string();
@@ -182,6 +182,7 @@ std::vector<char> WinRegistryKey::getBinary( const std::string& name )
 	DWORD type;
 	DWORD size;
 	std::vector<char> result;
+
 	std::wstring uname;
 	Poco::UnicodeConverter::toUTF16(name, uname);
 	if (RegQueryValueExW(_hKey, uname.c_str(), NULL, &type, NULL, &size) != ERROR_SUCCESS || type != REG_BINARY)
@@ -264,12 +265,12 @@ void WinRegistryKey::deleteKey()
 	Keys keys;
 	subKeys(keys);
 	close();
-	for (Keys::iterator it = keys.begin(); it != keys.end(); ++it)
+	for (const auto& k: keys)
 	{
 		std::string subKey(_subKey);
 		subKey += "\\";
-		subKey += *it;
-		WinRegistryKey subRegKey(_hRootKey, subKey);
+		subKey += k;
+		WinRegistryKey subRegKey(_hRootKey, subKey, _readOnly, _extraSam);
 		subRegKey.deleteKey();
 	}
 

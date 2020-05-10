@@ -157,8 +157,8 @@ class NetSSL_API SSLManager
 	/// Please see the Context class documentation regarding TLSv1.3 support.
 {
 public:
-	typedef Poco::SharedPtr<PrivateKeyPassphraseHandler> PrivateKeyPassphraseHandlerPtr;
-	typedef Poco::SharedPtr<InvalidCertificateHandler> InvalidCertificateHandlerPtr;
+	using PrivateKeyPassphraseHandlerPtr = Poco::SharedPtr<PrivateKeyPassphraseHandler>;
+	using InvalidCertificateHandlerPtr = Poco::SharedPtr<InvalidCertificateHandler>;
 
 	Poco::BasicEvent<VerificationErrorArgs> ServerVerificationError;
 		/// Fired whenever a certificate verification error is detected by the server during a handshake.
@@ -243,7 +243,7 @@ public:
 
 	static bool isFIPSEnabled();
 		// Returns true if FIPS mode is enabled, false otherwise.
-		
+
 	void shutdown();
 		/// Shuts down the SSLManager and releases the default Context
 		/// objects. After a call to shutdown(), the SSLManager can no
@@ -271,7 +271,7 @@ protected:
 		/// Method is invoked by OpenSSL to retrieve a passwd for an encrypted certificate.
 		/// The request is delegated to the PrivatekeyPassword event. This method returns the
 		/// length of the password.
-		
+
 	static Poco::Util::AbstractConfiguration& appConfig();
 		/// Returns the application configuration.
 		///

@@ -20,7 +20,6 @@
 
 #include "Poco/Foundation.h"
 #include "Poco/Instantiator.h"
-#include "Poco/AutoPtr.h"
 #include "Poco/Exception.h"
 #include "Poco/Mutex.h"
 #include <map>
@@ -30,13 +29,12 @@
 namespace Poco {
 
 
-template <class BaseT, class PtrT = AutoPtr<BaseT> >
+template <class Base>
 class DynamicFactory
 	/// A factory that creates objects by class name.
 {
 public:
-	typedef AbstractInstantiator<BaseT> AbstractFactory;
-	typedef PtrT Ptr;
+	typedef AbstractInstantiator<Base> AbstractFactory;
 
 	DynamicFactory()
 		/// Creates the DynamicFactory.
@@ -47,13 +45,13 @@ public:
 		/// Destroys the DynamicFactory and deletes the instantiators for
 		/// all registered classes.
 	{
-		for (typename FactoryMap::iterator it = _map.begin(); it != _map.end(); ++it)
+		for (auto& p: _map)
 		{
-			delete it->second;
+			delete p.second;
 		}
 	}
 
-	Ptr createInstance(const std::string& className) const
+	Base* createInstance(const std::string& className) const
 		/// Creates a new instance of the class with the given name.
 		/// The class must have been registered with registerClass.
 		/// If the class name is unknown, a NotFoundException is thrown.
@@ -75,7 +73,7 @@ public:
 		/// If the class has already been registered, an ExistsException is thrown
 		/// and the instantiator is deleted.
 	{
-		registerClass(className, new Instantiator<C, BaseT>);
+		registerClass(className, new Instantiator<C, Base>);
 	}
 
 	void registerClass(const std::string& className, AbstractFactory* pAbstractFactory)
@@ -90,6 +88,7 @@ public:
 		FastMutex::ScopedLock lock(_mutex);
 
 		std::unique_ptr<AbstractFactory> ptr(pAbstractFactory);
+
 		typename FactoryMap::iterator it = _map.find(className);
 		if (it == _map.end())
 			_map[className] = ptr.release();
@@ -112,7 +111,7 @@ public:
 		}
 		else throw NotFoundException(className);
 	}
-	
+
 	bool isClass(const std::string& className) const
 		/// Returns true iff the given class has been registered.
 	{

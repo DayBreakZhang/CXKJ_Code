@@ -19,9 +19,6 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/Event.h"
-#include "Poco/Mutex.h"
-#include "Poco/Optional.h"
 #include "Poco/RefCountedObject.h"
 #include <unistd.h>
 #include <vector>
@@ -39,16 +36,13 @@ class Foundation_API ProcessHandleImpl: public RefCountedObject
 public:
 	ProcessHandleImpl(pid_t pid);
 	~ProcessHandleImpl();
-	
+
 	pid_t id() const;
 	int wait() const;
-	int wait(int options) const;
-	
+	int tryWait() const;
+
 private:
-	const pid_t _pid;
-	mutable FastMutex _mutex;
-	mutable Event _event;
-	mutable Optional<int> _status;
+	pid_t _pid;
 };
 
 
@@ -58,7 +52,7 @@ public:
 	typedef pid_t PIDImpl;
 	typedef std::vector<std::string> ArgsImpl;
 	typedef std::map<std::string, std::string> EnvImpl;
-	
+
 	static PIDImpl idImpl();
 	static void timesImpl(long& userTime, long& kernelTime);
 	static ProcessHandleImpl* launchImpl(

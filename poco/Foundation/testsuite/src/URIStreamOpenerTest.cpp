@@ -9,8 +9,8 @@
 
 
 #include "URIStreamOpenerTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/URIStreamOpener.h"
 #include "Poco/URIStreamFactory.h"
 #include "Poco/URI.h"
@@ -44,7 +44,7 @@ namespace
 }
 
 
-URIStreamOpenerTest::URIStreamOpenerTest(const std::string& rName): CppUnit::TestCase(rName)
+URIStreamOpenerTest::URIStreamOpenerTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 

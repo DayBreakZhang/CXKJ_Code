@@ -9,29 +9,33 @@
 
 
 #include "PathTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Path.h"
 #include "Poco/Exception.h"
 #include "Poco/Random.h"
 #include "Poco/Environment.h"
 #include <iostream>
 
+
 #if defined(POCO_OS_FAMILY_WINDOWS)
 #if defined(_WIN32_WCE)
 #include "Poco/Path_WINCE.h"
 #else
-#include "Poco/Path_WIN32.h"
+#include "Poco/Path_WIN32U.h"
 #endif
 #endif
+
 
 using Poco::Path;
 using Poco::PathSyntaxException;
 using Poco::Environment;
 using std::clog;
+using std::cout;
 using std::endl;
 
-PathTest::PathTest(const std::string& rName): CppUnit::TestCase(rName)
+
+PathTest::PathTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -94,7 +98,7 @@ void PathTest::testParseUnix1()
 	assertTrue (!p.isDirectory());
 	assertTrue (p.isFile());
 	assertTrue (p.toString(Path::PATH_UNIX) == "usr");
-	
+
 	p.parse("/usr/local", Path::PATH_UNIX);
 	assertTrue (!p.isRelative());
 	assertTrue (p.isAbsolute());
@@ -210,7 +214,7 @@ void PathTest::testParseUnix3()
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
 	assertTrue (p.toString(Path::PATH_UNIX) == "/usr/local/bin/");
-	
+
 	p.parse("/usr/local/./bin/", Path::PATH_UNIX);
 	assertTrue (!p.isRelative());
 	assertTrue (p.isAbsolute());
@@ -341,7 +345,7 @@ void PathTest::testParseUnix4()
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
 	assertTrue (p.toString(Path::PATH_UNIX) == "../lib/");
-	
+
 	p.parse("a/b/c/d", Path::PATH_UNIX);
 	assertTrue (p.isRelative());
 	assertTrue (!p.isAbsolute());
@@ -370,30 +374,6 @@ void PathTest::testParseUnix5()
 	assertTrue (p.toString(Path::PATH_UNIX) == "/c:/windows/system32/");
 }
 
-void PathTest::testExpandVariableFromPath()
-{
-#ifdef POCO_OS_FAMILY_WINDOWS
-	std::string pathWithoutVar = "\\usr\\share\\O1%%\\folder";
-	std::string pathWithVar = "%HOMEDRIVE%%HOMEPATH%\\folder";
-	std::string correctStringWithoutVar = "\\usr\\share\\O1%%\\folder";
-#elif defined(POCO_OS_FAMILY_UNIX)
-	std::string pathWithoutVar = "/usr/share/O1\\$\\$/folder";
-	std::string pathWithVar = "${HOME}/folder";
-	std::string correctStringWithoutVar = "/usr/share/O1$$/folder";
-#else
-	return;
-#endif
-
-	Poco::Path p;
-	std::string s = p.expand(pathWithoutVar);
-	assertTrue (s == correctStringWithoutVar);
-	s = p.expand(pathWithVar);
-	Poco::Path tmpPath = Poco::Path::home();
-	tmpPath.append("folder");
-	clog << endl << "s                 =>" << s << '<' << endl;
-	clog << endl << "tmpPath.toString()=>" << tmpPath.toString() << '<' << endl;
-	assertTrue (s == tmpPath.toString());
-}
 
 void PathTest::testParseWindows1()
 {
@@ -487,7 +467,7 @@ void PathTest::testParseWindows2()
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
 	assertTrue (p.toString(Path::PATH_WINDOWS) == "usr\\");
-	
+
 	p.parse("/usr/local", Path::PATH_WINDOWS);
 	assertTrue (!p.isRelative());
 	assertTrue (p.isAbsolute());
@@ -594,7 +574,7 @@ void PathTest::testParseWindows2()
 	assertTrue (p.toString(Path::PATH_WINDOWS) == "\\usr\\local\\bin\\");
 }
 
-	
+
 void PathTest::testParseWindows3()
 {
 	Path p;
@@ -759,7 +739,7 @@ void PathTest::testParseWindows4()
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
 	assertTrue (p.toString(Path::PATH_WINDOWS) == "\\\\server\\files\\");
-	
+
 	p.parse("\\\\server\\files\\file", Path::PATH_WINDOWS);
 	assertTrue (!p.isRelative());
 	assertTrue (p.isAbsolute());
@@ -790,7 +770,7 @@ void PathTest::testParseWindows4()
 	assertTrue (p.getNode() == "server");
 	assertTrue (!p.isDirectory());
 	assertTrue (p.isFile());
-	assertTrue (p.toString(Path::PATH_WINDOWS) == "\\\\server\\files\\dir\\file");	
+	assertTrue (p.toString(Path::PATH_WINDOWS) == "\\\\server\\files\\dir\\file");
 
 	p.parse("\\\\server", Path::PATH_WINDOWS);
 	assertTrue (!p.isRelative());
@@ -800,7 +780,7 @@ void PathTest::testParseWindows4()
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
 	assertTrue (p.toString(Path::PATH_WINDOWS) == "\\\\server\\");
-	
+
 	p.parse("c:\\", Path::PATH_WINDOWS);
 	assertTrue (!p.isRelative());
 	assertTrue (p.isAbsolute());
@@ -808,7 +788,7 @@ void PathTest::testParseWindows4()
 	assertTrue (p.getDevice() == "c");
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
-	assertTrue (p.toString(Path::PATH_WINDOWS) == "c:\\");	
+	assertTrue (p.toString(Path::PATH_WINDOWS) == "c:\\");
 
 	p.parse("c:\\WinNT", Path::PATH_WINDOWS);
 	assertTrue (!p.isRelative());
@@ -817,7 +797,7 @@ void PathTest::testParseWindows4()
 	assertTrue (p.getDevice() == "c");
 	assertTrue (!p.isDirectory());
 	assertTrue (p.isFile());
-	assertTrue (p.toString(Path::PATH_WINDOWS) == "c:\\WinNT");	
+	assertTrue (p.toString(Path::PATH_WINDOWS) == "c:\\WinNT");
 
 	p.parse("c:\\WinNT\\", Path::PATH_WINDOWS);
 	assertTrue (!p.isRelative());
@@ -828,7 +808,7 @@ void PathTest::testParseWindows4()
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
 	assertTrue (p.toString(Path::PATH_WINDOWS) == "c:\\WinNT\\");
-	
+
 	try
 	{
 		p.parse("~:\\", Path::PATH_WINDOWS);
@@ -837,7 +817,7 @@ void PathTest::testParseWindows4()
 	catch (PathSyntaxException&)
 	{
 	}
-	
+
 	try
 	{
 		p.parse("c:file.txt", Path::PATH_WINDOWS);
@@ -846,7 +826,7 @@ void PathTest::testParseWindows4()
 	catch (PathSyntaxException&)
 	{
 	}
-	
+
 	p.parse("a\\b\\c\\d", Path::PATH_WINDOWS);
 	assertTrue (p.isRelative());
 	assertTrue (!p.isAbsolute());
@@ -859,20 +839,6 @@ void PathTest::testParseWindows4()
 	assertTrue (p.toString(Path::PATH_WINDOWS) == "a\\b\\c\\d");
 }
 
-void PathTest::testParseWindows5()
-{
-	Path p;
-	p.parse("/c:/windows/system32/", Path::PATH_WINDOWS);
-	assertTrue (!p.isRelative());
-	assertTrue (p.isAbsolute());
-	assertTrue (p.getDevice() == "c");
-	assertTrue (p.depth() == 2);
-	assertTrue (p[0] == "windows");
-	assertTrue (p[1] == "system32");
-	assertTrue (p.isDirectory());
-	assertTrue (!p.isFile());
-	assertTrue (p.toString(Path::PATH_WINDOWS) == "c:\\windows\\system32\\");
-}
 
 void PathTest::testParseVMS1()
 {
@@ -884,7 +850,7 @@ void PathTest::testParseVMS1()
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
 	assertTrue (p.toString(Path::PATH_VMS) == "");
-	
+
 	p.parse("[]", Path::PATH_VMS);
 	assertTrue (p.isRelative());
 	assertTrue (!p.isAbsolute());
@@ -892,7 +858,7 @@ void PathTest::testParseVMS1()
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
 	assertTrue (p.toString(Path::PATH_VMS) == "");
-	
+
 	p.parse("[foo]", Path::PATH_VMS);
 	assertTrue (!p.isRelative());
 	assertTrue (p.isAbsolute());
@@ -930,7 +896,7 @@ void PathTest::testParseVMS1()
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
 	assertTrue (p.toString(Path::PATH_VMS) == "[.foo.bar]");
-	
+
 	p.parse("[foo.bar.foobar]", Path::PATH_VMS);
 	assertTrue (!p.isRelative());
 	assertTrue (p.isAbsolute());
@@ -967,7 +933,7 @@ void PathTest::testParseVMS2()
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
 	assertTrue (p.toString(Path::PATH_VMS) == "[foo.bar]");
-	
+
 	p.parse("[foo.][bar]", Path::PATH_VMS);
 	assertTrue (!p.isRelative());
 	assertTrue (p.isAbsolute());
@@ -977,7 +943,7 @@ void PathTest::testParseVMS2()
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
 	assertTrue (p.toString(Path::PATH_VMS) == "[foo.bar]");
-	
+
 	p.parse("[foo.bar][foo]", Path::PATH_VMS);
 	assertTrue (!p.isRelative());
 	assertTrue (p.isAbsolute());
@@ -988,7 +954,7 @@ void PathTest::testParseVMS2()
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
 	assertTrue (p.toString(Path::PATH_VMS) == "[foo.bar.foo]");
-	
+
 	try
 	{
 		p.parse("[foo.bar][.foo]", Path::PATH_VMS);
@@ -1006,7 +972,7 @@ void PathTest::testParseVMS2()
 	catch (PathSyntaxException&)
 	{
 	}
-	
+
 	p.parse("[-]", Path::PATH_VMS);
 	assertTrue (p.isRelative());
 	assertTrue (!p.isAbsolute());
@@ -1226,7 +1192,7 @@ void PathTest::testParseVMS4()
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
 	assertTrue (p.toString(Path::PATH_VMS) == "node::device:[foo.bar]");
-	
+
 	p.parse("node::device:[foo.bar.][goo]", Path::PATH_VMS);
 	assertTrue (!p.isRelative());
 	assertTrue (p.isAbsolute());
@@ -1239,7 +1205,7 @@ void PathTest::testParseVMS4()
 	assertTrue (p.isDirectory());
 	assertTrue (!p.isFile());
 	assertTrue (p.toString(Path::PATH_VMS) == "node::device:[foo.bar.goo]");
-	
+
 	p.parse("[]foo.txt", Path::PATH_VMS);
 	assertTrue (p.isRelative());
 	assertTrue (!p.isAbsolute());
@@ -1273,6 +1239,7 @@ void PathTest::testParseVMS4()
 	assertTrue (p[0] == "foo");
 	assertTrue (!p.isDirectory());
 	assertTrue (p.isFile());
+	cout << "p.toString(Path::PATH_VMS)=" << p.toString(Path::PATH_VMS) << endl;
 	assertTrue (p.toString(Path::PATH_VMS) == "[foo]bar.txt;5");
 	assertTrue (p.version() == "5");
 
@@ -1334,6 +1301,7 @@ void PathTest::testParseGuess()
 	assertTrue (p.getDevice() == "foo");
 	assertTrue (!p.isDirectory());
 	assertTrue (p.isFile());
+	cout << "p.toString(Path::PATH_VMS)=" << p.toString(Path::PATH_VMS) << endl;
 	assertTrue (p.toString(Path::PATH_VMS) == "foo:bar.txt;5");
 	assertTrue (p.version() == "5");
 
@@ -1365,7 +1333,7 @@ void PathTest::testParseGuess()
 	assertTrue (p.getDevice() == "c");
 	assertTrue (!p.isDirectory());
 	assertTrue (p.isFile());
-	assertTrue (p.toString(Path::PATH_WINDOWS) == "c:\\WinNT");	
+	assertTrue (p.toString(Path::PATH_WINDOWS) == "c:\\WinNT");
 
 	p.parse("foo:bar.txt;5", Path::PATH_GUESS);
 	assertTrue (!p.isRelative());
@@ -1414,12 +1382,12 @@ void PathTest::testStatics()
 	assertTrue (!s.empty());
 	Path p(s);
 	assertTrue (p.isDirectory() && p.isAbsolute());
-	
+
 	s = Path::home();
 	assertTrue (!s.empty());
 	p = s;
 	assertTrue (p.isDirectory() && p.isAbsolute());
-	
+
 	s = Path::temp();
 	assertTrue (!s.empty());
 	p = s;
@@ -1437,17 +1405,17 @@ void PathTest::testBaseNameExt()
 	assertTrue (p.getFileName() == "foo.bar");
 	assertTrue (p.getBaseName() == "foo");
 	assertTrue (p.getExtension() == "bar");
-	
+
 	p.setBaseName("readme");
 	assertTrue (p.getFileName() == "readme.bar");
 	assertTrue (p.getBaseName() == "readme");
 	assertTrue (p.getExtension() == "bar");
-	
+
 	p.setExtension("txt");
 	assertTrue (p.getFileName() == "readme.txt");
 	assertTrue (p.getBaseName() == "readme");
 	assertTrue (p.getExtension() == "txt");
-	
+
 	p.setExtension("html");
 	assertTrue (p.getFileName() == "readme.html");
 	assertTrue (p.getBaseName() == "readme");
@@ -1466,7 +1434,7 @@ void PathTest::testAbsolute()
 	Path rel("Poco");
 	Path abs = rel.absolute(base);
 	assertTrue (abs.toString(Path::PATH_WINDOWS) == "C:\\Program Files\\Poco");
-	
+
 	base.parse("/usr/local", Path::PATH_UNIX);
 	rel.parse("Poco/include", Path::PATH_UNIX);
 	abs = rel.absolute(base);
@@ -1486,11 +1454,7 @@ void PathTest::testRobustness()
 	{
 		int len = r.next(1024);
 		std::string s;
-		while (s.size() < len)
-		{
-			char c = r.nextChar();
-			if (c != 0) s += c;
-		}
+		for (int i = 0; i < len; ++i) s += r.nextChar();
 		try
 		{
 			Path p(s, Path::PATH_WINDOWS);
@@ -1550,14 +1514,15 @@ void PathTest::testForDirectory()
 void PathTest::testExpand()
 {
 #if defined(POCO_OS_FAMILY_UNIX)
-	std::string s = Path::expand("~/.profile");
-	assertTrue (s == Path::expand("$HOME/.profile"));
-	assertTrue (s == Environment::get("HOME") + ".profile" || s == Environment::get("HOME") + "/.profile");
+	std::string s = Path::expand("~/.bashrc");
+	assertTrue (s == Path::expand("$HOME/.bashrc"));
+	assertTrue (s == Environment::get("HOME") + "/.bashrc" ||
+	        s == Environment::get("HOME") + "//.bashrc");
 	Path p(s);
-	s = Path::expand("$HOME/.profile");
-	assertTrue (s == Path::expand("~/.profile"));
-	s = Path::expand("${HOME}/.profile");
-	assertTrue (s == Path::expand("~/.profile"));
+	s = Path::expand("$HOME/.bashrc");
+	assertTrue (s == Path::expand("~/.bashrc"));
+	s = Path::expand("${HOME}/.bashrc");
+	assertTrue (s == Path::expand("~/.bashrc"));
 #elif defined(POCO_OS_FAMILY_WINDOWS)
 	std::string s = Path::expand("%TMP%\\foo");
 	assertTrue (s == Environment::get("TMP") + "\\foo");
@@ -1592,15 +1557,15 @@ void PathTest::testFind()
 #if defined(_WIN32_WCE)
 	return;
 #endif
-	bool found = Path::find(Environment::get("Path"), "cmd.exe", p);
-	bool notfound = Path::find(Environment::get("Path"), "xxxyyy123.zzz", p);
+	bool found = Path::find(Environment::get("PATH"), "cmd.exe", p);
+	bool notfound = Path::find(Environment::get("PATH"), "xxxyyy123.zzz", p);
 #else
 	bool found = true;
 	bool notfound = false;
 #endif
 	assertTrue (found);
 	assertTrue (!notfound);
-	
+
 	std::string fn = p.toString();
 	assertTrue (fn.size() > 0);
 }
@@ -1621,15 +1586,15 @@ void PathTest::testResolve()
 	Path p("c:\\foo\\", Path::PATH_WINDOWS);
 	p.resolve("test.dat");
 	assertTrue (p.toString(Path::PATH_WINDOWS) == "c:\\foo\\test.dat");
-	
+
 	p.assign("c:\\foo\\", Path::PATH_WINDOWS);
 	p.resolve(Path("d:\\bar.txt", Path::PATH_WINDOWS));
 	assertTrue (p.toString(Path::PATH_WINDOWS) == "d:\\bar.txt");
-	
+
 	p.assign("c:\\foo\\bar.txt", Path::PATH_WINDOWS);
 	p.resolve("foo.txt");
 	assertTrue (p.toString(Path::PATH_WINDOWS) == "c:\\foo\\foo.txt");
-	
+
 	p.assign("c:\\foo\\bar\\", Path::PATH_WINDOWS);
 	p.resolve(Path("..\\baz\\test.dat", Path::PATH_WINDOWS));
 	assertTrue (p.toString(Path::PATH_WINDOWS) == "c:\\foo\\baz\\test.dat");
@@ -1679,12 +1644,10 @@ CppUnit::Test* PathTest::suite()
 	CppUnit_addTest(pSuite, PathTest, testParseUnix3);
 	CppUnit_addTest(pSuite, PathTest, testParseUnix4);
 	CppUnit_addTest(pSuite, PathTest, testParseUnix5);
-	CppUnit_addTest(pSuite, PathTest, testExpandVariableFromPath);
 	CppUnit_addTest(pSuite, PathTest, testParseWindows1);
 	CppUnit_addTest(pSuite, PathTest, testParseWindows2);
 	CppUnit_addTest(pSuite, PathTest, testParseWindows3);
 	CppUnit_addTest(pSuite, PathTest, testParseWindows4);
-	CppUnit_addTest(pSuite, PathTest, testParseWindows5);
 	CppUnit_addTest(pSuite, PathTest, testParseVMS1);
 	CppUnit_addTest(pSuite, PathTest, testParseVMS2);
 	CppUnit_addTest(pSuite, PathTest, testParseVMS3);

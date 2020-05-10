@@ -33,7 +33,7 @@ namespace Poco {
 namespace Util {
 
 
-AbstractConfiguration::AbstractConfiguration():
+AbstractConfiguration::AbstractConfiguration(): 
 	_depth(0),
 	_eventsEnabled(true)
 {
@@ -357,12 +357,12 @@ namespace
 		{
 			++_count;
 		}
-
+		
 		~AutoCounter()
 		{
 			--_count;
 		}
-
+		
 	private:
 		int& _count;
 	};
@@ -384,7 +384,7 @@ void AbstractConfiguration::remove(const std::string& key)
 		propertyRemoving(this, key);
 	}
 	{
-
+		
 		Mutex::ScopedLock lock(_mutex);
 		removeRaw(key);
 	}
@@ -400,14 +400,14 @@ void AbstractConfiguration::enableEvents(bool enable)
 	_eventsEnabled = enable;
 }
 
-
+	
 bool AbstractConfiguration::eventsEnabled() const
 {
 	return _eventsEnabled;
 }
 
 
-void AbstractConfiguration::removeRaw(const std::string& /*key*/)
+void AbstractConfiguration::removeRaw(const std::string& key)
 {
 	throw Poco::NotImplementedException("removeRaw()");
 }
@@ -437,10 +437,10 @@ std::string AbstractConfiguration::uncheckedExpand(const std::string& value) con
 				std::string prop;
 				while (it != end && *it != '}') prop += *it++;
 				if (it != end) ++it;
-				std::string rawValue;
-				if (getRaw(prop, rawValue))
+				std::string value;
+				if (getRaw(prop, value))
 				{
-					result.append(internalExpand(rawValue));
+					result.append(internalExpand(value));
 				}
 				else
 				{
@@ -510,7 +510,7 @@ bool AbstractConfiguration::parseBool(const std::string& value)
 		return false;
 	else if (icompare(value, "off") == 0)
 		return false;
-	else
+	else 
 		throw SyntaxException("Cannot convert to boolean", value);
 }
 

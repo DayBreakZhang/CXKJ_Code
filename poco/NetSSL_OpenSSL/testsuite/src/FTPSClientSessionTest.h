@@ -15,7 +15,7 @@
 
 
 #include "Poco/Net/Net.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 namespace Poco {
@@ -25,7 +25,9 @@ class FTPSClientSession;
 
 } }
 
+
 class DialogServer;
+
 
 class FTPSClientSessionTest: public CppUnit::TestCase
 {
@@ -46,7 +48,7 @@ public:
 	void testUpload();
 	void testList();
 	void testUploadSSL();
-	
+
 	void setUp();
 	void tearDown();
 

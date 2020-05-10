@@ -2,13 +2,13 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Encodings">
-      <UniqueIdentifier>{fa8399e7-48a3-47af-82ce-4f5376e2fb04}</UniqueIdentifier>
+      <UniqueIdentifier>{2ac0c7b3-1706-4a76-895c-f3d4d3867af6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Encodings\Header Files">
-      <UniqueIdentifier>{9497a859-477b-418e-b514-84c970deb3d4}</UniqueIdentifier>
+      <UniqueIdentifier>{8e7ce3c1-f21d-42d1-9963-13ccbad20fb9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Encodings\Source Files">
-      <UniqueIdentifier>{2851012f-ca63-42c9-b2d3-cf0695acf1de}</UniqueIdentifier>
+      <UniqueIdentifier>{2d656b8f-d362-4626-9ffb-7c9ee3bf0d7c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +52,27 @@
       <Filter>Encodings\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Poco\ISO8859_9Encoding.h">
+      <Filter>Encodings\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Poco\MacCentralEurRomanEncoding.h">
+      <Filter>Encodings\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Poco\MacChineseSimpEncoding.h">
+      <Filter>Encodings\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Poco\MacChineseTradEncoding.h">
+      <Filter>Encodings\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Poco\MacCyrillicEncoding.h">
+      <Filter>Encodings\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Poco\MacJapaneseEncoding.h">
+      <Filter>Encodings\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Poco\MacKoreanEncoding.h">
+      <Filter>Encodings\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Poco\MacRomanEncoding.h">
       <Filter>Encodings\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Poco\Windows1253Encoding.h">
@@ -129,6 +150,27 @@
       <Filter>Encodings\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ISO8859_9Encoding.cpp">
+      <Filter>Encodings\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MacCentralEurRomanEncoding.cpp">
+      <Filter>Encodings\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MacChineseSimpEncoding.cpp">
+      <Filter>Encodings\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MacChineseTradEncoding.cpp">
+      <Filter>Encodings\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MacCyrillicEncoding.cpp">
+      <Filter>Encodings\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MacJapaneseEncoding.cpp">
+      <Filter>Encodings\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MacKoreanEncoding.cpp">
+      <Filter>Encodings\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MacRomanEncoding.cpp">
       <Filter>Encodings\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Windows1253Encoding.cpp">

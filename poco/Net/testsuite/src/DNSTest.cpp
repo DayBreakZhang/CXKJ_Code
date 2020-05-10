@@ -9,8 +9,8 @@
 
 
 #include "DNSTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/DNS.h"
 #include "Poco/Net/HostEntry.h"
 #include "Poco/Net/NetException.h"
@@ -47,7 +47,7 @@ void DNSTest::testHostByName()
 #endif
 	assertTrue (he1.addresses().size() >= 1);
 	assertTrue (he1.addresses()[0].toString() == "1.2.3.4");
-	
+
 	try
 	{
 		HostEntry he1 = DNS::hostByName("nohost.pocoproject.org");
@@ -70,7 +70,7 @@ void DNSTest::testHostByAddress()
 	assertTrue (he1.aliases().empty());
 	assertTrue (he1.addresses().size() >= 1);
 	assertTrue (he1.addresses()[0].toString() == "80.122.195.86");
-	
+
 	IPAddress ip2("10.0.244.253");
 	try
 	{

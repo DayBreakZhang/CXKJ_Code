@@ -25,7 +25,7 @@
 namespace Poco {
 
 
-class AtomicFlag
+class Foundation_API AtomicFlag
 	/// This class implements an atomic boolean flag by wrapping
 	/// the std::atomic_flag. It is guaranteed to be thread-safe
 	/// and lock-free.
@@ -64,9 +64,11 @@ class AtomicFlag
 	/// while (++i < 10) myClass.myFunc();
 {
 public:
-	AtomicFlag() {}
+	AtomicFlag() = default;
+		/// Creates AtomicFlag.
 
-	~AtomicFlag() {}
+	~AtomicFlag() = default;
+		/// Destroys AtomicFlag.
 
 	bool set();
 		/// Sets the flag to true and returns previously
@@ -93,6 +95,7 @@ private:
 // inlines
 //
 
+
 inline bool AtomicFlag::set()
 {
 	return _flag.test_and_set(std::memory_order_acquire);
@@ -115,3 +118,4 @@ inline AtomicFlag::operator bool ()
 
 
 #endif // Foundation_AtomicFlag_INCLUDED
+

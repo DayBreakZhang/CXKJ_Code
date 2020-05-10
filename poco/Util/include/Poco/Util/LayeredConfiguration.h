@@ -35,8 +35,8 @@ class Util_API LayeredConfiguration: public AbstractConfiguration
 	/// all added configurations are searched, in order of their priority.
 	/// Configurations with lower priority values have precedence.
 	///
-	/// When setting a property, the property is always written to the first writeable
-	/// configuration (see addWriteable()).
+	/// When setting a property, the property is always written to the first writeable 
+	/// configuration (see addWriteable()). 
 	/// If no writeable configuration has been added to the LayeredConfiguration, and an
 	/// attempt is made to set a property, a RuntimeException is thrown.
 	///
@@ -47,11 +47,11 @@ class Util_API LayeredConfiguration: public AbstractConfiguration
 	/// If no priority is specified, a priority of 0 is assumed.
 {
 public:
-	typedef Poco::AutoPtr<LayeredConfiguration> Ptr;
+	using Ptr = Poco::AutoPtr<LayeredConfiguration>;
 
 	LayeredConfiguration();
 		/// Creates the LayeredConfiguration.
-
+		
 	void add(AbstractConfiguration::Ptr pConfig);
 		/// Adds a read-only configuration to the back of the LayeredConfiguration.
 		/// The LayeredConfiguration takes shared ownership of the given configuration.
@@ -92,8 +92,8 @@ public:
 		///
 		/// Does nothing if the given configuration is not part of the
 		/// LayeredConfiguration.
-
-protected:
+		
+protected:	
 	struct ConfigItem
 	{
 		typedef AbstractConfiguration::Ptr ACPtr;

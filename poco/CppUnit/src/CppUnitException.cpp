@@ -3,7 +3,7 @@
 //
 
 
-#include "Poco/CppUnit/CppUnitException.h"
+#include "CppUnit/CppUnitException.h"
 
 
 namespace CppUnit {

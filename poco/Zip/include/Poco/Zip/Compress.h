@@ -3,14 +3,14 @@
 //
 // Library: Zip
 // Package: Zip
-// Module:	Compress
+// Module:  Compress
 //
 // Definition of the Compress class.
 //
 // Copyright (c) 2007, Applied Informatics Software Engineering GmbH.
 // and Contributors.
 //
-// SPDX-License-Identifier: BSL-1.0
+// SPDX-License-Identifier:	BSL-1.0
 //
 
 
@@ -78,10 +78,10 @@ public:
 		/// leads to worse results. Extensions will be converted to lower case.
 		///
 		/// The default extensions are:
-		///	  - gif
-		///	  - jpg
-		///	  - jpeg
-		///	  - png
+		///   - gif
+		///   - jpg
+		///   - jpeg
+		///   - png
 		
 	const std::set<std::string>& getStoreExtensions() const;
 		/// Returns the file extensions for which the CM_STORE compression method
@@ -106,16 +106,16 @@ private:
 		/// copys an already compressed ZipEntry from in
 
 private:
-	std::set<std::string>		  _storeExtensions;
-	std::ostream&				  _out;
-	bool						  _seekableOut;
-	bool						  _forceZip64;
-	ZipArchive::FileHeaders		  _files;
-	ZipArchive::FileInfos		  _infos;
-	ZipArchive::DirectoryInfos	 _dirs;
+	std::set<std::string>        _storeExtensions;
+	std::ostream&                _out;
+	bool                         _seekableOut;
+	bool						 _forceZip64;
+	ZipArchive::FileHeaders      _files;
+	ZipArchive::FileInfos        _infos;
+	ZipArchive::DirectoryInfos   _dirs;
 	ZipArchive::DirectoryInfos64 _dirs64;
 	Poco::UInt64				 _offset;
-	std::string					 _comment;
+    std::string                  _comment;
 
 	friend class Keep;
 	friend class Rename;

@@ -9,8 +9,8 @@
 
 
 #include "TypeListTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Tuple.h"
 #include "Poco/TypeList.h"
 #include "Poco/Void.h"
@@ -49,7 +49,7 @@ using Poco::UInt32;
 using Poco::Void;
 
 
-TypeListTest::TypeListTest(const std::string& rName): CppUnit::TestCase(rName)
+TypeListTest::TypeListTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -88,16 +88,16 @@ const int i = 0;
 		TypeGetter<8, Type15>::HeadType,
 		TypeGetter<9, Type15>::HeadType> tuple;
 
-	static TypeLocator<Type15, Int8> pos0;
-	static TypeLocator<Type15, UInt8> pos1;
-	static TypeLocator<Type15, Int16> pos2;
-	static TypeLocator<Type15, UInt16> pos3;
-	static TypeLocator<Type15, Int32> pos4;
-	static TypeLocator<Type15, UInt32> pos5;
-	static TypeLocator<Type15, float> pos6;
-	static TypeLocator<Type15, double> pos7;
-	static TypeLocator<Type15, Int8> pos8;
-	static TypeLocator<Type15, std::string> posUnknown;
+	static POCO_UNUSED TypeLocator<Type15, Int8> pos0;
+	static POCO_UNUSED TypeLocator<Type15, UInt8> pos1;
+	static POCO_UNUSED TypeLocator<Type15, Int16> pos2;
+	static POCO_UNUSED TypeLocator<Type15, UInt16> pos3;
+	static POCO_UNUSED TypeLocator<Type15, Int32> pos4;
+	static POCO_UNUSED TypeLocator<Type15, UInt32> pos5;
+	static POCO_UNUSED TypeLocator<Type15, float> pos6;
+	static POCO_UNUSED TypeLocator<Type15, double> pos7;
+	static POCO_UNUSED TypeLocator<Type15, Int8> pos8;
+	static POCO_UNUSED TypeLocator<Type15, std::string> posUnknown;
 
 	assertTrue (pos0.value == 0);
 	assertTrue (pos1.value == 1);
@@ -155,9 +155,9 @@ const int i = 0;
 	assertTrue (typeid(TypeGetter<1, Type3>::HeadType) == typeid(Int16));
 	assertTrue (typeid(TypeGetter<2, Type3>::HeadType) == typeid(Int32));
 
-	static TypeLocator<Type3, Int8> posNo1;
-	static TypeLocator<Type3, Int16> posNo2;
-	static TypeLocator<Type3, Int32> posNo3;
+	static POCO_UNUSED TypeLocator<Type3, Int8> posNo1;
+	static POCO_UNUSED TypeLocator<Type3, Int16> posNo2;
+	static POCO_UNUSED TypeLocator<Type3, Int32> posNo3;
 
 	assertTrue (posNo1.value == 0);
 	assertTrue (posNo2.value == 1);

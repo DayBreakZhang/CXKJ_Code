@@ -16,13 +16,13 @@ development. Of course, POCO is also ready for enterprise-level
 challenges.
 
 <%
-<img src="images/poco.png" width="320" height="255" alt="POCO Libraries" border="0"/>
+<img src="images/poco.png" width="320" height="255" alt="POCO Libraries" border="0">
 %>
 
 POCO consists of four core libraries, and a number of add-on libraries.
 The core libraries are Foundation, XML, Util and Net. Two of the add-on
 libraries are NetSSL, providing SSL support for the network classes in
-the Net library, and SQL, a library for uniformly accessing different
+the Net library, and Data, a library for uniformly accessing different
 SQL databases.  POCO aims to be for
 network-centric, cross-platform C++ software development what Apple's
 Cocoa is for Mac development, or Ruby on Rails is for Web development --
@@ -69,7 +69,7 @@ and a pointer to a member function. The event can be fired by calling
     #include <iostream>
 
     using Poco::BasicEvent;
-    using Poco::Delegate;
+    using Poco::delegate;
 
     class Source
     {
@@ -96,13 +96,11 @@ and a pointer to a member function. The event can be fired by calling
         Source source;
         Target target;
 
-        source.theEvent += Delegate<Target, int>(
-            &target, &Target::onEvent);
+        source.theEvent += delegate(&target, &Target::onEvent);
 
         source.fireEvent(42);
 
-        source.theEvent -= Delegate<Target, int>(
-            &target, &Target::onEvent);
+        source.theEvent -= delegate(&target, &Target::onEvent);
 
         return 0;
     }
@@ -201,7 +199,7 @@ complete access to an XML
 document, using a tree-style object hierarchy. For this to work, the DOM
 parser provided by POCO has to load the entire document into memory. To
 reduce the memory footprint of the DOM document, the POCO DOM
-implementation uses string pooling, storing frequently occurring strings
+implementation uses string pooling, storing frequently occuring strings
 such as element and attribute names only once. The XML library is based
 on the Expat open source XML parser library (http://www.libexpat.org).
 Built on top of Expat
@@ -315,12 +313,11 @@ server.
         {
         }
 
-        void handleRequest(HTTPServerRequest& request,
-                           HTTPServerResponse& response)
+        void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
         {
             Application& app = Application::instance();
-            app.logger().information("Request from "
-                + request.clientAddress().toString());
+            app.logger().information("Request from %s",
+                request.clientAddress().toString());
 
             Timestamp now;
             std::string dt(DateTimeFormatter::format(now, _format));
@@ -350,8 +347,7 @@ server.
         {
         }
 
-        HTTPRequestHandler* createRequestHandler(
-            const HTTPServerRequest& request)
+        HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request)
         {
             if (request.getURI() == "/")
                 return new TimeRequestHandler(_format);
@@ -365,25 +361,11 @@ server.
 
     class HTTPTimeServer: public Poco::Util::ServerApplication
     {
-    public:
-        HTTPTimeServer(): _helpRequested(false)
-        {
-        }
-
-        ~HTTPTimeServer()
-        {
-        }
-
     protected:
         void initialize(Application& self)
         {
             loadConfiguration();
             ServerApplication::initialize(self);
-        }
-
-        void uninitialize()
-        {
-            ServerApplication::uninitialize();
         }
 
         void defineOptions(OptionSet& options)
@@ -398,8 +380,7 @@ server.
                     this, &HTTPTimeServer::handleHelp)));
         }
 
-        void handleHelp(const std::string& name,
-                        const std::string& value)
+        void handleHelp(const std::string& name, const std::string& value)
         {
             HelpFormatter helpFormatter(options());
             helpFormatter.setCommand(commandName());
@@ -415,14 +396,15 @@ server.
         {
             if (!_helpRequested)
             {
-                unsigned short port = (unsigned short)
-                    config().getInt("HTTPTimeServer.port", 9980);
-                std::string format(
-                    config().getString("HTTPTimeServer.format",
-                                       DateTimeFormat::SORTABLE_FORMAT));
+                unsigned short port = static_cast<unsigned short>(
+                    config().getInt("HTTPTimeServer.port", 9980));
+                std::string format(config().getString(
+                    "HTTPTimeServer.format",
+                    DateTimeFormat::SORTABLE_FORMAT));
 
                 ServerSocket svs(port);
-                HTTPServer srv(new TimeRequestHandlerFactory(format),
+                HTTPServer srv(
+                    new TimeRequestHandlerFactory(format),
                     svs, new HTTPServerParams);
                 srv.start();
                 waitForTerminationRequest();
@@ -432,7 +414,7 @@ server.
         }
 
     private:
-        bool _helpRequested;
+        bool _helpRequested = false;
     };
 
     int main(int argc, char** argv)

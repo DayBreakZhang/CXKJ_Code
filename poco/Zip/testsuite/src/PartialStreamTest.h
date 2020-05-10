@@ -15,7 +15,7 @@
 
 
 #include "Poco/Zip/Zip.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class PartialStreamTest: public CppUnit::TestCase

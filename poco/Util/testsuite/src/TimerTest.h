@@ -15,7 +15,7 @@
 
 
 #include "Poco/Util/Util.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 #include "Poco/Util/TimerTask.h"
 #include "Poco/Event.h"
 
@@ -35,6 +35,7 @@ public:
 	void testCancel();
 	void testCancelAllStop();
 	void testCancelAllWaitStop();
+	void testFunc();
 
 	void setUp();
 	void tearDown();

@@ -38,15 +38,15 @@ class AbstractMetaObject
 	/// factory for its class.
 {
 public:
-	AbstractMetaObject(const char* pName): _name(pName)
+	AbstractMetaObject(const char* name): _name(name)
 	{
 	}
 
 	virtual ~AbstractMetaObject()
 	{
-		for (typename ObjectSet::iterator it = _deleteSet.begin(); it != _deleteSet.end(); ++it)
+		for (auto p: _deleteSet)
 		{
-			delete *it;
+			delete p;
 		}
 	}
 
@@ -155,18 +155,18 @@ public:
 };
 
 
-template <class C, class B>
-class MetaSingleton: public AbstractMetaObject<B>
+template <class C, class B> 
+class MetaSingleton: public AbstractMetaObject<B> 
 	/// A SingletonMetaObject disables the create() method
 	/// and instead offers an instance() method to access
-	/// the single instance of its class.
-{
-public:
-	MetaSingleton(const char* name): AbstractMetaObject<B>(name)
+	/// the single instance of its class. 
+{ 
+public: 
+	MetaSingleton(const char* name): AbstractMetaObject<B>(name) 
 	{
 	}
 	
-	~MetaSingleton()
+	~MetaSingleton() 
 	{
 	}
 	
@@ -190,9 +190,9 @@ public:
 		return true;
 	}
 
-private:
-	mutable SingletonHolder<C> _object;
-};
+private: 
+	mutable SingletonHolder<C> _object; 
+}; 
 
 
 } // namespace Poco

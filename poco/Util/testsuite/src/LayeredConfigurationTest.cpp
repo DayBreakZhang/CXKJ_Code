@@ -9,8 +9,8 @@
 
 
 #include "LayeredConfigurationTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Util/LayeredConfiguration.h"
 #include "Poco/Util/MapConfiguration.h"
 #include "Poco/AutoPtr.h"
@@ -139,7 +139,7 @@ void LayeredConfigurationTest::testThreeLayers()
 	AutoPtr<MapConfiguration> pMC1 = new MapConfiguration;
 	AutoPtr<MapConfiguration> pMC2 = new MapConfiguration;
 	AutoPtr<MapConfiguration> pMC3 = new MapConfiguration;
-
+	
 	pMC1->setString("prop1", "value1");
 	pMC1->setString("prop2", "value2");
 	pMC1->setString("prop3", "value3");
@@ -147,11 +147,11 @@ void LayeredConfigurationTest::testThreeLayers()
 	pMC2->setString("prop4", "value5");
 	pMC3->setString("prop5", "value6");
 	pMC3->setString("prop1", "value7");
-
+	
 	pLC->add(pMC1, 0);
 	pLC->add(pMC2, 1);
 	pLC->add(pMC3, -1);
-
+	
 	assertTrue (pLC->getString("prop1") == "value7");
 	assertTrue (pLC->getString("prop2") == "value2");
 	assertTrue (pLC->getString("prop3") == "value3");
@@ -165,12 +165,12 @@ void LayeredConfigurationTest::testRemove()
 	AutoPtr<LayeredConfiguration> pLC = new LayeredConfiguration;
 	AutoPtr<MapConfiguration> pMC1 = new MapConfiguration;
 	AutoPtr<MapConfiguration> pMC2 = new MapConfiguration;
-
+	
 	pMC1->setString("prop1", "value1");
 	pMC1->setString("prop2", "value2");
 	pMC2->setString("prop2", "value3");
 	pMC2->setString("prop3", "value4");
-
+	
 	pLC->add(pMC1, 0);
 	pLC->add(pMC2, -1);
 
@@ -201,13 +201,13 @@ void LayeredConfigurationTest::testFind()
 	LayeredConfiguration::Ptr pLC = new LayeredConfiguration;
 	AbstractConfiguration::Ptr pMC1 = new MapConfiguration;
 	AbstractConfiguration::Ptr pMC2 = new MapConfiguration;
-
+	
 	pLC->add(pMC1, 0);
 	pLC->add(pMC2, "label", -1);
-
+	
 	AbstractConfiguration::Ptr pFound = pLC->find("label");
 	assertTrue (pFound == pMC2);
-
+	
 	pFound = pLC->find("notfound");
 	assertTrue (pFound.isNull());
 }

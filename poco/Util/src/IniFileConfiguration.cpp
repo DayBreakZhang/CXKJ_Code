@@ -98,24 +98,24 @@ void IniFileConfiguration::setRaw(const std::string& key, const std::string& val
 
 void IniFileConfiguration::enumerate(const std::string& key, Keys& range) const
 {
-	std::set<std::string> keySet;
+	std::set<std::string> keys;
 	std::string prefix = key;
 	if (!prefix.empty()) prefix += '.';
 	std::string::size_type psize = prefix.size();
-	for (IStringMap::const_iterator it = _map.begin(); it != _map.end(); ++it)
+	for (const auto& p: _map)
 	{
-		if (icompare(it->first, psize, prefix) == 0)
+		if (icompare(p.first, psize, prefix) == 0)
 		{
 			std::string subKey;
-			std::string::size_type end = it->first.find('.', psize);
+			std::string::size_type end = p.first.find('.', psize);
 			if (end == std::string::npos)
-				subKey = it->first.substr(psize);
+				subKey = p.first.substr(psize);
 			else
-				subKey = it->first.substr(psize, end - psize);
-			if (keySet.find(subKey) == keySet.end())
+				subKey = p.first.substr(psize, end - psize);
+			if (keys.find(subKey) == keys.end())
 			{
 				range.push_back(subKey);
-				keySet.insert(subKey);
+				keys.insert(subKey);
 			}
 		}
 	}
@@ -148,7 +148,7 @@ bool IniFileConfiguration::ICompare::operator () (const std::string& s1, const s
 
 void IniFileConfiguration::parseLine(std::istream& istr)
 {
-	static const int eof = std::char_traits<char>::eof();
+	static const int eof = std::char_traits<char>::eof(); 
 
 	int c = istr.get();
 	while (c != eof && Poco::Ascii::isSpace(c)) c = istr.get();

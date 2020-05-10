@@ -24,7 +24,6 @@
 #include "Poco/Timespan.h"
 #include "Poco/Runnable.h"
 #include "Poco/Thread.h"
-#include <atomic>
 
 
 namespace Poco {
@@ -84,12 +83,12 @@ public:
 		/// Returns current server error backlog.
 
 private:
-	DatagramSocket   _socket;
-	SocketAddress    _address;
-	Thread*          _pThread;
-	bool             _stop;
-	std::atomic<int> _dataBacklog;
-	std::atomic<int> _errorBacklog;
+	DatagramSocket      _socket;
+	SocketAddress       _address;
+	Thread*             _pThread;
+	bool                _stop;
+	Poco::AtomicCounter _dataBacklog;
+	Poco::AtomicCounter _errorBacklog;
 };
 
 

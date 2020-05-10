@@ -9,8 +9,8 @@
 
 
 #include "XMLConfigurationTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Util/XMLConfiguration.h"
 #include "Poco/AutoPtr.h"
 #include "Poco/Exception.h"
@@ -37,7 +37,7 @@ XMLConfigurationTest::~XMLConfigurationTest()
 
 void XMLConfigurationTest::testLoad()
 {
-	static const std::string xmlFile =
+	static const std::string xmlFile = 
 		"<config>"
 		"	<prop1>value1</prop1>"
 		"	<prop2>value2</prop2>"
@@ -226,7 +226,7 @@ void XMLConfigurationTest::testLoadAppendSave()
 
 void XMLConfigurationTest::testOtherDelimiter()
 {
-	static const std::string xmlFile =
+	static const std::string xmlFile = 
 		"<config>"
 		"	<prop1>value1</prop1>"
 		"	<prop2>value2</prop2>"

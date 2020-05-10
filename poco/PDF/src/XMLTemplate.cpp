@@ -1,15 +1,6 @@
 //
 // XMLTemplate.cpp
 //
-// Library: PDF
-// Package: PDFCore
-// Module:  XMLTemplate
-//
-// Copyright (c) 2006, Applied Informatics Software Engineering GmbH.
-// and Contributors.
-//
-// SPDX-License-Identifier:	BSL-1.0
-//
 
 
 #include "Poco/PDF/XMLTemplate.h"
@@ -40,7 +31,7 @@ namespace PDF {
 class StackedConfiguration : public Poco::Util::AbstractConfiguration
 {
 public:
-	typedef Poco::Util::AbstractConfiguration::Ptr ConfigPtr;
+	typedef Poco::AutoPtr<Poco::Util::AbstractConfiguration> ConfigPtr;
 	typedef std::vector<ConfigPtr> ConfigStack;
 
 	void push(ConfigPtr pConfig)
@@ -286,7 +277,18 @@ public:
 
 		_pPage = new Page(_pDocument->addPage(parsePageSize(_size), parseOrientation(orientation)));
 		_pPage->setLineWidth(0.2f);
-		_pPage->setRGBStroke({ 0, 0, 0 });
+		RGBColor black = {0, 0, 0};
+		_pPage->setRGBStroke(black);
+
+		// read or force font, page must have default
+		std::string fontFamily = _styles.getString("font-family", "helvetica");
+		float fontSize = _styles.getFloat("font-size", 10.0);
+		std::string fontStyle = _styles.getString("font-style", "normal");
+		std::string fontWeight = _styles.getString("font-weight", "normal");
+
+		Font font = loadFont(fontFamily, fontStyle, fontWeight);
+		_pPage->setFont(font, fontSize);
+
 		_boxes.push_back(Box(0, 0, _pPage->getWidth(), _pPage->getHeight()));
 
 		float margin = _styles.getFloat("margin", 0);
@@ -331,7 +333,6 @@ public:
 		_text = transcode(_text);
 
 		Font font = loadFont(fontFamily, fontStyle, fontWeight);
-
 		_pPage->setFont(font, fontSize);
 
 		float width = static_cast<float>(font.textWidth(_text).width*fontSize / 1000);
@@ -373,20 +374,8 @@ public:
 		width *= scaleX;
 		height *= scaleY;
 
-		bool aspectratioH = static_cast<bool>(pStyle->getBool("aspectratioH", false));
-		if (aspectratioH) {
-			float fAspectRation = image.width()/ image.height();			
-			width = fAspectRation*height;			
-		}
-
 		float x = static_cast<float>(_styles.current()->getDouble("left", _styles.current()->getDouble("right", width) - width));
 		float y = static_cast<float>(_styles.current()->getDouble("bottom", _styles.current()->getDouble("top", _y) - height));
-
-		float offsetX = static_cast<float>(pStyle->getDouble("offsetX", 0.0F));
-		float offsetY = static_cast<float>(pStyle->getDouble("offsetY", 0.0F));
-
-		x += offsetX;
-		y += offsetY;
 
 		translateInBox(x, y);
 
@@ -468,12 +457,20 @@ public:
 		AttributedString::Alignment align = AttributedString::ALIGN_LEFT;
 		int style = AttributedString::STYLE_PLAIN;
 
+		
 		std::string fontFamily = _styles.getString("font-family");
 		float       fontSize = _styles.getFloat("font-size");
 		std::string textAlign = _styles.getString("text-align", "left");
 		std::string fontStyle = _styles.getString("font-style", "normal");
 		std::string fontWeight = _styles.getString("font-weight", "normal");
 		std::string textTransform = _styles.getString("text-transform", "none");
+		std::string widthPct = _styles.getString("width", "");
+		// solid only supported at this time
+		bool borderAll = _styles.getString("border-style", "") == "solid";
+		bool borderLeft = _styles.getString("border-left", "") == "solid";
+		bool borderTop = _styles.getString("border-top", "") == "solid";
+		bool borderRight = _styles.getString("border-right", "") == "solid";
+		bool borderBottom = _styles.getString("border-bottom", "") == "solid";
 
 		_text = transform(_text, textTransform);
 		_text = transcode(_text);
@@ -482,6 +479,8 @@ public:
 			align = AttributedString::ALIGN_RIGHT;
 		else if (textAlign == "left")
 			align = AttributedString::ALIGN_LEFT;
+		else if (textAlign == "center")
+			align = AttributedString::ALIGN_CENTER;
 
 		if (fontStyle == "italic" || fontStyle == "oblique")
 			style |= AttributedString::STYLE_ITALIC;
@@ -499,7 +498,25 @@ public:
 		(*pFontMap)[AttributedString::STYLE_ITALIC] = italicFontName(normalizedFontFamily);
 		(*pFontMap)[AttributedString::STYLE_BOLD | AttributedString::STYLE_ITALIC] = boldItalicFontName(normalizedFontFamily);
 
-		_row.push_back(Cell(content, pFontMap, _encoding, false));
+		int width = -1;
+		if (!widthPct.empty())
+		{
+			if (*widthPct.rbegin() != '%')
+				throw Poco::InvalidArgumentException("Only percentage widths supported for table cells.");
+			else
+			{
+				widthPct.erase(widthPct.length() - 1);
+				width = NumberParser::parse(widthPct);
+			}
+		}
+
+		Cell cell(content, pFontMap, _encoding, false, width);
+		if (borderAll) cell.borderAll(true);
+		if (borderLeft) cell.borderLeft(true);
+		if (borderTop) cell.borderTop(true);
+		if (borderRight) cell.borderRight(true);
+		if (borderBottom) cell.borderBottom(true);
+		_row.push_back(cell);
 
 		popStyle();
 	}
@@ -737,8 +754,6 @@ protected:
 			return _pDocument->loadJPEGImage(p.toString());
 		else if (Poco::icompare(p.getExtension(), "png") == 0)
 			return _pDocument->loadPNGImage(p.toString());
-		else if (Poco::icompare(p.getExtension(), "bmp") == 0)
-			return _pDocument->loadBMPImage(p.toString());
 		else
 			throw Poco::InvalidArgumentException("cannot determine image type", path);
 	}
@@ -862,9 +877,9 @@ void XMLTemplate::load(std::istream& xmlStream)
 }
 
 
-void XMLTemplate::create(const std::string& fileName)
+void XMLTemplate::create(const std::string& path)
 {
-	_pDocument->save(fileName);
+	_pDocument->save(path);
 }
 
 

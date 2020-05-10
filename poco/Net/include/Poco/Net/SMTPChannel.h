@@ -21,6 +21,7 @@
 #include "Poco/Net/Net.h"
 #include "Poco/Channel.h"
 #include "Poco/String.h"
+#include "Poco/AutoPtr.h"
 
 
 namespace Poco {
@@ -31,6 +32,8 @@ class Net_API SMTPChannel: public Poco::Channel
 	/// This Channel implements SMTP (email) logging.
 {
 public:
+	using Ptr = Poco::AutoPtr<SMTPChannel>;
+
 	SMTPChannel();
 		/// Creates a SMTPChannel.
 		
@@ -56,9 +59,9 @@ public:
 		///     * local:      If true, local time is used. Default is true.
 		///     * attachment: Filename of the file to attach.
 		///     * type:       Content type of the file to attach.
-		///     * delete:     Boolean value indicating whether to delete
+		///     * delete:     Boolean value indicating whether to delete 
 		///                   the attachment file after sending.
-		///     * throw:      Boolean value indicating whether to throw
+		///     * throw:      Boolean value indicating whether to throw 
 		///                   exception upon failure.
 		
 	std::string getProperty(const std::string& name) const;

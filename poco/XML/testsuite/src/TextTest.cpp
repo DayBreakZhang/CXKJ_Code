@@ -9,8 +9,8 @@
 
 
 #include "TextTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/DOM/Text.h"
 #include "Poco/DOM/CDATASection.h"
 #include "Poco/DOM/Element.h"

@@ -9,8 +9,8 @@
 
 
 #include "ManifestTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Manifest.h"
 #include "Poco/MetaObject.h"
 #include <set>
@@ -30,7 +30,7 @@ class MfTestObject: public MfTestBase
 };
 
 
-ManifestTest::ManifestTest(const std::string& rName): CppUnit::TestCase(rName)
+ManifestTest::ManifestTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 

@@ -18,82 +18,11 @@
 #define Foundation_Tuple_INCLUDED
 
 
-// TODO: std::tuple doesn't accept partial initialization
-
-//#define POCO_CXX11_TUPLE_FINISHED
-
-
 #include "Poco/Foundation.h"
-#if defined(POCO_CXX11_TUPLE_FINISHED)
-#include <tuple>
-#endif
 #include "Poco/TypeList.h"
 
 
 namespace Poco {
-
-
-#if defined(POCO_CXX11_TUPLE_FINISHED)
-
-template<class ...Types>
-class Tuple : public std::tuple<Types...>
-{
-public:
-	//using std::tuple<Types...>::tuple;
-
-	Tuple() : std::tuple<Types...>()
-	{
-
-	}
-
-	/*
-	Tuple(Types... args) : std::tuple<Types...>(args...)
-	{
-
-	}
-	*/
-
-	template < typename ...Args >
-	Tuple(Args&&... args) : std::tuple<Types...>(std::forward<Args>(args)...)
-	{
-
-	}
-
-	//Tuple(const Tuple<Types...> &other) = delete;
-	//Tuple(const Tuple<Types...> &&other) = delete;
-
-	/*
-	Tuple(Types&... args) : std::tuple<Types...>(args...)
-	{
-
-	}
-
-	Tuple(Types&&... args) : std::tuple<Types...>(args...)
-	{
-
-	}
-	*/
-
-	enum TupleLengthType
-	{
-		length = std::tuple_size<std::tuple<Types...>>::value
-	};
-
-	template <int N, typename C>
-	void set(C value)
-	{
-		std::get<N>(*this) = value;
-	}
-
-	template <int N>
-	typename std::tuple_element<N, std::tuple<Types...>>::type& get()
-	{
-		return std::get<N>(*this);
-	}
-};
-
-
-#else
 
 
 #if defined(POCO_COMPILER_MSVC)
@@ -3159,7 +3088,7 @@ struct Tuple<T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,N
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -3269,7 +3198,7 @@ struct Tuple<T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,NullT
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -3376,7 +3305,7 @@ struct Tuple<T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,NullTypeL
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -3480,7 +3409,7 @@ struct Tuple<T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -3581,7 +3510,7 @@ struct Tuple<T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -3679,7 +3608,7 @@ struct Tuple<T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -3774,7 +3703,7 @@ struct Tuple<T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12, NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -3866,7 +3795,7 @@ struct Tuple<T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -3955,7 +3884,7 @@ struct Tuple<T0, T1,T2,T3,T4,T5,T6,T7,T8,T9,T10, NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -4041,7 +3970,7 @@ struct Tuple<T0, T1,T2,T3,T4,T5,T6,T7,T8,T9, NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -4124,7 +4053,7 @@ struct Tuple<T0, T1,T2,T3,T4,T5,T6,T7,T8, NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -4204,7 +4133,7 @@ struct Tuple<T0, T1,T2,T3,T4,T5,T6,T7, NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -4281,7 +4210,7 @@ struct Tuple<T0, T1,T2,T3,T4,T5,T6, NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -4355,7 +4284,7 @@ struct Tuple<T0, T1,T2,T3,T4,T5, NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -4426,7 +4355,7 @@ struct Tuple<T0, T1,T2,T3,T4, NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3),
@@ -4494,7 +4423,7 @@ struct Tuple<T0, T1,T2,T3, NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2),
 		typename TypeWrapper<T3>::CONSTTYPE& t3 = POCO_TYPEWRAPPER_DEFAULTVALUE(T3)):
@@ -4559,7 +4488,7 @@ struct Tuple<T0, T1,T2, NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1),
 		typename TypeWrapper<T2>::CONSTTYPE& t2 = POCO_TYPEWRAPPER_DEFAULTVALUE(T2)):
 		_data(t0, typename TypeListType<T1,T2>::HeadType
@@ -4621,7 +4550,7 @@ struct Tuple<T0, T1, NullTypeList>
 	{
 	}
 
-	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0,
+	Tuple(typename TypeWrapper<T0>::CONSTTYPE& t0, 
 		typename TypeWrapper<T1>::CONSTTYPE& t1 = POCO_TYPEWRAPPER_DEFAULTVALUE(T1)):
 		_data(t0, typename TypeListType<T1>::HeadType(t1, NullTypeList()))
 	{
@@ -4721,7 +4650,6 @@ private:
 	Type _data;
 };
 
-#endif
 
 } // namespace Poco
 

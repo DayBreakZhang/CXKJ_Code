@@ -3,14 +3,14 @@
 //
 // Library: Zip
 // Package: Zip
-// Module:	ZipUtil
+// Module:  ZipUtil
 //
 // Definition of the ZipUtil class.
 //
 // Copyright (c) 2007, Applied Informatics Software Engineering GmbH.
 // and Contributors.
 //
-// SPDX-License-Identifier: BSL-1.0
+// SPDX-License-Identifier:	BSL-1.0
 //
 
 

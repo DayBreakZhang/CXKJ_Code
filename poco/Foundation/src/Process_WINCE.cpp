@@ -73,6 +73,18 @@ int ProcessHandleImpl::wait() const
 }
 
 
+int ProcessHandleImpl::tryWait() const
+{
+	DWORD exitCode;
+	if (GetExitCodeProcess(_hProcess, &exitCode) == 0)
+		throw SystemException("Cannot get exit code for process", NumberFormatter::format(_pid));
+	if (exitCode == STILL_ACTIVE)
+		return -1;
+	else
+		return exitCode;
+}
+
+
 //
 // ProcessImpl
 //
@@ -110,13 +122,13 @@ ProcessHandleImpl* ProcessImpl::launchImpl(const std::string& command, const Arg
 {
 	std::wstring ucommand;
 	UnicodeConverter::toUTF16(command, ucommand);
-	
+
 	std::string commandLine;
 	for (ArgsImpl::const_iterator it = args.begin(); it != args.end(); ++it)
 	{
 		if (it != args.begin()) commandLine.append(" ");
 		commandLine.append(*it);
-	}		
+	}
 
 	std::wstring ucommandLine;
 	UnicodeConverter::toUTF16(commandLine, ucommandLine);

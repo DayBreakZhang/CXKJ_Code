@@ -1,12 +1,326 @@
 This is the changelog file for the POCO C++ Libraries.
 
-Release 1.7.8p4 (2017-08-11)
+Release 1.10.1 (2020-02-10)
+===========================
+
+- Upgraded bundled SQLite to version 3.31.1.
+- GH #2894: Poco 1.10.0 doesn't build with cmake & POCO_UNBUNDLED
+- GH #2898: poco 1.10/ NetSSL / openssl < 1.1 : default server usage changed (compare to 1.9.4)
+- GH #2834: Wrong cancelation of the fix: incorrect type of store name parameter in
+  CertOpenStore API call into NetSSL_Win. Release 1.10.0
+- GH #2791: allow pre-allocation of the buffer in Poco::LogStreamBuf.
+- GH #2816: Modernise TLS configuration
+- GH #2818: Add getSpecifiedPort() method in Poco::URI.
+- GH #2909: Test failures on s390x architecture with 1.10.0
+- GH #2911: Poco::UTF16Encoding and Poco::UTF32Encoding byte order conversion bug
+- GH #2912: Poco::SHA2Engine computes incorrect hash on big-endian systems
+- GH #2923: cmake: Version 1.10.0 not parsed correctly from VERSION file
+- GH #2908: [Windows] Process arguments quoting is broken.
+- GH #2894: Poco 1.10.0 doesn't build with cmake & POCO_UNBUNDLED
+- GH #2920: Close Service Handle after DeleteService Function call
+- GH #2919: Fixed Crash in WinService::setFailureActions
+- GH #2922: 1.10 cmake build fails on FreeBSD 11.2 Release
+- MySQL: resetting the session when putting it back into a SessionPool is now optional
+  (and disabled by default) due to a bug in MySQL messing up the character encoding when doing so.
+- Poco::AutoPtr and Poco::SharedPtr now support comparison with nullptr.
+
+
+Release 1.10.0 (2020-01-27)
+===========================
+
+- This release now requires a C++14 compiler (GCC 5, Clang 3.4, Visual C++ 2015).
+- Visual Studio project and solution files for versions prior to 2015 have
+  been removed. Furthermore, the separate projects and solutions for 64-bit builds
+  have been removed and configurations have been merged in a single project file.
+- POCO's fixed-size integer types are now based on <cstdint> types. This changes
+  the definition of Poco::Int64 and Poco::UInt64 on some platforms.
+- Many methods exposing raw pointers have been changed to use smart pointers
+  (usually Poco::SharedPtr or Poco::AutoPtr) instead. This may break some existing
+  code. Specifically, the Logging framework in the Foundation library and the
+  Configuration framework in the Util library have been changed.
+- New JWT library for dealing with JSON Web Tokens.
+- Upgrade bundled SQLite to version 3.31.0.
+- The NetSSL_OpenSSL library supports TLS 1.3 with OpenSSL 1.1.1 or later.
+- The NetSSL_Win library supports TLS 1.3 if it's supported by the underlying SChannel
+  implementation.
+- Added support for NTLM authentication in the Net library.
+- NetSSL_OpenSSL now has a Poco::Net::FTPSClientSession and Poco::Net::FTPSStreamOpener
+  class for connecting to FTP servers over TLS.
+- Fixed a potential crash in Poco::Net::NetworkInterface on Linux and macOS due to
+  an invalid cast when obtaining the MAC address of an interface.
+- GH #2624: Poco::FileChannel/Poco:LogFileImpl::writeImpl() on Windows should translate \n to \r\n.
+- GH #2869: X509Certificate does not render UTF-8 characters in subjectName
+- GH #2863: NetworkInterface::map can fail to reveal some interfaces if an earlier one can not be handled
+- GH #2807: Poco::Data::ODBC Binding of SQL Decimal Type
+- GH #2812: String trimInPlace crashes with 0 size on Visual Studio Express 2017
+- GH #2830: Fix wrong buffer size in client handshake when re-using a SecureSocket [NetSSL_Win]
+- GH #2809: Allow to filter long tests using a command line argument
+- GH #2853: Poco::Process::launch process environment unicode support is broken on Windows
+- GH #2843: Poco::Net::MediaType::parse() does not split parameters
+- GH #2772: On iOS real device (not simulator) the home directory is not usable
+- GH #2689: Added tryWait() into Process and ProcessHandle. Handle kill()-ed UNIX process exit codes.
+- GH #2866: unescape Backslash char in UTF8 unescape method
+- GH #2879: Add support for SameSite attribute in HTTPCookie
+- GH #2824: Poco::Environment missing UTF8/wstring support on Windows
+- GH #2295: setEscapeUnicode() functions in JSON Array and Object classes ignore their boolean parameter
+- GH #2306: Why does Poco explicitly define _WIN32_WINNT?
+- GH #2802: Deprecated warning when building POCO with OpenSSL in submodule + cmake
+- GH #2884: Is it a description error about setReceiveTimeout()?
+- GH #2780: Allow Poco::Net::Context::usePrivateKey to accept ECKey and/or general EVPPKey
+- GH #2747: NetSSL_Win: Context constructor usage argument should specify minimum supported SSL/TLS version
+- GH #2745: Small problem in the code
+- GH #2743: X509Certificate validFrom expiresOn Date parsing
+- GH #2744: Poco::Mysql does not build with MySQL 8.0+
+- GH #2686: Uploads larger than 2GB fail
+- GH #2217: UUIDGenerator should allow random seed
+- GH #1609: Improve XDG Base Directory Specification implementation
+- GH #561: Support for XDG Base Directory Specification
+- GH #2881: Add an option to force the use of PollingDirectoryWatcherStrategy
+- GH #2584: Adding standard macOS legacy encodings
+- GH #2885: fix Dynamic::Var parse string issue
+- GH #2616: Restore pre-1.8.0 behaviour of Poco::Net::ServerSocket::bind.
+- GH #2641: Implement DataURIStream for extracting data from data URIs.
+- GH #2842: File fail on overwrite
+- GH #2840: Deleting Registry Keys on the WOW6432Node is not possible on 64Bit Applications
+- GH #2841: Service manager improvments
+- GH #2827: X509Certificate: Get rid of deprecated OpenSSL 1.1 APIs
+- GH #2826: CipherImpl: Fix small error with OpenSSL 1.1
+- GH #2775: Fix issue in NetSSL_Win. Windows Server 2016 reboots while trying to establish an SSL connection.
+- GH #2773: Fix the issue with incorrect type of store name parameter in CertOpenStore API call into NetSSL_Win
+- GH #2766: Support qnx sdp7
+- GH #2308: SocketAcceptor::setReactor() is broken
+- GH #2250: Poco::strToInt<> fails for values right above the type's boundary / limit
+- GH #2249: Poco::JSON::Object::set() should return reference to this to allow chaining.
+- GH #2275: SQLite mismatch open/close API calls
+- GH #1921: ICMPSocket does not check reply address
+- GH #2092: Use PollSet in SocketReactor
+- GH #2552: Poco::MongoDB test cases failed in Linux on IBM z
+- GH #2546: MySQL session state is not cleared in SessionPool
+- GH #2410: Preserve entries order in DynamicStruct
+- GH #2467: Can not open certain zip files include data descriptor
+- GH #2398: Poco 1.9.1 branch cmake build on FreeBSD 11.1 failed
+- GH #2365: add struct tm support to DateTime
+- GH #2348: NTPClient not checking reply address
+- GH #2346: lock-order-inversion in SocketReactor
+- GH #2330: add socket gather/scatter capabilities
+- GH #2343: UDPServer and client
+- GH #2329: add PMTU discovery
+- GH #2345: SocketNotifier not thread-safe
+- GH #2323: WebSocketTest.cpp faults reported by valgrind
+- GH #1160: Poco::Net::NetException "SSL Exception: error:1409F07F:SSL routines:ssl3_write_pending:bad write retry"
+- GH #2547: Reset connection when a session is returned to the SessionPool
+- GH #2451: http client timeout on Windows 7 and Server 2008 R2
+- GH #2417: Added missing IPv6 methods to SecureSocketImpl
+- GH #2408: add ordered containers
+- GH #2042: Android abstract namespace local socket address
+- GH #2088: Fix race condition in TCPServerDispatcher.cpp
+- GH #2892: SocketImpl::bind --> bind wrong config
+
+
+Release 1.9.4 (2019-09-18)
+==========================
+
+- fixed GH #2784: Upgrade bundled expat XML parser library to release 2.2.8,
+  which fixes CVE-2019-15903.
+
+
+Release 1.9.3 (2019-08-20)
+==========================
+
+- fixed GH #2603: Remove incorrect upper size limits for SSL certificates in NetSSL_Win
+- fixed GH #2661: Poco::Zip::ZipArchive cannot load new tomcat.zip file (additional fix)
+- fixed GH #2742: Support of vs150 & vs160 with the official Microsoft localization executable,
+  vswhere.exe, installed by MSVC starting from VS2017
+- Data/ODBC: make binding of std::string configurable (SQL_LONGVARCHAR - default or SQL_VARCHAR)
+  through a global setting (Poco::Data::ODBC::Connector::bindStringToLongVarChar()).
+- added Poco::SharedLibrary::setSearchPath() (currently implemented on Windows only)
+- Windows required minimum version is now Windows XP SP2
+- upgraded bundled SQLite to 3.29.0
+- CppParser now supports type aliases defined with using keyword.
+- PageCompiler: added support for adding Content-Security-Policy and Cache-Control headers.
+
+
+Release 1.9.2 (2019-07-02)
+==========================
+
+- fixed GH #2736: Error using CMake gui - latest version
+- fixed GH #2737: Bundles vulnerable copy of Expat — please upgrade to Expat 2.2.7
+- fixed GH #2738: Poco::AccessExpireStrategy::onGet() must not extend expiration time after expiration
+
+
+Release 1.9.1 (2019-06-24)
+==========================
+
+- Added support for building with different OpenSSL distributions on Windows.
+  See the POCO_EXTERNAL_OPENSSL macro defined in Foundation/include/Poco/Config.h
+  for options.
+- Added Poco::Net::HTTPClientSession::flushRequest()
+- Added Poco::Net::WebSocket::setMaxPayloadSize() and Poco::Net::WebSocket::getMaxPayloadSize()
+  to specify a maximum acceptable payload size for Poco::Net::WebSocket::receiveFrame().
+- Poco::Net::WebSocket: don't attempt to send empty credentials in response to 401 response.
+- Redis: added support for additional commands (exists, expire, ping, multi, exec, discard)
+- Redis: added Poco::Redis::Client::isConnected()
+- Upgraded bundled PCRE to version 8.43
+- Upgraded bundled SQLite to version 3.28.0
+- Added project/solution files for Visual Studio 2019
+- Fixed Visual Studio project files (version information from DLLVersion.rc not included in DLLs)
+- Include version resource in DLLs built with CMake
+- Added HTTP*Credentials::empty() and HTTPCredentials::clear()
+- fixed GH #2220: Encoding/DoubleByteEncoding.cpp fails to compile with VS2008 and _DEBUG
+- fixed GH #2243: DLLVersion.rc is excluded from build, missing detail information in properties of *.dll
+- fixed GH #2277: SQLite null pointer dereference occurs when exception is being thrown
+- fixed GH #2313: PollSet behaves differently on windows
+- fixed GH #2316: cmake can't find MySQL and ODBC libraries
+- fixed GH #2336: Omit ContentLength in WebSocket accept response
+- fixed GH #2358: Don't include <openssl/fips.h> for later OpenSSL
+- fixed GH #2364: Stringify escapes every unicode symbol when object contain an array
+- fixed GH #2380: Calling Poco::Net::X509Certificate::addChainCertificate() leads to double free.
+- fixed GH #2492: Net::Socket::address() crash on Android
+- fixed GH #2549: Fix keepAlive in http client session
+- fixed GH #2565: HTMLForm: optional enforcement of Content-Length instead of Chunked Transfer-Encoding
+- fixed GH #2570: DialogSocket: receiveStatusMessage() - line length limit applies to entire multi-line message
+- fixed GH #2583: Crypto library does not build with OpenSSL 1.0.0
+- fixed GH #2655: MongoDB Binary element to string - bug
+- fixed GH #2661: Poco::Zip::ZipArchive cannot load new tomcat.zip file
+- fixed GH #2700: Invalid read of memory in Poco::Environment::set which may cause crashes.
+- fixed GH #2712: File_WIN32.cpp(168): error C2065: "_upath":Undeclared identifier
+- fixed GH #2723: Access violation when trying to decompress .zip file with unsupported compression method.
+
+
+Release 1.9.0 (2018-03-07)
+==========================
+
+- Added additional text encodings, available in the new PocoEncodings library (GH #2165)
+- Added Punycode support for resolving Internationalized Domain Names to Poco::Net::DNS (GH #2164)
+- Added XDG Base Directory Specification support in Poco::Path, Poco::Util::SystemConfiguration
+  and Poco::Util::Application (GH #1609, GH #561, GH #1609)
+- Added support for GCM ciphers in Crypto library (GH #2129)
+- Poco::Net::RemoteSyslogChannel and Poco::Net::RemoteSyslogListener now have basic
+  support for RFC 5424 structured data (GH #2173)
+- Poco::File now has methods for obtaining partition space (GH #1545)
+- Added Poco::Net::Context::addCertificateAuthority() (GH #2197)
+- Added Poco::AutoPtr::reset() and Poco::SharedPtr::reset() to improve compatibility
+  with std::shared_ptr() (GH #2172)
+- fixed GH #703: Poco::Data::SQLite data types (INTEGER is now mapped to Int64)
+- fixed GH #1426: inttypes.h is available on sun solaris
+- fixed GH #1912: Run ping with custom data size #1912
+- fixed GH #2177: Run ping with custom timeout instead of the default
+- fixed GH #2058 and GH #2095: Synchronization issue/deadlock in Poco::Util::Timer at destruction
+- fixed GH #2089: Allow hyphen in HTTP authentication scheme names
+- fixed GH #2106: Undefined behavior in Delegate::equals()
+- fixed GH #2108: POCO SQLite Data Connector hangs for 20 secs waiting for thread timeouts on Windows
+- fixed GH #2142: JSON::Object preserveOrder keys not synced on assignment
+- fixed GH #2199 and GH #2188: Illegal header in zip file exception/assertion failure during JAR file decompression
+- fixed GH #2203: Use MAX_ADDRESS_LENGTH to determine buffer size
+
+Release 1.8.1 (2018-01-09)
+==========================
+
+- Added Poco::File::linkTo()
+- fixed GH #2044: Poco::Net::NetworkInterface::list does not list inactive interfaces
+  even when explicitly being asked for it.
+- fixed GH #2042: Android abstract namespace local socket address
+- fixed GH #2038: Poco::Net::MultipartWriter::createBoundary() always returns the same string.
+- fixed GH #2020: SQLite not handling parameter count mismatch correctly.
+- fixed GH #2012: Data/SQLite: Exception messages contain duplicate text
+- fixed GH #2005: Upgraded bundled PCRE to 8.41
+- fixed GH #2000: Fix building XMLStreamParser with unbundled expat
+- fixed GH #1603: fix MinGW 4.8.2 Compilation
+- fixed GH #1991: Support building poco 1.8.0 as cmake sub-project
+- fixed GH #2080: Bugs in Poco::Net::Socket::select when POCO_HAVE_FD_POLL is defined
+
+
+Release 1.8.0.1 (2017-11-11)
 ============================
 
+- Reverted change for GH #1828; DeflatingStreamBuf::sync() no longer flushes
+  underlying stream as this causes corruption for some Zip files.
+- PocoDoc: fix for handling compiler configuration for Gradle builds.
+
+
+Release 1.8.0 (2017-11-10)
+==========================
+
+- Poco::Base64Encoder: add support for base64url encoding (GH #1967)
+- Add Poco::Net::PollSet class to Net library (GH #1763)
+- The Net library now supports Unix Domain Sockets, where available.
+- Added stream parser (Poco::XML::XMLStreamParser) to XML library (GH #1697)
+- Added Poco::Net::TCPServerConnectionFilter and Poco::Net::TCPServer::setConnectionFilter()
+  to support connection filtering and IP blacklisting (GH #1485)
+- Added Redis library (GH #1383)
+- Added Zip64 support to Zip library (GH #1356)
+- Upgraded bundled SQLite to 3.21.0
+- Removed OpenVMS support (GH #1988)
+- fixed GH #271: NamedMutex_UNIX.cpp must remove semid
+- fixed GH #739: Add WebSocket::receiveFrame() that appends to a Poco::Buffer<char>
+- fixed GH #749: NTP Packet impl not according to RFC958
+- fixed GH #896: Sample "TwitterClient" of NetSSL_OpenSSL can't be build
+- fixed GH #1172: Poco::Data default storage should be std::vector
+- fixed GH #1337: Poco::HTMLForm throws exception HTMLFormException("Form must be prepared")
+  even after form is prepared.
+- fixed GH #1373: SessionImpl::close() does not check return code of close handle specific function
+- fixed GH #1425: Workaround bug in SolarisStudio 12.4 on RVO-ed objects.
+- fixed GH #1614: Problematic license for JSON component: the previously used JSON.org parser
+  has been replaced with pdjson
+- fixed GH #1659: wrong field size calculation in ODBC code
+- fixed GH #1683: Poco::Data ODBC impl doesn't bind to unsigned numeric types properly
+- fixed GH #1705: MongoDB: support URI in Connection
+- fixed GH #1708: "SocketReactor::addEventHandler" and "SocketReactor::removeEventHandler"
+  must protect the access to "NotifierPtr pNotifier"
+- fixed GH #1729: getConnectionTimeout of SQLite DB wrapper returns wrong value
+  (in milliseconds, should be in seconds)
+- fixed GH #1739: OpenSSLInitializer isn't threadsafe
+- fixed GH #1750: double_conversion in NumericString is in conflict with Qt5 Core
+- fixed GH #1804 and GH #1805: Integer Overflow or Wraparound
+- fixed GH #1828: DeflatingStreamBuf::sync() should also flush underlying stream.
+- fixed GH #1880: FTPClientSession::close() error
+- fixed GH #1897: DateTime wrong binding/extraction for MySQL database
+- fixed GH #1905: Compiling Foundation library with POCO_NO_FPENVIRONMENT in Config.h fails
+- fixed GH #1906: Race condition in ThreadPool
+- fixed GH #1913: Message Doesn't Support 64-bit Thread IDs
+- fixed GH #1921: ICMPSocket does not check reply address
+- fixed GH #1926: Exception when using SortedDirectoryIterator
+- fixed GH #1934: File::setExecutable() on POSIX should set executable bit for group and
+  other if corresponding readable bit is set
+- fixed GH #1950: Net Exception: Address family not supported with clang
+- fixed GH #1964: Buffer<> swap miss ownMem
+
+
+Release 1.7.9p2 (2017-11-06)
+============================
+
+- fixed GH #1628: Export Poco::Zip::ZipUtil class
+
+
+Release 1.7.9p1 (2017-11-02)
+============================
+
+- fixed GH #1968: Zip Decompress Parent Path Injection
+
+
+Release 1.7.9 (2017-09-11)
+==========================
+
 - fixed GH #1813: xmlparse.cpp doesn't compile in WinCE (poco 1.7.8p3)
+- fixed GH #1826: XPath query error
 - fixed GH #1834: Visual Studio 2008 cannot find stdint.h
 - fixed GH #1842: Upgrade bundled expat to 2.2.3
 - fixed GH #1843: Use random salt for Poco::XML::NamePool
+- fixed GH #1865: AbstractEvent::hasDelegates() is not thread-safe
+- improved/fixed QNX support
+- Poco::Util::LayeredConfiguration: added support for labelling configurations and
+  finding them by their label
+- upgraded bundled SQLite to 3.20.1
+- PageCompiler: support <%@ include file="<path>" %> syntax for includes, in addition
+  to <%@ include page="<path>" %>
+- PageCompiler: optimize generated request handler code by removing useless
+  statements, e.g. writing empty strings.
+- added POCO_DEPRECATED macro which will be used in the future to deprecate
+  classes and methods.
+- Poco::NamedMutex and Poco::NamedEvent (System V Semaphores implementation): files are
+  now opened with O_RDONLY | O_CREAT instead of O_WRONLY | O_CREAT, allowing sharing
+  between different users. Furthermore, ftok() is called with 'p' as project ID
+  argument.
 
 
 Release 1.7.8p3 (2017-06-22)
@@ -397,7 +711,7 @@ Release 1.5.3 (2014-06-30)
 - Add extern "C" around <net/if.h> on HPUX platform.
 - added runtests.sh
 - fixed CPPUNIT_IGNORE parsing
-- fixed Glob from start path, for platforms not allowing transverse from root (Android)
+- fixed Glob from start path, for platforms not alowing transverse from root (Android)
 - added NTPClient (Rangel Reale)
 - added PowerShell build script
 - added SmartOS build support
@@ -1260,7 +1574,7 @@ Release 1.4.0 (2010-12-14)
 - Added Poco::Nullable class template.
 - Added Poco::NullMutex, a no-op mutex to be used as template argument for template classes
   taking a mutex policy argument.
-- Poco::XML::XMLWriter: fixed a namespace handling issue that occurred with startPrefixMapping() and endPrefixMapping()
+- Poco::XML::XMLWriter: fixed a namespace handling issue that occured with startPrefixMapping() and endPrefixMapping()
 - Poco::Net::Context now allows for loading certificates and private keys from Poco::Crypto::X509Certificate objects
   and Poco::Crypto::RSAKey objects.
 - Poco::Crypto::RSAKey no longer uses temporary files for stream operations. Memory buffers are used instead.
@@ -1477,7 +1791,7 @@ Release 1.3.6 (2009-11-24)
 - fixed SF# 2828401: Deadlock in SocketReactor/NotificationCenter (also fixes patch# 1956490)
   NotificationCenter now uses a std::vector internally instead of a std::list, and the mutex is
   no longer held while notifications are sent to observers.
-- fixed SF# 2835206: File_WIN32 not checking against INVALID_HANDLE_VALUE
+- fixed SF# 2835206: File_WIN32 not checking aganist INVALID_HANDLE_VALUE
 - fixed SF# 2841812: Posix ThreadImpl::sleepImpl throws exceptions on EINTR
 - fixed SF# 2839579: simple DoS for SSL TCPServer, HTTPS server
   No SSL handshake is performed during accept() - the handshake is delayed until
@@ -2074,7 +2388,7 @@ Release 1.2.5 (2006-10-23)
 - XML now compiles with -DXML_UNICODE_WCHAR_T (SF# 1575174)
 - fixed SF# 1572757: HTML forms can have more than one key/value pair with the same name
 - got rid of the dynamic casts in Events, Events/Cache: simpler/faster Delegate < operator,
-  prevents some rare dynamic casts error from occurring when using StrategyCollection with Caches
+  prevents some rare dynamic casts error from occuring when using StrategyCollection with Caches
 - improvements to Logger and LoggingConfigurator:
   * added Logger::unsafeGet()
   * added Logger::setProperty(loggerName, propertyName, value)
@@ -2335,7 +2649,7 @@ Release 1.0b1 (2006-01-09)
 Release 1.0a1 (2006-01-03) [internal]
 =====================================
 
-- mediaType is used consistently to refer to a MIME media type (some occurrences of contentType and mimeType have been replaced)
+- mediaType is used consistently to refer to a MIME media type (some occurences of contentType and mimeType have been replaced)
 - moved MediaType::quote() to MessageHeader and made it public
 - added MultipartWriter::stream()
 - Renamed AttachmentSource to PartSource and AttachmentHandler to PartHandler
@@ -2449,7 +2763,7 @@ Relesae 0.95.1 (2005-10-15) [internal]
 - Socket classes use Timespan::useconds() to fill struct timeval
 - added DatagramSocket, MulticastSocket and NetworkInterface classes
 - added socket classes and related basic stuff
-- added additional constructor/assign to Timespan- added BasicBufferedBidirectionalStreamBuf
+- added additonal constructor/assign to Timespan- added BasicBufferedBidirectionalStreamBuf
 - fixed a potential MT issue in Base64Decoder
 - code beautifying in [Un]BufferedStreamBuf
 - more improvements to ClassLoader

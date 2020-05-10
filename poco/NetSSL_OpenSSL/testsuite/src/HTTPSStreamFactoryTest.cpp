@@ -9,8 +9,8 @@
 
 
 #include "HTTPSStreamFactoryTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/HTTPSStreamFactory.h"
 #include "Poco/Net/NetException.h"
 #include "Poco/Util/Application.h"
@@ -19,7 +19,6 @@
 #include "Poco/Exception.h"
 #include "Poco/StreamCopier.h"
 #include "HTTPSTestServer.h"
-#include <iostream>
 #include <sstream>
 #include <memory>
 
@@ -87,13 +86,12 @@ void HTTPSStreamFactoryTest::testProxy()
 	HTTPSStreamFactory factory(
 		Application::instance().config().getString("testsuite.proxy.host"),
 		Application::instance().config().getInt("testsuite.proxy.port")
-		);
+	);
 	URI uri("https://secure.appinf.com/public/poco/NetSSL.txt");
 	std::unique_ptr<std::istream> pStr(factory.open(uri));
 	std::ostringstream ostr;
 	StreamCopier::copyStream(*pStr.get(), ostr);
 	assertTrue (ostr.str().length() > 0);
-
 }
 
 
@@ -132,11 +130,6 @@ CppUnit::Test* HTTPSStreamFactoryTest::suite()
 	CppUnit_addTest(pSuite, HTTPSStreamFactoryTest, testNoRedirect);
 	CppUnit_addTest(pSuite, HTTPSStreamFactoryTest, testEmptyPath);
 	CppUnit_addTest(pSuite, HTTPSStreamFactoryTest, testRedirect);
-#ifdef FIXME
-	testProxy should use a public proxy server
-	http://www.publicproxyservers.com/proxy/list1.html
-	Really working public proxy servers - page 1 of 6.
-#endif
 	CppUnit_addTest(pSuite, HTTPSStreamFactoryTest, testProxy);
 	CppUnit_addTest(pSuite, HTTPSStreamFactoryTest, testError);
 

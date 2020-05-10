@@ -3,7 +3,7 @@
 //
 
 
-#include "Poco/CppUnit/TestDecorator.h"
+#include "CppUnit/TestDecorator.h"
 
 
 namespace CppUnit {
@@ -20,7 +20,7 @@ TestDecorator::~TestDecorator()
 }
 
 
-int TestDecorator::countTestCases()
+int TestDecorator::countTestCases() const
 {
 	return _test->countTestCases();
 }
@@ -32,7 +32,7 @@ void TestDecorator::run(TestResult* result)
 }
 
 
-std::string TestDecorator::toString()
+std::string TestDecorator::toString() const
 {
 	return _test->toString();
 }

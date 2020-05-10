@@ -6,13 +6,15 @@
 
 include $(POCO_BASE)/build/rules/global
 
-include $(POCO_BASE)/build/script/openssl_ver
-
 # Note: linking order is important, do not change it.
 ifeq ($(POCO_CONFIG),FreeBSD)
 SYSLIBS += -lssl -lcrypto -lz
 else
+ifeq ($(POCO_CONFIG),QNX)
+SYSLIBS += -lssl -lcrypto -lz
+else
 SYSLIBS += -lssl -lcrypto -lz -ldl
+endif
 endif
 
 objects = CryptoTestSuite Driver \
@@ -21,6 +23,6 @@ objects = CryptoTestSuite Driver \
 
 target         = testrunner
 target_version = 1
-target_libs    = PocoCrypto PocoFoundation PocoCppUnit
+target_libs    = PocoCrypto PocoFoundation CppUnit
 
 include $(POCO_BASE)/build/rules/exec

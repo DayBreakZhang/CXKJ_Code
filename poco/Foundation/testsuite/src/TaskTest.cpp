@@ -9,8 +9,8 @@
 
 
 #include "TaskTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Task.h"
 #include "Poco/Thread.h"
 #include "Poco/Event.h"
@@ -56,7 +56,7 @@ namespace
 }
 
 
-TaskTest::TaskTest(const std::string& rName): CppUnit::TestCase(rName)
+TaskTest::TaskTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 

@@ -73,14 +73,14 @@ class Foundation_API Logger: public Channel
 	/// are used. The macros also add the source file path and line
 	/// number into the log message so that it is available to formatters.
 	/// Variants of these macros that allow message formatting with Poco::format()
-	/// are also available. Up to four arguments are supported.
+	/// are also available.
 	///
 	/// Examples:
 	///     poco_warning(logger, "This is a warning");
-	///     poco_information_f2(logger, "An informational message with args: %d, %d", 1, 2);
+	///     poco_information_f(logger, "An informational message with args: %d, %d", 1, 2);
 {
 public:
-	typedef AutoPtr<Logger> Ptr;
+	using Ptr = AutoPtr<Logger>;
 
 	const std::string& name() const;
 		/// Returns the name of the logger, which is set as the
@@ -88,20 +88,20 @@ public:
 
 	void setChannel(Channel::Ptr pChannel);
 		/// Attaches the given Channel to the Logger.
-		
+
 	Channel::Ptr getChannel() const;
 		/// Returns the Channel attached to the logger.
-		
+
 	void setLevel(int level);
 		/// Sets the Logger's log level.
 		///
 		/// See Message::Priority for valid log levels.
 		/// Setting the log level to zero turns off
 		/// logging for that Logger.
-		
+
 	int getLevel() const;
 		/// Returns the Logger's log level.
-		
+
 	void setLevel(const std::string& level);
 		/// Sets the Logger's log level using a symbolic value.
 		///
@@ -126,17 +126,17 @@ public:
 	void log(const Message& msg);
 		/// Logs the given message if its priority is
 		/// greater than or equal to the Logger's log level.
-		
+
 	void log(const Exception& exc);
-		/// Logs the given exception with priority PRIO_ERROR.	
+		/// Logs the given exception with priority PRIO_ERROR.
 
 	void log(const Exception& exc, const char* file, int line);
-		/// Logs the given exception with priority PRIO_ERROR.	
+		/// Logs the given exception with priority PRIO_ERROR.
 		///
 		/// File must be a static string, such as the value of
 		/// the __FILE__ macro. The string is not copied
-		/// internally for performance reasons.	
-		
+		/// internally for performance reasons.
+
 	void fatal(const std::string& msg);
 		/// If the Logger's log level is at least PRIO_FATAL,
 		/// creates a Message with priority PRIO_FATAL
@@ -154,7 +154,7 @@ public:
 		/// internally for performance reasons.
 
 	template <typename T, typename... Args>
-	void fatal(const std::string &fmt, T arg1, Args&&... args)
+	void fatal(const std::string& fmt, T arg1, Args&&... args)
 	{
 		log(Poco::format(fmt, arg1, std::forward<Args>(args)...), Message::PRIO_FATAL);
 	}
@@ -176,7 +176,7 @@ public:
 		/// internally for performance reasons.
 
 	template <typename T, typename... Args>
-	void critical(const std::string &fmt, T arg1, Args&&... args)
+	void critical(const std::string& fmt, T arg1, Args&&... args)
 	{
 		log(Poco::format(fmt, arg1, std::forward<Args>(args)...), Message::PRIO_CRITICAL);
 	}
@@ -198,7 +198,7 @@ public:
 		/// internally for performance reasons.
 
 	template <typename T, typename... Args>
-	void error(const std::string &fmt, T arg1, Args&&... args)
+	void error(const std::string& fmt, T arg1, Args&&... args)
 	{
 		log(Poco::format(fmt, arg1, std::forward<Args>(args)...), Message::PRIO_ERROR);
 	}
@@ -220,7 +220,7 @@ public:
 		/// internally for performance reasons.
 
 	template <typename T, typename... Args>
-	void warning(const std::string &fmt, T arg1, Args&&... args)
+	void warning(const std::string& fmt, T arg1, Args&&... args)
 	{
 		log(Poco::format(fmt, arg1, std::forward<Args>(args)...), Message::PRIO_WARNING);
 	}
@@ -242,7 +242,7 @@ public:
 		/// internally for performance reasons.
 
 	template <typename T, typename... Args>
-	void notice(const std::string &fmt, T arg1, Args&&... args)
+	void notice(const std::string& fmt, T arg1, Args&&... args)
 	{
 		log(Poco::format(fmt, arg1, std::forward<Args>(args)...), Message::PRIO_NOTICE);
 	}
@@ -264,7 +264,7 @@ public:
 		/// internally for performance reasons.
 
 	template <typename T, typename... Args>
-	void information(const std::string &fmt, T arg1, Args&&... args)
+	void information(const std::string& fmt, T arg1, Args&&... args)
 	{
 		log(Poco::format(fmt, arg1, std::forward<Args>(args)...), Message::PRIO_INFORMATION);
 	}
@@ -286,7 +286,7 @@ public:
 		/// internally for performance reasons.
 
 	template <typename T, typename... Args>
-	void debug(const std::string &fmt, T arg1, Args&&... args)
+	void debug(const std::string& fmt, T arg1, Args&&... args)
 	{
 		log(Poco::format(fmt, arg1, std::forward<Args>(args)...), Message::PRIO_DEBUG);
 	}
@@ -308,7 +308,7 @@ public:
 		/// internally for performance reasons.
 
 	template <typename T, typename... Args>
-	void trace(const std::string &fmt, T arg1, Args&&... args)
+	void trace(const std::string& fmt, T arg1, Args&&... args)
 	{
 		log(Poco::format(fmt, arg1, std::forward<Args>(args)...), Message::PRIO_TRACE);
 	}
@@ -324,10 +324,10 @@ public:
 
 	bool is(int level) const;
 		/// Returns true if at least the given log level is set.
-		
+
 	bool fatal() const;
 		/// Returns true if the log level is at least PRIO_FATAL.
-		
+
 	bool critical() const;
 		/// Returns true if the log level is at least PRIO_CRITICAL.
 
@@ -353,18 +353,18 @@ public:
 		/// Replaces all occurrences of $0 in fmt with the string given in arg and
 		/// returns the result. To include a dollar sign in the result string,
 		/// specify two dollar signs ($$) in the format string.
-		
+
 	static std::string format(const std::string& fmt, const std::string& arg0, const std::string& arg1);
 		/// Replaces all occurrences of $<n> in fmt with the string given in arg<n> and
 		/// returns the result. To include a dollar sign in the result string,
 		/// specify two dollar signs ($$) in the format string.
 
-	static std::string format(const std::string& fmt, const std::string& arg0, const std::string& arg1, const std::string& arg2);	
+	static std::string format(const std::string& fmt, const std::string& arg0, const std::string& arg1, const std::string& arg2);
 		/// Replaces all occurrences of $<n> in fmt with the string given in arg<n> and
 		/// returns the result. To include a dollar sign in the result string,
 		/// specify two dollar signs ($$) in the format string.
 
-	static std::string format(const std::string& fmt, const std::string& arg0, const std::string& arg1, const std::string& arg2, const std::string& arg3);	
+	static std::string format(const std::string& fmt, const std::string& arg0, const std::string& arg1, const std::string& arg2, const std::string& arg3);
 		/// Replaces all occurrences of $<n> in fmt with the string given in arg<n> and
 		/// returns the result. To include a dollar sign in the result string,
 		/// specify two dollar signs ($$) in the format string.
@@ -372,11 +372,11 @@ public:
 	static void formatDump(std::string& message, const void* buffer, std::size_t length);
 		/// Creates a hex-dump of the given buffer and appends it to the
 		/// given message string.
-		
+
 	static void setLevel(const std::string& name, int level);
 		/// Sets the given log level on all loggers that are
 		/// descendants of the Logger with the given name.
-		
+
 	static void setChannel(const std::string& name, Channel::Ptr pChannel);
 		/// Attaches the given Channel to all loggers that are
 		/// descendants of the Logger with the given name.
@@ -399,35 +399,35 @@ public:
 		/// probably use get() instead.
 		/// The only time this method should be used is during
 		/// program initialization, when only one thread is running.
-		
+
 	static Logger& create(const std::string& name, Channel::Ptr pChannel, int level = Message::PRIO_INFORMATION);
 		/// Creates and returns a reference to a Logger with the
 		/// given name. The Logger's Channel and log level as set as
 		/// specified.
-		
+
 	static Logger& root();
 		/// Returns a reference to the root logger, which is the ultimate
 		/// ancestor of all Loggers.
-		
+
 	static Ptr has(const std::string& name);
 		/// Returns a pointer to the Logger with the given name if it
 		/// exists, or a null pointer otherwise.
-		
+
 	static void destroy(const std::string& name);
 		/// Destroys the logger with the specified name. Does nothing
 		/// if the logger is not found.
 		///
 		/// After a logger has been destroyed, all references to it
-		/// become invalid.	
-		
+		/// become invalid.
+
 	static void shutdown();
 		/// Shuts down the logging framework and releases all
 		/// Loggers.
-		
+
 	static void names(std::vector<std::string>& names);
 		/// Fills the given vector with the names
 		/// of all currently defined loggers.
-		
+
 	static int parseLevel(const std::string& level);
 		/// Parses a symbolic log level from a string and
 		/// returns the resulting numeric level.
@@ -444,7 +444,7 @@ public:
 		///   - trace
 		///
 		/// The level is not case sensitive.
-		
+
 	static const std::string ROOT; /// The name of the root logger ("").
 
 protected:
@@ -468,13 +468,13 @@ private:
 	Logger(const Logger&);
 	Logger& operator = (const Logger&);
 
-	std::string  _name;
+	std::string _name;
 	Channel::Ptr _pChannel;
-	int          _level;
+	int         _level;
 
 	// definitions in Foundation.cpp
 	static LoggerMapPtr _pLoggerMap;
-	static Mutex        _mapMtx;
+	static Mutex      _mapMtx;
 };
 
 
@@ -496,6 +496,9 @@ private:
 #define poco_fatal_f4(logger, fmt, arg1, arg2, arg3, arg4) \
 	if ((logger).fatal()) (logger).fatal(Poco::format((fmt), (arg1), (arg2), (arg3), (arg4)), __FILE__, __LINE__); else (void) 0
 
+#define poco_fatal_f(logger, fmt, ...) \
+	if ((logger).fatal()) (logger).fatal(Poco::format((fmt), __VA_ARGS__), __FILE__, __LINE__); else (void) 0
+
 #define poco_critical(logger, msg) \
 	if ((logger).critical()) (logger).critical(msg, __FILE__, __LINE__); else (void) 0
 
@@ -510,6 +513,9 @@ private:
 
 #define poco_critical_f4(logger, fmt, arg1, arg2, arg3, arg4) \
 	if ((logger).critical()) (logger).critical(Poco::format((fmt), (arg1), (arg2), (arg3), (arg4)), __FILE__, __LINE__); else (void) 0
+
+#define poco_critical_f(logger, fmt, ...) \
+	if ((logger).critical()) (logger).critical(Poco::format((fmt), __VA_ARGS__), __FILE__, __LINE__); else (void) 0
 
 #define poco_error(logger, msg) \
 	if ((logger).error()) (logger).error(msg, __FILE__, __LINE__); else (void) 0
@@ -526,6 +532,9 @@ private:
 #define poco_error_f4(logger, fmt, arg1, arg2, arg3, arg4) \
 	if ((logger).error()) (logger).error(Poco::format((fmt), (arg1), (arg2), (arg3), (arg4)), __FILE__, __LINE__); else (void) 0
 
+#define poco_error_f(logger, fmt, ...) \
+	if ((logger).error()) (logger).error(Poco::format((fmt), __VA_ARGS__), __FILE__, __LINE__); else (void) 0
+
 #define poco_warning(logger, msg) \
 	if ((logger).warning()) (logger).warning(msg, __FILE__, __LINE__); else (void) 0
 
@@ -540,7 +549,10 @@ private:
 
 #define poco_warning_f4(logger, fmt, arg1, arg2, arg3, arg4) \
 	if ((logger).warning()) (logger).warning(Poco::format((fmt), (arg1), (arg2), (arg3), (arg4)), __FILE__, __LINE__); else (void) 0
-	
+
+#define poco_warning_f(logger, fmt, ...) \
+	if ((logger).warning()) (logger).warning(Poco::format((fmt), __VA_ARGS__), __FILE__, __LINE__); else (void) 0
+
 #define poco_notice(logger, msg) \
 	if ((logger).notice()) (logger).notice(msg, __FILE__, __LINE__); else (void) 0
 
@@ -556,6 +568,9 @@ private:
 #define poco_notice_f4(logger, fmt, arg1, arg2, arg3, arg4) \
 	if ((logger).notice()) (logger).notice(Poco::format((fmt), (arg1), (arg2), (arg3), (arg4)), __FILE__, __LINE__); else (void) 0
 
+#define poco_notice_f(logger, fmt, ...) \
+	if ((logger).notice()) (logger).notice(Poco::format((fmt), __VA_ARGS__), __FILE__, __LINE__); else (void) 0
+
 #define poco_information(logger, msg) \
 	if ((logger).information()) (logger).information(msg, __FILE__, __LINE__); else (void) 0
 
@@ -570,6 +585,9 @@ private:
 
 #define poco_information_f4(logger, fmt, arg1, arg2, arg3, arg4) \
 	if ((logger).information()) (logger).information(Poco::format((fmt), (arg1), (arg2), (arg3), (arg4)), __FILE__, __LINE__); else (void) 0
+
+#define poco_information_f(logger, fmt, ...) \
+	if ((logger).information()) (logger).information(Poco::format((fmt), __VA_ARGS__), __FILE__, __LINE__); else (void) 0
 
 #if defined(_DEBUG) || defined(POCO_LOG_DEBUG)
 	#define poco_debug(logger, msg) \
@@ -587,6 +605,9 @@ private:
 	#define poco_debug_f4(logger, fmt, arg1, arg2, arg3, arg4) \
 		if ((logger).debug()) (logger).debug(Poco::format((fmt), (arg1), (arg2), (arg3), (arg4)), __FILE__, __LINE__); else (void) 0
 
+	#define poco_debug_f(logger, fmt, ...) \
+		if ((logger).debug()) (logger).debug(Poco::format((fmt), __VA_ARGS__), __FILE__, __LINE__); else (void) 0
+
 	#define poco_trace(logger, msg) \
 		if ((logger).trace()) (logger).trace(msg, __FILE__, __LINE__); else (void) 0
 
@@ -601,18 +622,24 @@ private:
 
 	#define poco_trace_f4(logger, fmt, arg1, arg2, arg3, arg4) \
 		if ((logger).trace()) (logger).trace(Poco::format((fmt), (arg1), (arg2), (arg3), (arg4)), __FILE__, __LINE__); else (void) 0
+
+	#define poco_trace_f(logger, fmt, ...) \
+		if ((logger).trace()) (logger).trace(Poco::format((fmt), __VA_ARGS__), __FILE__, __LINE__); else (void) 0
 #else
 	#define poco_debug(logger, msg)
 	#define poco_debug_f1(logger, fmt, arg1)
 	#define poco_debug_f2(logger, fmt, arg1, arg2)
 	#define poco_debug_f3(logger, fmt, arg1, arg2, arg3)
 	#define poco_debug_f4(logger, fmt, arg1, arg2, arg3, arg4)
+	#define poco_debug_f(logger, fmt, ...)
 	#define poco_trace(logger, msg)
 	#define poco_trace_f1(logger, fmt, arg1)
 	#define poco_trace_f2(logger, fmt, arg1, arg2)
 	#define poco_trace_f3(logger, fmt, arg1, arg2, arg3)
 	#define poco_trace_f4(logger, fmt, arg1, arg2, arg3, arg4)
+	#define poco_trace_f(logger, fmt, ...)
 #endif
+
 
 //
 // inlines

@@ -132,15 +132,15 @@ public:
 	virtual ~ClassLoader()
 		/// Destroys the ClassLoader.
 	{
-		for (typename LibraryMap::const_iterator it = _map.begin(); it != _map.end(); ++it)
+		for (auto& p: _map)
 		{
-			delete it->second.pLibrary;
-			delete it->second.pManifest;
+			delete p.second.pLibrary;
+			delete p.second.pManifest;
 		}
 	}
 
 	void loadLibrary(const std::string& path, const std::string& manifest)
-		/// Loads a library from the given path, using the given manifest.
+		/// Loads a library from the given path, using the given manifest. 
 		/// Does nothing if the library is already loaded.
 		/// Throws a LibraryLoadException if the library
 		/// cannot be loaded or does not have a Manifest.
@@ -210,7 +210,7 @@ public:
 	}
 		
 	void unloadLibrary(const std::string& path)
-		/// Unloads the given library.
+		/// Unloads the given library. 
 		/// Be extremely cautious when unloading shared libraries.
 		/// If objects from the library are still referenced somewhere,
 		/// a total crash is very likely.
@@ -247,9 +247,9 @@ public:
 	{
 		FastMutex::ScopedLock lock(_mutex);
 
-		for (typename LibraryMap::const_iterator it = _map.begin(); it != _map.end(); ++it)
+		for (const auto& p: _map)
 		{
-			const Manif* pManif = it->second.pManifest;
+			const Manif* pManif = p.second.pManifest;
 			typename Manif::Iterator itm = pManif->find(className);
 			if (itm != pManif->end())
 				return *itm;

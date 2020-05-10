@@ -13,9 +13,7 @@
 				expat*.h,
 				zconf.h,
 				zlib.h,
-				XMLStreamParser.h,
-				CppUnitException.h,
-				RepeatedTest.h,
+				${PocoBuild}/Util/include/Poco/Util/Units.h
 			</exclude>
 		</files>
 		<pages>

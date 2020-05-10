@@ -96,7 +96,7 @@ OperatorToken::OperatorToken()
 	_opMap[":"] = i++;
 	_opMap["::"] = i++;
 	_opMap[";"] = i++;
-	_opMap["?"] = i++;	
+	_opMap["?"] = i++;
 }
 
 
@@ -388,7 +388,7 @@ bool StringLiteralToken::start(char c, std::istream& /*istr*/)
 
 void StringLiteralToken::finish(std::istream& istr)
 {
-	int next = istr.peek();	
+	int next = istr.peek();
 	while (next != -1 && next != '"' && next != '\n' && next != '\r')
 	{
 		if (next == '\\') _value += (char) istr.get();
@@ -447,7 +447,7 @@ bool CharLiteralToken::start(char c, std::istream& /*istr*/)
 
 void CharLiteralToken::finish(std::istream& istr)
 {
-	int next = istr.peek();	
+	int next = istr.peek();
 	while (next != -1 && next != '\'' && next != '\n' && next != '\r')
 	{
 		if (next == '\\') _value += (char) istr.get();
@@ -608,27 +608,27 @@ void NumberLiteralToken::finishBin(std::istream& istr, int next)
 void NumberLiteralToken::finishExp(std::istream& istr, int next)
 {
 	_isFloat = true;
+	_value += (char) istr.get();
+	next = istr.peek();
+	if (next == '+' || next == '-')
+	{
 		_value += (char) istr.get();
 		next = istr.peek();
-		if (next == '+' || next == '-')
+	}
+	if (next >= '0' && next <= '9')
+	{
+		while (next >= '0' && next <= '9')
 		{
 			_value += (char) istr.get();
 			next = istr.peek();
 		}
-		if (next >= '0' && next <= '9')
-		{
-			while (next >= '0' && next <= '9')
-			{
-				_value += (char) istr.get();
-				next = istr.peek();
-			}
-		}
-		else
-		{
-			std::string s(1, (char) next);
-			syntaxError("digit", s);
-		}
 	}
+	else
+	{
+		std::string s(1, (char) next);
+		syntaxError("digit", s);
+	}
+}
 
 
 void NumberLiteralToken::finishSuffix(std::istream& istr, int next)

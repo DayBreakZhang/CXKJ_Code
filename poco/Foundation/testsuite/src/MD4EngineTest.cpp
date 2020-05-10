@@ -9,8 +9,8 @@
 
 
 #include "MD4EngineTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/MD4Engine.h"
 
 
@@ -18,7 +18,7 @@ using Poco::MD4Engine;
 using Poco::DigestEngine;
 
 
-MD4EngineTest::MD4EngineTest(const std::string& rName): CppUnit::TestCase(rName)
+MD4EngineTest::MD4EngineTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 

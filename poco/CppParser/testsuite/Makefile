@@ -12,6 +12,6 @@ objects = CppParserTestSuite Driver \
 
 target         = testrunner
 target_version = 1
-target_libs    = PocoCppParser PocoFoundation PocoCppUnit
+target_libs    = PocoCppParser PocoFoundation CppUnit
 
 include $(POCO_BASE)/build/rules/exec

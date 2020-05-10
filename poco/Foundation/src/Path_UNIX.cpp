@@ -22,9 +22,6 @@
 #if !defined(POCO_VXWORKS)
 #include <pwd.h>
 #endif
-#if POCO_OS == POCO_OS_MAC_OS_X
-#include <mach-o/dyld.h>
-#endif
 #include <climits>
 
 
@@ -54,22 +51,34 @@ std::string PathImpl::homeImpl()
 {
 #if defined(POCO_VXWORKS)
 	if (EnvironmentImpl::hasImpl("HOME"))
-		return EnvironmentImpl::getImpl("HOME");
-	else
-		return "/";
+	{
+		std::string path = EnvironmentImpl::getImpl("HOME");
+		std::string::size_type n = path.size();
+		if (n > 0 && path[n - 1] != '/') path.append("/");
+		return path;
+	}
+	else return "/";
 #else
 	std::string path;
-	struct passwd* pwd = getpwuid(getuid());
-	if (pwd)
-		path = pwd->pw_dir;
+	if (EnvironmentImpl::hasImpl("HOME"))
+	{
+		path = EnvironmentImpl::getImpl("HOME");
+	}
 	else
 	{
-		pwd = getpwuid(geteuid());
+		struct passwd* pwd = getpwuid(getuid());
 		if (pwd)
+		{
 			path = pwd->pw_dir;
+		}
 		else
-			if (EnvironmentImpl::hasImpl("HOME"))
-				path = EnvironmentImpl::getImpl("HOME");
+		{
+			pwd = getpwuid(geteuid());
+			if (pwd)
+				path = pwd->pw_dir;
+			else
+				path = "/";
+		}
 	}
 	std::string::size_type n = path.size();
 	if (n > 0 && path[n - 1] != '/') path.append("/");
@@ -159,34 +168,22 @@ std::string PathImpl::cacheHomeImpl()
 }
 
 
-std::string PathImpl::selfImpl()
+std::string PathImpl::tempHomeImpl()
 {
+#if defined(POCO_VXWORKS)
+	return PathImpl::tempImpl();
+#else
+	std::string path = PathImpl::homeImpl();
+	std::string::size_type n = path.size();
+	if (n > 0 && path[n - 1] == '/')
 #if POCO_OS == POCO_OS_MAC_OS_X
-	char path[1024];
-	uint32_t size = sizeof(path);
-	if (_NSGetExecutablePath(path, &size) != 0)
-		throw SystemException("cannot obtain path for executable");
-	return path;
-#elif POCO_OS == POCO_OS_LINUX || POCO_OS == POCO_OS_ANDROID
-	#ifdef PATH_MAX
-		std::size_t sz = PATH_MAX;
-	#else
-		std::size_t sz = 4096;
-	#endif
-	char buf[sz];
-	ssize_t ret = readlink("/proc/self/exe", buf, sz);
-	if (-1 == ret) throw SystemException("cannot obtain path for executable");
-	poco_assert_dbg(ret < sz);
-	buf[ret-1] = '\0';
-	return buf;
+	  path.append("Library/Caches/");
+#else
+	  path.append(".local/tmp/");
 #endif
-	// TODO (see https://stackoverflow.com/a/1024937/205386)
-	// Solaris: getexecname()
-	// FreeBSD: sysctl CTL_KERN KERN_PROC KERN_PROC_PATHNAME -1
-	// FreeBSD if it has procfs: readlink /proc/curproc/file (FreeBSD doesn't have procfs by default)
-	// NetBSD: readlink /proc/curproc/exe
-	// DragonFly BSD: readlink /proc/curproc/file
-	return "";
+
+	return path;
+#endif
 }
 
 
@@ -211,7 +208,7 @@ std::string PathImpl::tempImpl()
 std::string PathImpl::configImpl()
 {
 	std::string path;
-	
+
 #if POCO_OS == POCO_OS_MAC_OS_X
 	  path = "/Library/Preferences/";
 #else

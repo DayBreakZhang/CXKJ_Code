@@ -114,24 +114,59 @@ void Foundation_API format(std::string& result, const std::string& fmt, const st
 	/// all other variants of format().
 
 
-template <typename T, typename... Args>
-void format(std::string &result, const std::string &fmt, T arg1, Args... args)
+template <
+	typename T,
+	typename... Args>
+void format(std::string& result, const std::string& fmt, T arg1, Args... args)
 	/// Appends the formatted string to result.
 {
 	std::vector<Any> values;
-	values.push_back(arg1);
+	values.reserve(sizeof...(Args) + 1);
+	values.emplace_back(arg1);
 	values.insert(values.end(), { args... });
 	format(result, fmt, values);
 }
 
 
-template <typename FMT, typename T, typename... Args,
-	typename std::enable_if< std::is_const< typename std::remove_reference<FMT>::type >::value, int >::type = 0>
-std::string format(FMT &fmt, T arg1, Args... args)
+template <
+	typename T,
+	typename... Args>
+void format(std::string& result, const char* fmt, T arg1, Args... args)
+	/// Appends the formatted string to result.
+{
+	std::vector<Any> values;
+	values.reserve(sizeof...(Args) + 1);
+	values.emplace_back(arg1);
+	values.insert(values.end(), { args... });
+	format(result, fmt, values);
+}
+
+
+template <
+	typename T,
+	typename... Args>
+std::string format(const std::string& fmt, T arg1, Args... args)
 	/// Returns the formatted string.
 {
 	std::vector<Any> values;
-	values.push_back(arg1);
+	values.reserve(sizeof...(Args) + 1);
+	values.emplace_back(arg1);
+	values.insert(values.end(), { args... });
+	std::string result;
+	format(result, fmt, values);
+	return result;
+}
+
+
+template <
+	typename T,
+	typename... Args>
+std::string format(const char* fmt, T arg1, Args... args)
+	/// Returns the formatted string.
+{
+	std::vector<Any> values;
+	values.reserve(sizeof...(Args) + 1);
+	values.emplace_back(arg1);
 	values.insert(values.end(), { args... });
 	std::string result;
 	format(result, fmt, values);

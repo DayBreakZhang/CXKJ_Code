@@ -9,8 +9,8 @@
 
 
 #include "NullStreamTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/NullStream.h"
 
 
@@ -18,7 +18,7 @@ using Poco::NullInputStream;
 using Poco::NullOutputStream;
 
 
-NullStreamTest::NullStreamTest(const std::string& rName): CppUnit::TestCase(rName)
+NullStreamTest::NullStreamTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 

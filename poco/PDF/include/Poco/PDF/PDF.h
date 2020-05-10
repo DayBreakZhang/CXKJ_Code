@@ -19,11 +19,7 @@
 #ifndef PDF_PDF_INCLUDED
 #define PDF_PDF_INCLUDED
 
-
-#include "Poco/Foundation.h"
-
-
-#if defined(POCO_COMPILER_MSVC) && !defined(POCO_MSVC_SECURE_WARNINGS) && (!defined(_CRT_SECURE_NO_WARNINGS) || !defined(_CRT_SECURE_NO_DEPRECATE))
+#if defined(_MSC_VER) && !defined(POCO_MSVC_SECURE_WARNINGS) && (!defined(_CRT_SECURE_NO_WARNINGS) || !defined(_CRT_SECURE_NO_DEPRECATE))
 	#ifndef _CRT_SECURE_NO_WARNINGS
 		#define _CRT_SECURE_NO_WARNINGS
 	#endif
@@ -32,7 +28,7 @@
 	#endif
 #endif
 
-
+#include "Poco/Foundation.h"
 #include "hpdf.h"
 
 
@@ -44,7 +40,7 @@
 // PDF_API functions as being imported from a DLL, wheras this DLL sees symbols
 // defined with this macro as being exported.
 //
-#if defined(POCO_COMPILER_MSVC) && defined(POCO_DLL)
+#if defined(_WIN32) && defined(POCO_DLL)
 	#if defined(PDF_EXPORTS)
 		#define PDF_API __declspec(dllexport)
 	#else
@@ -54,7 +50,7 @@
 
 
 #if !defined(PDF_API)
-	#if defined (__GNUC__) && (__GNUC__ >= 4)
+	#if !defined(POCO_NO_GCC_API_ATTRIBUTE) && defined (__GNUC__) && (__GNUC__ >= 4)
 		#define PDF_API __attribute__ ((visibility ("default")))
 	#else
 		#define PDF_API
@@ -65,7 +61,7 @@
 //
 // Automatically link PDF library.
 //
-#if defined(POCO_COMPILER_MSVC)
+#if defined(_MSC_VER)
 	#if !defined(POCO_NO_AUTOMATIC_LIBS) && !defined(PDF_EXPORTS)
 		#pragma comment(lib, "PocoPDF" POCO_LIB_SUFFIX)
 	#endif

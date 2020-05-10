@@ -37,12 +37,12 @@ class NetSSL_API Session: public Poco::RefCountedObject
 	/// if it wants to reuse it with a future connection.
 {
 public:
-	typedef Poco::AutoPtr<Session> Ptr;
+	using Ptr = Poco::AutoPtr<Session>;
 
 	SSL_SESSION* sslSession() const;
 		/// Returns the stored OpenSSL SSL_SESSION object.
 
-protected:	
+protected:
 	Session(SSL_SESSION* pSession);
 		/// Creates a new Session object, using the given
 		/// SSL_SESSION object.
@@ -59,7 +59,7 @@ private:
 	Session();
 
 	SSL_SESSION* _pSession;
-	
+
 	friend class SecureSocketImpl;
 };
 

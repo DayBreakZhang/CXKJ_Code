@@ -9,8 +9,8 @@
 
 
 #include "WebSocketTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/WebSocket.h"
 #include "Poco/Net/SocketStream.h"
 #include "Poco/Net/HTTPClientSession.h"
@@ -56,8 +56,6 @@ namespace
 				do
 				{
 					n = ws.receiveFrame(buffer.begin(), static_cast<int>(buffer.size()), flags);
-					if (n == 0)
-						break;
 					ws.sendFrame(buffer.begin(), n, flags);
 				}
 				while (n > 0 || (flags & WebSocket::FRAME_OP_BITMASK) != WebSocket::FRAME_OP_CLOSE);

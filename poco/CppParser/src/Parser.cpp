@@ -161,7 +161,7 @@ void Parser::parse()
 		std::string m(exc.message());
 		std::string where(_currentPath);
 		where.append("(");
-		where.append(NumberFormatter::format(static_cast<int>(_istr.getCurrentLineNumber())));
+		where.append(NumberFormatter::format(_istr.getCurrentLineNumber()));
 		where.append(")");
 		throw SyntaxException(m, where);
 	}
@@ -287,6 +287,7 @@ const Token* Parser::parseClass(const Token* pNext, std::string& decl)
 	else
 		syntaxError("class/struct name");
 	pNext = next();
+
 	bool isFinal = false;
 	if (isIdentifier(pNext) && pNext->asString() == "final")
 	{
@@ -398,6 +399,9 @@ const Token* Parser::parseClassMembers(const Token* pNext, Struct* /*pClass*/)
 		case IdentifierToken::KW_TYPEDEF:
 			pNext = parseTypeDef(pNext);
 			break;
+		case IdentifierToken::KW_USING:
+			pNext = parseUsing(pNext);
+			break;
 		case IdentifierToken::KW_ENUM:
 			pNext = parseEnum(pNext);
 			break;
@@ -463,6 +467,8 @@ const Token* Parser::parseTemplateArgs(const Token* pNext, std::string& decl)
 			++depth;
 		else if (isOperator(pNext, OperatorToken::OP_GT))
 			--depth;
+		else if (isOperator(pNext, OperatorToken::OP_SHR))
+			depth -= 2;
 		pNext = next();
 	}
 	return pNext;
@@ -483,6 +489,7 @@ const Token* Parser::parseTypeDef(const Token* pNext)
 	}
 	TypeDef* pTypeDef = new TypeDef(decl, currentNameSpace());
 	addSymbol(pTypeDef, line);
+
 	pNext = next();
 	_pCurrentSymbol = 0;
 	return pNext;
@@ -493,6 +500,8 @@ const Token* Parser::parseUsing(const Token* pNext)
 {
 	poco_assert (isKeyword(pNext, IdentifierToken::KW_USING));
 	
+	_pCurrentSymbol = 0;
+	int line = _istr.getCurrentLineNumber();
 	pNext = next();
 	if (isKeyword(pNext, IdentifierToken::KW_NAMESPACE))
 	{
@@ -511,13 +520,32 @@ const Token* Parser::parseUsing(const Token* pNext)
 		{
 			std::string id;
 			pNext = parseIdentifier(pNext, id);
-			currentNameSpace()->importSymbol(id);
+			if (isOperator(pNext, OperatorToken::OP_ASSIGN))
+			{
+				pNext = next();
+				std::string decl("using ");
+				decl += id;
+				decl += " = ";
+				while (!isOperator(pNext, OperatorToken::OP_SEMICOLON) && !isEOF(pNext))
+				{
+					append(decl, pNext);
+					pNext = next();
+				}
+				TypeAlias* pTypeAlias = new TypeAlias(decl, currentNameSpace());
+				addSymbol(pTypeAlias, line);
+			}
+			else
+			{
+				currentNameSpace()->importSymbol(id);
+			}
 		}	
 	}
 
 	if (!isOperator(pNext, OperatorToken::OP_SEMICOLON))
 		syntaxError("semicolon");
-	return next();
+	pNext = next();
+	_pCurrentSymbol = 0;
+	return pNext;
 }
 
 
@@ -628,7 +656,7 @@ const Token* Parser::parseFunc(const Token* pNext, std::string& decl)
 	expectOperator(pNext, OperatorToken::OP_CLOSPARENT, ")");
 	pNext = next();
 	while (pNext->is(Poco::Token::IDENTIFIER_TOKEN) || pNext->is(Poco::Token::KEYWORD_TOKEN))
-	{
+	{ 
 		if (isKeyword(pNext, IdentifierToken::KW_CONST))
 		{
 			if (pFunc) pFunc->makeConst();
@@ -636,7 +664,7 @@ const Token* Parser::parseFunc(const Token* pNext, std::string& decl)
 		}
 		if (isKeyword(pNext, IdentifierToken::KW_THROW))
 		{
-			while (!isOperator(pNext, OperatorToken::OP_ASSIGN) && !isOperator(pNext, OperatorToken::OP_SEMICOLON) &&
+			while (!isOperator(pNext, OperatorToken::OP_ASSIGN) && !isOperator(pNext, OperatorToken::OP_SEMICOLON) && 
 				   !isOperator(pNext, OperatorToken::OP_OPENBRACE) && !isEOF(pNext))
 				pNext = next();
 		}
@@ -741,6 +769,8 @@ const Token* Parser::parseParameters(const Token* pNext, Function* pFunc)
 				++tdepth;
 			else if (isOperator(pNext, OperatorToken::OP_GT))
 				--tdepth;
+			else if (isOperator(pNext, OperatorToken::OP_SHR))
+				tdepth -= 2;
 			pNext = next();
 		}
 		if (isOperator(pNext, OperatorToken::OP_COMMA))
@@ -774,9 +804,17 @@ const Token* Parser::parseEnum(const Token* pNext)
 {
 	poco_assert (isKeyword(pNext, IdentifierToken::KW_ENUM));
 
+	int flags = 0;
 	_pCurrentSymbol = 0;
 	int line = _istr.getCurrentLineNumber();
 	pNext = next();
+
+	if (isKeyword(pNext, IdentifierToken::KW_CLASS))
+	{
+		flags = Enum::ENUM_IS_CLASS;
+		pNext = next();
+	}
+
 	std::string name;
 	if (pNext->is(Token::IDENTIFIER_TOKEN))
 	{
@@ -784,7 +822,7 @@ const Token* Parser::parseEnum(const Token* pNext)
 		pNext = next();
 	}
 	expectOperator(pNext, OperatorToken::OP_OPENBRACE, "{");
-	Enum* pEnum = new Enum(name, currentNameSpace());
+	Enum* pEnum = new Enum(name, currentNameSpace(), flags);
 	addSymbol(pEnum, line);
 	pNext = next();
 	while (pNext->is(Token::IDENTIFIER_TOKEN))

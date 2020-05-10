@@ -9,8 +9,8 @@
 
 
 #include "FTPStreamFactoryTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "DialogServer.h"
 #include "Poco/Net/FTPStreamFactory.h"
 #include "Poco/Net/DialogSocket.h"
@@ -80,12 +80,11 @@ void FTPStreamFactoryTest::testDownload()
 	uri.setPath("/test.txt;type=a");
 	FTPStreamFactory sf;
 	std::unique_ptr<std::istream> pStr(sf.open(uri));
-
 	std::ostringstream dataStr;
 	StreamCopier::copyStream(*pStr.get(), dataStr);
-	
+
 	pStr.reset();
-		
+
 	std::string s(dataStr.str());
 	assertTrue (s == "line1\r\nline2\r\n");
 }
@@ -121,9 +120,9 @@ void FTPStreamFactoryTest::testList()
 
 	std::ostringstream dataStr;
 	StreamCopier::copyStream(*pStr.get(), dataStr);
-	
+
 	pStr.reset();
-		
+
 	std::string s(dataStr.str());
 	assertTrue (s == "file1\r\nfile2\r\n");
 }
@@ -159,7 +158,7 @@ void FTPStreamFactoryTest::testUserInfo()
 
 	std::ostringstream dataStr;
 	StreamCopier::copyStream(*pStr.get(), dataStr);
-	
+
 	pStr.reset();
 
 	std::string s(dataStr.str());

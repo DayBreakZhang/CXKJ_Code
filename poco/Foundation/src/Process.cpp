@@ -23,17 +23,17 @@ namespace
 		std::vector<char> envbuf;
 		std::size_t pos = 0;
 
-		for (Poco::Process::Env::const_iterator it = env.begin(); it != env.end(); ++it)
+		for (const auto& p: env)
 		{
-			std::size_t envlen = it->first.length() + it->second.length() + 1;
+			std::size_t envlen = p.first.length() + p.second.length() + 1;
 
 			envbuf.resize(pos + envlen + 1);
-			std::copy(it->first.begin(), it->first.end(), &envbuf[pos]);
-			pos += it->first.length();
+			std::copy(p.first.begin(), p.first.end(), &envbuf[pos]);
+			pos += p.first.length();
 			envbuf[pos] = '=';
 			++pos;
-			std::copy(it->second.begin(), it->second.end(), &envbuf[pos]);
-			pos += it->second.length();
+			std::copy(p.second.begin(), p.second.end(), &envbuf[pos]);
+			pos += p.second.length();
 
 			envbuf[pos] = '\0';
 			++pos;
@@ -51,7 +51,7 @@ namespace
 #if defined(_WIN32_WCE)
 #include "Process_WINCE.cpp"
 #else
-#include "Process_WIN32.cpp"
+#include "Process_WIN32U.cpp"
 #endif
 #elif defined(POCO_VXWORKS)
 #include "Process_VX.cpp"
@@ -107,6 +107,12 @@ ProcessHandle::PID ProcessHandle::id() const
 int ProcessHandle::wait() const
 {
 	return _pImpl->wait();
+}
+
+
+int ProcessHandle::tryWait() const
+{
+	return _pImpl->tryWait();
 }
 
 
@@ -166,6 +172,12 @@ int Process::wait(const ProcessHandle& handle)
 }
 
 
+int Process::tryWait(const ProcessHandle& handle)
+{
+	return handle.tryWait();
+}
+
+
 void Process::kill(ProcessHandle& handle)
 {
 	killImpl(*handle._pImpl);
@@ -181,10 +193,13 @@ bool Process::isRunning(const ProcessHandle& handle)
 {
 	return isRunningImpl(*handle._pImpl);
 }
+
+
 bool Process::isRunning(PID pid)
 {
 	return isRunningImpl(pid);
 }
+
 
 void Process::requestTermination(PID pid)
 {

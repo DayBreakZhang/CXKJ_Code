@@ -22,7 +22,7 @@
 
 
 #if defined(POCO_OS_FAMILY_WINDOWS)
-#include "Poco/LogFile_WIN32.h"
+#include "Poco/LogFile_WIN32U.h"
 #else
 #include "Poco/LogFile_STD.h"
 #endif

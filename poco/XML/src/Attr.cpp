@@ -21,16 +21,16 @@ namespace Poco {
 namespace XML {
 
 
-Attr::Attr(Document* pOwnerDocument, Element* /*pOwnerElement*/, const XMLString& namespaceURI, const XMLString& localName, const XMLString& qname, const XMLString& value, bool specified):
+Attr::Attr(Document* pOwnerDocument, Element* pOwnerElement, const XMLString& namespaceURI, const XMLString& localName, const XMLString& qname, const XMLString& value, bool specified):
 	AbstractNode(pOwnerDocument),
 	_name(pOwnerDocument->namePool().insert(qname, namespaceURI, localName)),
 	_value(value),
 	_specified(specified)
-{ 
+{
 }
 
 
-Attr::Attr(Document* pOwnerDocument, const Attr& attr):
+Attr::Attr(Document* pOwnerDocument, const Attr& attr): 
 	AbstractNode(pOwnerDocument, attr),
 	_name(pOwnerDocument->namePool().insert(attr._name)),
 	_value(attr._value),
@@ -124,7 +124,7 @@ XMLString Attr::innerText() const
 }
 
 
-Node* Attr::copyNode(bool /*deep*/, Document* pOwnerDocument) const
+Node* Attr::copyNode(bool deep, Document* pOwnerDocument) const
 {
 	return new Attr(pOwnerDocument, *this);
 }

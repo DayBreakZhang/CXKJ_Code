@@ -44,7 +44,7 @@ class NetSSL_Win_API HTTPSClientSession: public HTTPClientSession
 	/// specify the server's host name and port number.
 	///
 	/// Then create a HTTPRequest object, fill it accordingly,
-	/// and pass it as argument to the sendRequest() method.
+	/// and pass it as argument to the sendRequst() method.
 	///
 	/// sendRequest() will return an output stream that can
 	/// be used to send the request body, if there is any.
@@ -133,9 +133,9 @@ public:
 		/// The certificate is available after the first request has been sent.
 		
 	Session::Ptr sslSession();
-		/// Returns the SSL Session object for the current
+		/// Returns the SSL Session object for the current 
 		/// connection, if session caching has been enabled for
-		/// the HTTPSClientSession's Context. A null pointer is
+		/// the HTTPSClientSession's Context. A null pointer is 
 		/// returned otherwise.
 		///
 		/// The Session object can be obtained after the first request has

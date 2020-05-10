@@ -19,12 +19,15 @@
 #define Foundation_Platform_WIN32_INCLUDED
 
 
+#include "Poco/UnWindows.h"
+
+
 #if defined(_MSC_VER) && !defined(POCO_MSVC_SECURE_WARNINGS) && !defined(_CRT_SECURE_NO_DEPRECATE)
 	#define _CRT_SECURE_NO_DEPRECATE
-#endif
+#endif 
 
 
-// Verify that we're built with the multithreaded
+// Verify that we're built with the multithreaded 
 // versions of the runtime libraries
 #if defined(_MSC_VER) && !defined(_MT)
 	#error Must compile with /MD, /MDd, /MT or /MTd
@@ -76,21 +79,6 @@
 	#pragma warning(disable:4355)	// 'this' : used in base member initializer list
 	#pragma warning(disable:4675)	// resolved overload was found by argument-dependent lookup
 	#pragma warning(disable:4996)	// VC++ 8.0 deprecation warnings
-#endif
-
-
-//
-// C++11/14 support
-//
-
-// Versions earlier than VS 2015 not supported
-#if defined(_MSC_VER) && (_MSC_VER < 1900)
-	#error "_MSC_VER >= 1900 (VS 2015) required"
-#endif
-
-
-#if !defined(POCO_ENABLE_CPP14) && !defined(POCO_DISABLE_CPP14)
-	#define POCO_ENABLE_CPP14
 #endif
 
 

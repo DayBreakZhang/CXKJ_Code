@@ -1,17 +1,6 @@
 //
 // DocumentTemplate.h
 //
-// Library: PDF
-// Package: PDFCore
-// Module:  DocumentTemplate
-//
-// Definition of the DocumentTemplate class.
-//
-// Copyright (c) 2006, Applied Informatics Software Engineering GmbH.
-// and Contributors.
-//
-// SPDX-License-Identifier:	BSL-1.0
-//
 
 
 #ifndef PDF_AttributedString_INCLUDED
@@ -66,10 +55,10 @@ public:
 
 private:
 	std::string _content;
-	Alignment   _align = ALIGN_LEFT;
-	int         _style = STYLE_PLAIN;
-	std::string _fontName = "Helvetica";
-	int         _fontSize = 10;
+	Alignment   _align;
+	int         _style;
+	std::string _fontName;
+	int         _fontSize;
 };
 
 

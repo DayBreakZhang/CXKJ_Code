@@ -6,7 +6,7 @@
 // Copyright (c) 2007, Applied Informatics Software Engineering GmbH.
 // and Contributors.
 //
-// SPDX-License-Identifier: BSL-1.0
+// SPDX-License-Identifier:	BSL-1.0
 //
 
 
@@ -15,7 +15,7 @@
 
 
 #include "Poco/Zip/Zip.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class CompressTest: public CppUnit::TestCase

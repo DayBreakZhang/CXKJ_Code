@@ -15,6 +15,7 @@
 #include "Poco/Util/Option.h"
 #include "Poco/Util/OptionException.h"
 #include "Poco/Util/Validator.h"
+#include "Poco/Util/AbstractConfiguration.h"
 #include "Poco/String.h"
 #include <algorithm>
 
@@ -26,9 +27,9 @@ namespace Poco {
 namespace Util {
 
 
-Option::Option():
-	_required(false),
-	_repeatable(false),
+Option::Option(): 
+	_required(false), 
+	_repeatable(false), 
 	_argRequired(false),
 	_pValidator(0),
 	_pCallback(0),
@@ -53,6 +54,7 @@ Option::Option(const Option& option):
 {
 	if (_pValidator) _pValidator->duplicate();
 	if (_pCallback) _pCallback = _pCallback->clone();
+	if (_pConfig) _pConfig->duplicate();
 }
 
 
@@ -101,6 +103,7 @@ Option::Option(const std::string& fullName, const std::string& shortName, const 
 Option::~Option()
 {
 	if (_pValidator) _pValidator->release();
+	if (_pConfig) _pConfig->release();
 	delete _pCallback;
 }
 
@@ -132,7 +135,7 @@ void Option::swap(Option& option)
 	std::swap(_pConfig, option._pConfig);
 }
 
-
+	
 Option& Option::shortName(const std::string& name)
 {
 	_shortName = name;
@@ -168,10 +171,10 @@ Option& Option::repeatable(bool flag)
 }
 
 	
-Option& Option::argument(const std::string& name, bool isRequired)
+Option& Option::argument(const std::string& name, bool required)
 {
 	_argName     = name;
-	_argRequired = isRequired;
+	_argRequired = required;
 	return *this;
 }
 
@@ -200,7 +203,9 @@ Option& Option::binding(const std::string& propertyName)
 Option& Option::binding(const std::string& propertyName, AbstractConfiguration* pConfig)
 {
 	_binding = propertyName;
+	if (_pConfig) _pConfig->release();
 	_pConfig = pConfig;
+	if (_pConfig) _pConfig->duplicate();
 	return *this;
 }
 
@@ -222,7 +227,7 @@ Option& Option::validator(Validator* pValidator)
 
 bool Option::matchesShort(const std::string& option) const
 {
-	return option.length() > 0
+	return option.length() > 0 
 		&& !_shortName.empty() && option.compare(0, _shortName.length(), _shortName) == 0;
 }
 
@@ -240,7 +245,7 @@ bool Option::matchesPartial(const std::string& option) const
 {
 	std::string::size_type pos = option.find_first_of(":=");
 	std::string::size_type len = pos == std::string::npos ? option.length() : pos;
-	return option.length() > 0
+	return option.length() > 0 
 		&& icompare(option, 0, len, _fullName, 0, len) == 0;
 }
 

@@ -15,7 +15,7 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class TuplesTest: public CppUnit::TestCase
@@ -65,7 +65,6 @@ public:
 	void testTuple39();
 	void testTuple40();
 	void testTupleOrder();
-	void testTupleNullable();
 	void testMemOverhead();
 	void setUp();
 	void tearDown();

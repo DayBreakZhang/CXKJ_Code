@@ -11,21 +11,26 @@
 // SPDX-License-Identifier:	BSL-1.0
 //
 
+
 #include "SHA2EngineTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/SHA2Engine.h"
+
 
 using Poco::SHA2Engine;
 using Poco::DigestEngine;
+
 
 SHA2EngineTest::SHA2EngineTest(const std::string& rName): CppUnit::TestCase(rName)
 {
 }
 
+
 SHA2EngineTest::~SHA2EngineTest()
 {
 }
+
 
 void SHA2EngineTest::testSHA224()
 {
@@ -45,6 +50,7 @@ void SHA2EngineTest::testSHA224()
 	assertTrue (DigestEngine::digestToHex(engine.digest()) == "20794655980c91d8bbb4c1ea97618a4bf03f42581948b2ee4ee7ad67");
 }
 
+
 void SHA2EngineTest::testSHA256()
 {
 	SHA2Engine engine(SHA2Engine::SHA_256);
@@ -62,6 +68,7 @@ void SHA2EngineTest::testSHA256()
 		engine.update('a');
 	assertTrue (DigestEngine::digestToHex(engine.digest()) == "cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0");
 }
+
 
 void SHA2EngineTest::testSHA384()
 {
@@ -81,6 +88,7 @@ void SHA2EngineTest::testSHA384()
 	assertTrue (DigestEngine::digestToHex(engine.digest()) == "9d0e1809716474cb086e834e310a4a1ced149e9c00f248527972cec5704c2a5b07b8b3dc38ecc4ebae97ddd87f3d8985");
 }
 
+
 void SHA2EngineTest::testSHA512()
 {
 	SHA2Engine engine(SHA2Engine::SHA_512);
@@ -99,13 +107,16 @@ void SHA2EngineTest::testSHA512()
 	assertTrue (DigestEngine::digestToHex(engine.digest()) == "e718483d0ce769644e2e42c7bc15b4638e1f98b13b2044285632a803afa973ebde0ff244877ea60a4cb0432ce577c31beb009c5c2c49aa2e4eadb217ad8cc09b");
 }
 
+
 void SHA2EngineTest::setUp()
 {
 }
 
+
 void SHA2EngineTest::tearDown()
 {
 }
+
 
 CppUnit::Test* SHA2EngineTest::suite()
 {

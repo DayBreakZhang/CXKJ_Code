@@ -42,7 +42,7 @@ class MongoDB_API ObjectId
 	/// as its value.
 {
 public:
-	typedef SharedPtr<ObjectId> Ptr;
+	using Ptr = SharedPtr<ObjectId>;
 
 	explicit ObjectId(const std::string& id);
 		/// Creates an ObjectId from a string.
@@ -67,9 +67,9 @@ public:
 private:
 	ObjectId();
 
-	static int fromHex(char c);	
+	static int fromHex(char c);
 	static char fromHex(const char* c);
-	
+
 	unsigned char _id[12];
 
 	friend class BSONWriter;
@@ -118,7 +118,8 @@ struct ElementTraits<ObjectId::Ptr>
 {
 	enum { TypeId = 0x07 };
 
-	static std::string toString(const ObjectId::Ptr& id, int /*indent*/ = 0,
+	static std::string toString(const ObjectId::Ptr& id,
+		int indent = 0,
 		const std::string& fmt = "%02x")
 	{
 		return id->toString(fmt);

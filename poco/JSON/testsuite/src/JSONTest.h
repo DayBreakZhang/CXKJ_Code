@@ -15,7 +15,7 @@
 
 
 #include "Poco/JSON/JSON.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 #include "Poco/JSON/Object.h"
 #include "Poco/JSON/Parser.h"
 #include "Poco/JSON/Query.h"
@@ -106,26 +106,26 @@ private:
 		catch (Poco::JSON::JSONException& jsone)
 		{
 			std::cout << jsone.message() << std::endl;
-			assertTrue (false);
+			assertTrue  (false);
 		}
 
-		assertTrue (result.type() == typeid(Poco::JSON::Object::Ptr));
+		assertTrue  (result.type() == typeid(Poco::JSON::Object::Ptr));
 
 		Poco::JSON::Object::Ptr object = result.extract<Poco::JSON::Object::Ptr>();
 		Poco::Dynamic::Var test = object->get("test");
-		assertTrue (test.isNumeric());
+		assertTrue  (test.isNumeric());
 		T value = test;
-		assertTrue (value == number);
+		assertTrue  (value == number);
 
 		Poco::DynamicStruct ds = *object;
-		assertTrue (!ds["test"].isEmpty());
-		assertTrue (ds["test"].isNumeric());
-		assertTrue (ds["test"] == number);
+		assertTrue  (!ds["test"].isEmpty());
+		assertTrue  (ds["test"].isNumeric());
+		assertTrue  (ds["test"] == number);
 
 		const Poco::DynamicStruct& rds = *object;
-		assertTrue (!rds["test"].isEmpty());
-		assertTrue (rds["test"].isNumeric());
-		assertTrue (rds["test"] == number);
+		assertTrue  (!rds["test"].isEmpty());
+		assertTrue  (rds["test"].isNumeric());
+		assertTrue  (rds["test"] == number);
 	}
 };
 

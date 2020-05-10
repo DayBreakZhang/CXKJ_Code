@@ -9,8 +9,8 @@
 
 
 #include "ChannelTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/SplitterChannel.h"
 #include "Poco/AsyncChannel.h"
 #include "Poco/AutoPtr.h"
@@ -45,7 +45,7 @@ public:
 };
 
 
-ChannelTest::ChannelTest(const std::string& rName): CppUnit::TestCase(rName)
+ChannelTest::ChannelTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -70,15 +70,13 @@ void ChannelTest::testSplitter()
 void ChannelTest::testAsync()
 {
 	AutoPtr<TestChannel> pChannel = new TestChannel;
-#ifndef POCO_OS_FAMILY_WINDOWS
-	AutoPtr<AsyncChannel> pAsync = new AsyncChannel(pChannel); // FIXME It is crashing here on Windows!
+	AutoPtr<AsyncChannel> pAsync = new AsyncChannel(pChannel);
 	pAsync->open();
 	Message msg;
 	pAsync->log(msg);
 	pAsync->log(msg);
 	pAsync->close();
 	assertTrue (pChannel->list().size() == 2);
-#endif
 }
 
 

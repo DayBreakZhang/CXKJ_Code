@@ -73,9 +73,8 @@ bool checkIsBrokenTimeout()
 	vi.dwOSVersionInfoSize = sizeof(vi);
 	if (GetVersionEx(&vi) == 0) return true;
 	return vi.dwMajorVersion < 6 || (vi.dwMajorVersion == 6 && vi.dwMinorVersion < 2);
-#else
-	return false;
 #endif
+	return false;
 }
 
 
@@ -205,7 +204,7 @@ void SocketImpl::connectNB(const SocketAddress& address)
 
 void SocketImpl::bind(const SocketAddress& address, bool reuseAddress)
 {
-	bind(address, reuseAddress, true);
+	bind(address, reuseAddress, reuseAddress);
 }
 
 
@@ -230,7 +229,7 @@ void SocketImpl::bind(const SocketAddress& address, bool reuseAddress, bool reus
 
 void SocketImpl::bind6(const SocketAddress& address, bool reuseAddress, bool ipV6Only)
 {
-	bind6(address, reuseAddress, true, ipV6Only);
+	bind6(address, reuseAddress, reuseAddress, ipV6Only);
 }
 
 
@@ -307,11 +306,11 @@ void SocketImpl::shutdown()
 }
 
 
-void SocketImpl::checkBrokenTimeout(const SelectMode& mode)
+void SocketImpl::checkBrokenTimeout(SelectMode mode)
 {
 	if (_isBrokenTimeout)
 	{
-		Poco::Timespan timeout = (mode == SelectMode::SELECT_READ) ? _recvTimeout : _sndTimeout;
+		Poco::Timespan timeout = (mode == SELECT_READ) ? _recvTimeout : _sndTimeout;
 		if (timeout.totalMicroseconds() != 0)
 		{
 			if (!poll(timeout, mode))
@@ -689,7 +688,7 @@ bool SocketImpl::poll(const Poco::Timespan& timeout, int mode)
 	{
 		Poco::Timestamp start;
 #ifdef _WIN32
-		rc = WSAPoll(&pollBuf, 1, static_cast<INT>(timeout.totalMilliseconds()));
+		rc = WSAPoll(&pollBuf, 1, static_cast<INT>(remainingTime.totalMilliseconds()));
 #else
 		rc = ::poll(&pollBuf, 1, remainingTime.totalMilliseconds());
 #endif
@@ -974,7 +973,7 @@ void SocketImpl::setLinger(bool on, int seconds)
 {
 	struct linger l;
 	l.l_onoff  = on ? 1 : 0;
-	l.l_linger = static_cast<u_short>(seconds);
+	l.l_linger = seconds;
 	setRawOption(SOL_SOCKET, SO_LINGER, &l, sizeof(l));
 }
 
@@ -1048,8 +1047,6 @@ void SocketImpl::setReusePort(bool flag)
 		// support SO_REUSEPORT, even if the macro
 		// is defined.
 	}
-#else
-	(void)flag;
 #endif
 }
 

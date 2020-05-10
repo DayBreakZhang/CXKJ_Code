@@ -17,8 +17,8 @@
 # Hints:
 # Set ``MYSQL_ROOT_DIR`` to the root directory of an installation.
 #
-include(FindPackageHandleStandardArgs)
-
+#include(FindPackageHandleStandardArgs)
+message(STATUS "Mysql path:${MYSQL_ROOT_DIR}")
 find_package(PkgConfig QUIET)
 pkg_check_modules(PC_MYSQL QUIET mysqlclient)
 pkg_check_modules(PC_MARIADB QUIET mariadb)

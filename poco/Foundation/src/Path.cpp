@@ -16,8 +16,10 @@
 #include "Poco/File.h"
 #include "Poco/Exception.h"
 #include "Poco/StringTokenizer.h"
+#if defined(_WIN32)
 #include "Poco/UnicodeConverter.h"
 #include "Poco/Buffer.h"
+#endif
 #include <algorithm>
 
 
@@ -27,7 +29,7 @@
 #if defined(_WIN32_WCE)
 #include "Path_WINCE.cpp"
 #else
-#include "Path_WIN32.cpp"
+#include "Path_WIN32U.cpp"
 #endif
 #endif
 
@@ -40,21 +42,19 @@ Path::Path(): _absolute(false)
 }
 
 
-Path::Path(bool absolutePath): _absolute(absolutePath)
+Path::Path(bool absolute): _absolute(absolute)
 {
 }
 
 
 Path::Path(const std::string& path)
 {
-	poco_assert(std::char_traits<char>::length(path.data()) == path.size());
 	assign(path);
 }
 
 
 Path::Path(const std::string& path, Style style)
 {
-	poco_assert(std::char_traits<char>::length(path.data()) == path.size());
 	assign(path, style);
 }
 
@@ -84,40 +84,50 @@ Path::Path(const Path& path):
 }
 
 
-Path::Path(const Path& rParent, const std::string& fileName):
-	_node(rParent._node),
-	_device(rParent._device),
-	_name(rParent._name),
-	_version(rParent._version),
-	_dirs(rParent._dirs),
-	_absolute(rParent._absolute)
+Path::Path(Path&& path) noexcept:
+	_node(std::move(path._node)),
+	_device(std::move(path._device)),
+	_name(std::move(path._name)),
+	_version(std::move(path._version)),
+	_dirs(std::move(path._dirs)),
+	_absolute(std::move(path._absolute))
 {
-	poco_assert(std::char_traits<char>::length(fileName.data()) == fileName.size());
-	makeDirectory();
-	_name = fileName;
 }
 
 
-Path::Path(const Path& rParent, const char* fileName):
-	_node(rParent._node),
-	_device(rParent._device),
-	_name(rParent._name),
-	_version(rParent._version),
-	_dirs(rParent._dirs),
-	_absolute(rParent._absolute)
+Path::Path(const Path& parent, const std::string& fileName):
+	_node(parent._node),
+	_device(parent._device),
+	_name(parent._name),
+	_version(parent._version),
+	_dirs(parent._dirs),
+	_absolute(parent._absolute)
 {
 	makeDirectory();
 	_name = fileName;
 }
 
 
-Path::Path(const Path& rParent, const Path& relative):
-	_node(rParent._node),
-	_device(rParent._device),
-	_name(rParent._name),
-	_version(rParent._version),
-	_dirs(rParent._dirs),
-	_absolute(rParent._absolute)
+Path::Path(const Path& parent, const char* fileName):
+	_node(parent._node),
+	_device(parent._device),
+	_name(parent._name),
+	_version(parent._version),
+	_dirs(parent._dirs),
+	_absolute(parent._absolute)
+{
+	makeDirectory();
+	_name = fileName;
+}
+
+
+Path::Path(const Path& parent, const Path& relative):
+	_node(parent._node),
+	_device(parent._device),
+	_name(parent._name),
+	_version(parent._version),
+	_dirs(parent._dirs),
+	_absolute(parent._absolute)
 {
 	resolve(relative);
 }
@@ -134,9 +144,20 @@ Path& Path::operator = (const Path& path)
 }
 
 
+Path& Path::operator = (Path&& path) noexcept
+{
+	_node     = std::move(path._node);
+	_device   = std::move(path._device);
+	_name     = std::move(path._name);
+	_version  = std::move(path._version);
+	_dirs     = std::move(path._dirs);
+	_absolute = std::move(path._absolute);
+	return *this;
+}
+
+
 Path& Path::operator = (const std::string& path)
 {
-	poco_assert(std::char_traits<char>::length(path.data()) == path.size());
 	return assign(path);
 }
 
@@ -249,7 +270,6 @@ std::string Path::toString(Style style) const
 
 bool Path::tryParse(const std::string& path)
 {
-	poco_assert(std::char_traits<char>::length(path.data()) == path.size());
 	try
 	{
 		Path p;
@@ -266,7 +286,6 @@ bool Path::tryParse(const std::string& path)
 
 bool Path::tryParse(const std::string& path, Style style)
 {
-	poco_assert(std::char_traits<char>::length(path.data()) == path.size());
 	try
 	{
 		Path p;
@@ -283,7 +302,6 @@ bool Path::tryParse(const std::string& path, Style style)
 
 Path& Path::parseDirectory(const std::string& path)
 {
-	poco_assert(std::char_traits<char>::length(path.data()) == path.size());
 	assign(path);
 	return makeDirectory();
 }
@@ -291,7 +309,6 @@ Path& Path::parseDirectory(const std::string& path)
 
 Path& Path::parseDirectory(const std::string& path, Style style)
 {
-	poco_assert(std::char_traits<char>::length(path.data()) == path.size());
 	assign(path, style);
 	return makeDirectory();
 }
@@ -329,9 +346,9 @@ Path& Path::makeAbsolute(const Path& base)
 	{
 		Path tmp = base;
 		tmp.makeDirectory();
-		for (StringVec::const_iterator it = _dirs.begin(); it != _dirs.end(); ++it)
+		for (const auto& d: _dirs)
 		{
-			tmp.pushDirectory(*it);
+			tmp.pushDirectory(d);
 		}
 		_node     = tmp._node;
 		_device   = tmp._device;
@@ -425,7 +442,6 @@ Path& Path::resolve(const Path& path)
 
 Path& Path::setNode(const std::string& node)
 {
-	poco_assert(std::char_traits<char>::length(node.data()) == node.size());
 	_node     = node;
 	_absolute = _absolute || !node.empty();
 	return *this;
@@ -434,7 +450,6 @@ Path& Path::setNode(const std::string& node)
 
 Path& Path::setDevice(const std::string& device)
 {
-	poco_assert(std::char_traits<char>::length(device.data()) == device.size());
 	_device   = device;
 	_absolute = _absolute || !device.empty();
 	return *this;
@@ -465,7 +480,6 @@ const std::string& Path::operator [] (int n) const
 
 Path& Path::pushDirectory(const std::string& dir)
 {
-	poco_assert(std::char_traits<char>::length(dir.data()) == dir.size());
 	if (!dir.empty() && dir != ".")
 	{
 		if (dir == "..")
@@ -502,7 +516,6 @@ Path& Path::popFrontDirectory()
 
 Path& Path::setFileName(const std::string& name)
 {
-	poco_assert(std::char_traits<char>::length(name.data()) == name.size());
 	_name = name;
 	return *this;
 }
@@ -510,7 +523,6 @@ Path& Path::setFileName(const std::string& name)
 
 Path& Path::setBaseName(const std::string& name)
 {
-	poco_assert(std::char_traits<char>::length(name.data()) == name.size());
 	std::string ext = getExtension();
 	_name = name;
 	if (!ext.empty())
@@ -534,7 +546,6 @@ std::string Path::getBaseName() const
 
 Path& Path::setExtension(const std::string& extension)
 {
-	poco_assert(std::char_traits<char>::length(extension.data()) == extension.size());
 	_name = getBaseName();
 	if (!extension.empty())
 	{
@@ -599,6 +610,16 @@ std::string Path::dataHome()
 }
 
 
+std::string Path::tempHome()
+{
+#if defined(POCO_OS_FAMILY_UNIX) || defined(POCO_OS_FAMILY_WINDOWS)
+	return PathImpl::tempHomeImpl();
+#else
+	return PathImpl::tempImpl();
+#endif
+}
+
+
 std::string Path::cacheHome()
 {
 #if defined(POCO_OS_FAMILY_UNIX) || defined(POCO_OS_FAMILY_WINDOWS)
@@ -606,12 +627,6 @@ std::string Path::cacheHome()
 #else
 	return PathImpl::homeImpl();
 #endif
-}
-
-
-std::string Path::self()
-{
-	return PathImpl::selfImpl();
 }
 
 
@@ -630,6 +645,7 @@ std::string Path::config()
 #endif
 }
 
+
 std::string Path::null()
 {
 	return PathImpl::nullImpl();
@@ -638,7 +654,6 @@ std::string Path::null()
 
 std::string Path::expand(const std::string& path)
 {
-	poco_assert(std::char_traits<char>::length(path.data()) == path.size());
 	return PathImpl::expandImpl(path);
 }
 
@@ -651,7 +666,6 @@ void Path::listRoots(std::vector<std::string>& roots)
 
 bool Path::find(StringVec::const_iterator it, StringVec::const_iterator end, const std::string& name, Path& path)
 {
-	poco_assert(std::char_traits<char>::length(name.data()) == name.size());
 	while (it != end)
 	{
 #if defined(WIN32)
@@ -758,7 +772,7 @@ void Path::parseWindows(const std::string& path)
 			char d = *it++;
 			if (it != end && *it == ':') // drive letter
 			{
-				if (!((d >= 'a' && d <= 'z') || (d >= 'A' && d <= 'Z'))) throw PathSyntaxException(path);
+				if (_absolute || !((d >= 'a' && d <= 'z') || (d >= 'A' && d <= 'Z'))) throw PathSyntaxException(path);
 				_absolute = true;
 				_device += d;
 				++it;
@@ -971,9 +985,9 @@ std::string Path::buildUnix() const
 	{
 		result.append("/");
 	}
-	for (StringVec::const_iterator it = _dirs.begin(); it != _dirs.end(); ++it)
+	for (const auto& d: _dirs)
 	{
-		result.append(*it);
+		result.append(d);
 		result.append("/");
 	}
 	result.append(_name);
@@ -999,9 +1013,9 @@ std::string Path::buildWindows() const
 	{
 		result.append("\\");
 	}
-	for (StringVec::const_iterator it = _dirs.begin(); it != _dirs.end(); ++it)
+	for (const auto& d: _dirs)
 	{
-		result.append(*it);
+		result.append(d);
 		result.append("\\");
 	}
 	result.append(_name);

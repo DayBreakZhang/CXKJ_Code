@@ -123,8 +123,10 @@ set(CXKJ_PKG_CONFIG_FILES "")
 # Pthreads/threads support
 find_package(Threads REQUIRED)
 #find openssl
-set(OPENSSL_ROOT_DIR "D:/3rdlib/openssl1.0.2r")
+set(OPENSSL_ROOT_DIR "D:/3rdlib/openssl19")
 find_package(OpenSSL REQUIRED)
+#设置mysql
+set(MYSQL_ROOT_DIR "C:/Program Files/MySQL/MySQL Server 5.7")
 
 #添加项目
 set(CXKJ_COMPONENTS "")

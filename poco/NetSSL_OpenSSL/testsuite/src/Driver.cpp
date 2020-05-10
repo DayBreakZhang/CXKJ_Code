@@ -10,9 +10,8 @@
 //
 
 
-#include "Poco/CppUnit/TestRunner.h"
+#include "CppUnit/TestRunner.h"
 #include "NetSSLTestSuite.h"
-#include "Poco/Path.h"
 #include "Poco/Util/Application.h"
 #include "Poco/Net/HTTPStreamFactory.h"
 #include "Poco/Net/HTTPSStreamFactory.h"
@@ -51,21 +50,7 @@ public:
 protected:
 	void initialize(Poco::Util::Application& self)
 	{
-#ifdef POCO_OS_FAMILY_UNIX
-		std::string pocoBase(Poco::Environment::get("POCO_BASE"));
-		if (pocoBase.empty())
-			throw Poco::LogicException("POCO_BASE should be defined");
-		
-		Poco::Path configPath(pocoBase);
-		configPath.makeDirectory();
-		configPath.pushDirectory("NetSSL_OpenSSL");
-		configPath.pushDirectory("testsuite");
-		configPath.setFileName("TestSuite.xml");
-
-		loadConfiguration(configPath.toString());
-#else
-		loadConfiguration();
-#endif
+		loadConfiguration(); // load default configuration files, if present
 		Poco::Util::Application::initialize(self);
 	}
 	

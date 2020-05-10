@@ -23,8 +23,8 @@
 #include "Poco/Delegate.h"
 #include "Poco/StreamCopier.h"
 #include "Poco/Environment.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #undef min
 #include <algorithm>
 #include <iostream>
@@ -131,9 +131,9 @@ void ZipTest::testCrcAndSizeAfterData()
 	Poco::FileInputStream inp(testFile);
 	assertTrue (inp.good());
 	Decompress dec(inp, Poco::Path::temp());
-	dec.EError += Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string> >(this, &ZipTest::onDecompressError);
+	dec.EError += Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>>(this, &ZipTest::onDecompressError);
 	dec.decompressAllFiles();
-	dec.EError -= Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string> >(this, &ZipTest::onDecompressError);
+	dec.EError -= Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>>(this, &ZipTest::onDecompressError);
 	assertTrue (_errCnt == 0);
 	assertTrue (!dec.mapping().empty());
 }
@@ -192,9 +192,9 @@ void ZipTest::testDecompress()
 	Poco::FileInputStream inp(testFile);
 	assertTrue (inp.good());
 	Decompress dec(inp, Poco::Path::temp());
-	dec.EError += Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string> >(this, &ZipTest::onDecompressError);
+	dec.EError += Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>>(this, &ZipTest::onDecompressError);
 	dec.decompressAllFiles();
-	dec.EError -= Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string> >(this, &ZipTest::onDecompressError);
+	dec.EError -= Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>>(this, &ZipTest::onDecompressError);
 	assertTrue (_errCnt == 0);
 	assertTrue (!dec.mapping().empty());
 }
@@ -206,9 +206,9 @@ void ZipTest::testDecompressFlat()
 	Poco::FileInputStream inp(testFile);
 	assertTrue (inp.good());
 	Decompress dec(inp, Poco::Path::temp(), true);
-	dec.EError += Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string> >(this, &ZipTest::onDecompressError);
+	dec.EError += Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>>(this, &ZipTest::onDecompressError);
 	dec.decompressAllFiles();
-	dec.EError -= Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string> >(this, &ZipTest::onDecompressError);
+	dec.EError -= Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>>(this, &ZipTest::onDecompressError);
 	assertTrue (_errCnt == 0);
 	assertTrue (!dec.mapping().empty());
 }
@@ -220,9 +220,9 @@ void ZipTest::testDecompressVuln()
 	Poco::FileInputStream inp(testFile);
 	assertTrue (inp.good());
 	Decompress dec(inp, Poco::Path::temp());
-	dec.EError += Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string> >(this, &ZipTest::onDecompressError);
+	dec.EError += Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>>(this, &ZipTest::onDecompressError);
 	dec.decompressAllFiles();
-	dec.EError -= Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string> >(this, &ZipTest::onDecompressError);
+	dec.EError -= Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>>(this, &ZipTest::onDecompressError);
 	assertTrue (_errCnt == 1);
 	assertTrue (dec.mapping().empty());
 }
@@ -234,9 +234,9 @@ void ZipTest::testDecompressFlatVuln()
 	Poco::FileInputStream inp(testFile);
 	assertTrue (inp.good());
 	Decompress dec(inp, Poco::Path::temp(), true);
-	dec.EError += Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string> >(this, &ZipTest::onDecompressError);
+	dec.EError += Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>>(this, &ZipTest::onDecompressError);
 	dec.decompressAllFiles();
-	dec.EError -= Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string> >(this, &ZipTest::onDecompressError);
+	dec.EError -= Poco::Delegate<ZipTest, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>>(this, &ZipTest::onDecompressError);
 	assertTrue (_errCnt == 0);
 	assertTrue (!dec.mapping().empty());
 }
@@ -270,7 +270,7 @@ void ZipTest::testDecompressZip64()
 	files[Poco::Path::temp() + "data1.bin"] = static_cast<Poco::UInt64>(KB)*4096+1;
 	files[Poco::Path::temp() + "data2.bin"] = static_cast<Poco::UInt64>(KB)*16;
 	files[Poco::Path::temp() + "data3.bin"] = static_cast<Poco::UInt64>(KB)*4096-1;
-	
+
 	for(std::map<std::string, Poco::UInt64>::const_iterator it = files.begin(); it != files.end(); it++)
 	{
 		Poco::File file(it->first);

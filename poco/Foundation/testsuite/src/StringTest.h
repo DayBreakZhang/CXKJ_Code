@@ -15,9 +15,10 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 #include "Poco/NumericString.h"
 #include "Poco/MemoryStream.h"
+#include "Poco/NumberFormatter.h"
 
 
 class StringTest: public CppUnit::TestCase
@@ -74,10 +75,10 @@ private:
 		T result = 0;
 		if (123 <= std::numeric_limits<T>::max())
 			assertTrue (Poco::strToInt("123", result, 10)); assertTrue (result == 123);
-		
+
 		assertTrue (Poco::strToInt("0", result, 10)); assertTrue (result == 0);
 		assertTrue (Poco::strToInt("000", result, 10)); assertTrue (result == 0);
-		
+
 		if (std::numeric_limits<T>::is_signed && (-123 > std::numeric_limits<T>::min()))
 			{ assertTrue (Poco::strToInt("-123", result, 10)); assertTrue (result == -123); }
 		if (0x123 < std::numeric_limits<T>::max())
@@ -90,7 +91,7 @@ private:
 			{ assertTrue (Poco::strToInt("123", result, 010));  assertTrue (result == 0123); }
 		if (0123 < std::numeric_limits<T>::max())
 			{ assertTrue (Poco::strToInt("0123", result, 010)); assertTrue (result == 0123); }
-		
+
 		assertTrue (Poco::strToInt("0", result, 010)); assertTrue (result == 0);
 		assertTrue (Poco::strToInt("000", result, 010)); assertTrue (result == 0);
 	}
@@ -99,22 +100,22 @@ private:
 	void numericStringLimitSameSign()
 	{
 		Larger l = std::numeric_limits<Smaller>::max();
-		std::string str = std::to_string(l);
+		std::string str = Poco::NumberFormatter::format(l);
 
 		Smaller s;
 		assertTrue(Poco::strToInt<Smaller>(str, s, 10));
 		assertTrue(s == std::numeric_limits<Smaller>::max());
-		++l; str = std::to_string(l);
+		++l; str = Poco::NumberFormatter::format(l);
 		assertFalse(Poco::strToInt<Smaller>(str, s, 10));
-		++l; str = std::to_string(l);
+		++l; str = Poco::NumberFormatter::format(l);
 		assertFalse(Poco::strToInt<Smaller>(str, s, 10));
-		++l; str = std::to_string(l);
+		++l; str = Poco::NumberFormatter::format(l);
 		assertFalse(Poco::strToInt<Smaller>(str, s, 10));
-		++l; str = std::to_string(l);
+		++l; str = Poco::NumberFormatter::format(l);
 		assertFalse(Poco::strToInt<Smaller>(str, s, 10));
-		++l; str = std::to_string(l);
+		++l; str = Poco::NumberFormatter::format(l);
 		assertFalse(Poco::strToInt<Smaller>(str, s, 10));
-		++l; str = std::to_string(l);
+		++l; str = Poco::NumberFormatter::format(l);
 		assertFalse(Poco::strToInt<Smaller>(str, s, 10));
 	}
 
@@ -122,23 +123,23 @@ private:
 	void numericStringLowerLimit()
 	{
 		Larger l = std::numeric_limits<Smaller>::min();
-		std::string val = std::to_string(l);
+		std::string val = Poco::NumberFormatter::format(l);
 		Smaller s = -1;
 		assertFalse(s == std::numeric_limits<Smaller>::min());
 		assertTrue(Poco::strToInt<Smaller>(val, s, 10));
 		assertTrue (s == std::numeric_limits<Smaller>::min());
 		assertTrue(s == std::numeric_limits<Smaller>::min());
-		--l; val = std::to_string(l);
+		--l; val = Poco::NumberFormatter::format(l);
 		assertFalse(Poco::strToInt<Smaller>(val, s, 10));
-		--l; val = std::to_string(l);
+		--l; val = Poco::NumberFormatter::format(l);
 		assertFalse(Poco::strToInt<Smaller>(val, s, 10));
-		--l; val = std::to_string(l);
+		--l; val = Poco::NumberFormatter::format(l);
 		assertFalse(Poco::strToInt<Smaller>(val, s, 10));
-		--l; val = std::to_string(l);
+		--l; val = Poco::NumberFormatter::format(l);
 		assertFalse(Poco::strToInt<Smaller>(val, s, 10));
-		--l; val = std::to_string(l);
+		--l; val = Poco::NumberFormatter::format(l);
 		assertFalse(Poco::strToInt<Smaller>(val, s, 10));
-		--l; val = std::to_string(l);
+		--l; val = Poco::NumberFormatter::format(l);
 		assertFalse(Poco::strToInt<Smaller>(val, s, 10));
 	}
 

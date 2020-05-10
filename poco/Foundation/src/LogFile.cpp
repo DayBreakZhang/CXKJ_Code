@@ -16,7 +16,7 @@
 
 
 #if defined(POCO_OS_FAMILY_WINDOWS)
-#include "LogFile_WIN32.cpp"
+#include "LogFile_WIN32U.cpp"
 #else
 #include "LogFile_STD.cpp"
 #endif
@@ -25,7 +25,7 @@
 namespace Poco {
 
 
-LogFile::LogFile(const std::string& rPath): LogFileImpl(rPath)
+LogFile::LogFile(const std::string& path): LogFileImpl(path)
 {
 }
 

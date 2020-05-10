@@ -9,9 +9,10 @@
 
 
 #include "MemoryPoolTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/MemoryPool.h"
+#include "Poco/NumberFormatter.h"
 #include "Poco/Stopwatch.h"
 #include <vector>
 #include <cstring>
@@ -19,9 +20,10 @@
 
 
 using Poco::MemoryPool;
+using Poco::NumberFormatter;
 
 
-MemoryPoolTest::MemoryPoolTest(const std::string& rName): CppUnit::TestCase(rName)
+MemoryPoolTest::MemoryPoolTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -124,41 +126,45 @@ bool fastMemPoolTestCustom(int n, const T& val)
 
 struct Custom
 {
+	Custom(): i(42), s("abc") {}
 	virtual ~Custom() {}
 	bool operator ==(const Custom& other) const
 	{
 		return i == other.i && s == other.s;
 	}
-	int i = 42;
-	std::string s = "abc";
+	int i;
+	std::string s;
 };
 
 struct CustomChild1: virtual public Custom
 {
+	CustomChild1(): j(0) {}
 	bool operator ==(const CustomChild1& other) const
 	{
 		return i == other.i && s == other.s && j == other.j;
 	}
-	int j = 0;
+	int j;
 };
 
 struct CustomChild2: virtual public Custom
 {
+	CustomChild2(): k(0) {}
 	bool operator ==(const CustomChild2& other) const
 	{
 		return i == other.i && s == other.s && k == other.k;
 	}
-	int k = 0;
+	int k;
 };
 
 struct CustomGrandChild: public CustomChild1, CustomChild2
 {
+	CustomGrandChild(): l(0) {}
 	bool operator ==(const CustomGrandChild& other) const
 	{
 		return i == other.i && s == other.s &&
 				j == other.j && k == other.k && l == other.l;
 	}
-	int l = 0;
+	int l;
 };
 
 }
@@ -167,6 +173,7 @@ struct CustomGrandChild: public CustomChild1, CustomChild2
 void MemoryPoolTest::testFastMemoryPool()
 {
 	int blocks = 10;
+
 	Poco::FastMemoryPool<int> fastIntPool(blocks);
 	Poco::FastMemoryPool<std::string> fastStringPool(blocks);
 
@@ -175,14 +182,14 @@ void MemoryPoolTest::testFastMemoryPool()
 
 	for (int i = 0; i < blocks; ++i)
 	{
-	  intVec[i] = new (fastIntPool.get()) int(i);
-	  strVec[i] = new (fastStringPool.get()) std::string(std::to_string(i));
+		intVec[i] = new (fastIntPool.get()) int(i);
+		strVec[i] = new (fastStringPool.get()) std::string(NumberFormatter::format(i));
 	}
 
 	for (int i = 0; i < blocks; ++i)
 	{
 		assertTrue (intVec[i] && *intVec[i] == i);
-		assertTrue (strVec[i] && *strVec[i] == std::to_string(i));
+		assertTrue (strVec[i] && *strVec[i] == NumberFormatter::format(i));
 	}
 
 	for (int i = 0; i < blocks; ++i)
@@ -216,6 +223,15 @@ void MemoryPoolTest::testFastMemoryPool()
 
 	CustomGrandChild gc;
 	assertTrue (fastMemPoolTestCustom(sz, gc));
+
+	const int elements = 16;
+	Poco::FastMemoryPool<char[elements]> fastArrayPool(blocks);
+	char* pC = reinterpret_cast<char*>(fastArrayPool.get());
+	const char* pStr = "1234567890abcde";
+	std::memcpy(pC, pStr, elements);
+	assert (strlen(pC) == elements - 1);
+	assert (std::strcmp(pC, pStr) == 0);
+	fastArrayPool.release(pC);
 }
 
 

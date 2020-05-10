@@ -9,8 +9,8 @@
 
 
 #include "CppParserTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/CppParser/Utility.h"
 #include "Poco/CppParser/Symbol.h"
 #include "Poco/CppParser/CppToken.h"
@@ -55,7 +55,7 @@ void CppParserTest::testParseDir()
 	inc.push_back("./*.h");
 	std::vector<std::string> exc;
 	Utility::parseDir(inc, exc, st, linker, options, path);
-	
+
 	NameSpace::SymbolTable::const_iterator it = st.begin();
 	NameSpace::SymbolTable::const_iterator itEnd = st.end();
 	for (; it != itEnd; ++it)
@@ -63,7 +63,7 @@ void CppParserTest::testParseDir()
 		std::cout << it->first << ": ";
 		Symbol* pSym = it->second;
 		std::cout << pSym->name() << ", " << pSym->getDocumentation() << "\n";
-		
+
 	}
 }
 
@@ -73,15 +73,15 @@ void CppParserTest::testExtractName()
 	std::string decl("int _var");
 	std::string name = Symbol::extractName(decl);
 	assertTrue (name == "_var");
-	
+
 	decl = "void func(int arg1, int arg2)";
 	name = Symbol::extractName(decl);
 	assertTrue (name == "func");
-	
+
 	decl = "const std::vector<NS::MyType>* var";
 	name = Symbol::extractName(decl);
 	assertTrue (name == "var");
-	
+
 	decl = "const std::vector<NS::MyType>* func(int arg) = 0";
 	name = Symbol::extractName(decl);
 	assertTrue (name == "func");
@@ -97,7 +97,7 @@ void CppParserTest::testExtractName()
 	decl = "template <typename A, typename B> B func(A a, B b)";
 	name = Symbol::extractName(decl);
 	assertTrue (name == "func");
-	
+
 	decl = "template <typename A, typename B> class Class";
 	name = Symbol::extractName(decl);
 	assertTrue (name == "Class");

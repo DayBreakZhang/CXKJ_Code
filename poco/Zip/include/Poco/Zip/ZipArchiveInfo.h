@@ -3,14 +3,14 @@
 //
 // Library: Zip
 // Package: Zip
-// Module:	ZipArchiveInfo
+// Module:  ZipArchiveInfo
 //
 // Definition of the ZipArchiveInfo class.
 //
 // Copyright (c) 2007, Applied Informatics Software Engineering GmbH.
 // and Contributors.
 //
-// SPDX-License-Identifier: BSL-1.0
+// SPDX-License-Identifier:	BSL-1.0
 //
 
 
@@ -81,7 +81,7 @@ public:
 
 	void setHeaderOffset(std::streamoff val);
 		/// Sets the offset of the header in relation to the begin of this disk
-	
+
 	std::string createHeader() const;
 		/// Creates a header
 
@@ -111,9 +111,9 @@ private:
 		FULLHEADER_SIZE = 22
 	};
 
-	char		   _rawInfo[FULLHEADER_SIZE];
+	char           _rawInfo[FULLHEADER_SIZE];
 	std::streamoff _startPos;
-	std::string	   _comment;
+	std::string    _comment;
 };
 
 
@@ -221,9 +221,9 @@ private:
 		FULL_LOCATOR_SIZE = 20
 	};
 
-	char		   _rawInfo[FULL_HEADER_SIZE];
-	std::string	   _extraField;
-	char		   _locInfo[FULL_LOCATOR_SIZE];
+	char           _rawInfo[FULL_HEADER_SIZE];
+	std::string     _extraField;
+	char            _locInfo[FULL_LOCATOR_SIZE];
 	std::streamoff _startPos;
 };
 

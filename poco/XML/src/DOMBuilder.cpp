@@ -171,7 +171,7 @@ void DOMBuilder::unparsedEntityDecl(const XMLString& name, const XMLString* publ
 }
 
 
-void DOMBuilder::setDocumentLocator(const Locator* /*loc*/)
+void DOMBuilder::setDocumentLocator(const Locator* loc)
 {
 }
 
@@ -192,9 +192,9 @@ void DOMBuilder::startElement(const XMLString& uri, const XMLString& localName, 
 
 	const AttributesImpl& attrs = dynamic_cast<const AttributesImpl&>(attributes);
 	Attr* pPrevAttr = 0;
-	for (AttributesImpl::iterator it = attrs.begin(); it != attrs.end(); ++it)
+	for (const auto& attr: attrs)
 	{
-		AutoPtr<Attr> pAttr = new Attr(_pDocument, 0, it->namespaceURI, it->localName, it->qname, it->value, it->specified);
+		AutoPtr<Attr> pAttr = new Attr(_pDocument, 0, attr.namespaceURI, attr.localName, attr.qname, attr.value, attr.specified);
 		pPrevAttr = pElem->addAttributeNodeNP(pPrevAttr, pAttr);
 	}
 	appendNode(pElem);
@@ -202,7 +202,7 @@ void DOMBuilder::startElement(const XMLString& uri, const XMLString& localName, 
 }
 
 
-void DOMBuilder::endElement(const XMLString& /*uri*/, const XMLString& /*localName*/, const XMLString& /*qname*/)
+void DOMBuilder::endElement(const XMLString& uri, const XMLString& localName, const XMLString& qname)
 {
 	_pPrevious = _pParent;
 	_pParent   = static_cast<AbstractContainerNode*>(_pParent->parentNode());
@@ -251,12 +251,12 @@ void DOMBuilder::processingInstruction(const XMLString& target, const XMLString&
 }
 
 
-void DOMBuilder::startPrefixMapping(const XMLString& /*prefix*/, const XMLString& /*uri*/)
+void DOMBuilder::startPrefixMapping(const XMLString& prefix, const XMLString& uri)
 {
 }
 
 
-void DOMBuilder::endPrefixMapping(const XMLString& /*prefix*/)
+void DOMBuilder::endPrefixMapping(const XMLString& prefix)
 {
 }
 
@@ -280,12 +280,12 @@ void DOMBuilder::endDTD()
 }
 
 
-void DOMBuilder::startEntity(const XMLString& /*name*/)
+void DOMBuilder::startEntity(const XMLString& name)
 {
 }
 
 
-void DOMBuilder::endEntity(const XMLString& /*name*/)
+void DOMBuilder::endEntity(const XMLString& name)
 {
 }
 

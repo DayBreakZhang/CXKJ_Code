@@ -34,13 +34,13 @@ class Net_API NameValueCollection
 	///
 	/// The name is case-insensitive.
 	///
-	/// There can be more than one name-value pair with the
+	/// There can be more than one name-value pair with the 
 	/// same name.
 {
 public:
-	typedef Poco::ListMap<std::string, std::string> HeaderMap;
-	typedef HeaderMap::Iterator Iterator;
-	typedef HeaderMap::ConstIterator ConstIterator;
+	using HeaderMap = Poco::ListMap<std::string, std::string>;
+	using Iterator = HeaderMap::Iterator;
+	using ConstIterator = HeaderMap::ConstIterator;
 	
 	NameValueCollection();
 		/// Creates an empty NameValueCollection.
@@ -48,11 +48,17 @@ public:
 	NameValueCollection(const NameValueCollection& nvc);
 		/// Creates a NameValueCollection by copying another one.
 
+	NameValueCollection(NameValueCollection&& nvc) noexcept;
+		/// Creates a NameValueCollection by moving another one.
+
 	virtual ~NameValueCollection();
 		/// Destroys the NameValueCollection.
 
 	NameValueCollection& operator = (const NameValueCollection& nvc);
 		/// Assigns the name-value pairs of another NameValueCollection to this one.
+
+	NameValueCollection& operator = (NameValueCollection&& nvc) noexcept;
+		/// Moves the name-value pairs of another NameValueCollection to this one.
 		
 	void swap(NameValueCollection& nvc);
 		/// Swaps the NameValueCollection with another one.
@@ -90,7 +96,7 @@ public:
 		/// the name-value pair collection.
 		
 	ConstIterator end() const;
-		/// Returns an iterator pointing to the end of
+		/// Returns an iterator pointing to the end of 
 		/// the name-value pair collection.
 		
 	bool empty() const;

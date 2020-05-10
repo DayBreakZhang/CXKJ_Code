@@ -7,7 +7,7 @@ Portions of the POCO C++ Libraries utilize the
 following copyrighted material, the use of which is hereby acknowledged.
 
 
-!!!Expat XML Parser Toolkit 2.0
+!!!Expat XML Parser Toolkit 2.2
 
     Copyright (c) 1998, 1999, 2000 Thai Open Source Software Center Ltd
                                    and Clark Cooper
@@ -112,7 +112,7 @@ following copyrighted material, the use of which is hereby acknowledged.
 ----
 
 
-!!!Perl Compatible Regular Expressions (PCRE) 7.1
+!!!Perl Compatible Regular Expressions (PCRE) 8.41
 
     PCRE is a library of functions to support regular expressions whose syntax
     and semantics are as close as possible to those of the Perl 5 language.
@@ -126,7 +126,7 @@ following copyrighted material, the use of which is hereby acknowledged.
     University of Cambridge Computing Service,
     Cambridge, England. Phone: +44 1223 334714.
 
-    Copyright (c) 1997-2004 University of Cambridge
+    Copyright (c) 1997-2014 University of Cambridge
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -157,9 +157,9 @@ following copyrighted material, the use of which is hereby acknowledged.
 ----
 
 
-!!!zlib 1.2.5
+!!!zlib 1.2.11
 
-    Copyright (C) 1995-2004 Jean-loup Gailly and Mark Adler
+    Copyright (C) 1995-2017 Jean-loup Gailly and Mark Adler
 
     This software is provided 'as-is', without any express or implied
     warranty.  In no event will the authors be held liable for any damages
@@ -182,7 +182,7 @@ following copyrighted material, the use of which is hereby acknowledged.
 ----
 
 
-!!!SQlite 3.7.14
+!!!SQLite 3.22.0
 
     The original author of SQLite has dedicated the code to the
     public domain (http://www.sqlite.org/copyright.html).
@@ -322,14 +322,3 @@ following copyrighted material, the use of which is hereby acknowledged.
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
-----
-
-
-!!! Wrapper for function "wmain" for MinGW
-
-    http://www.coderforlife.com/projects/utilities/#MinGWUnicodeSupport
-
-    Copyright (c) 2012 Jeff Bush <jeff@coderforlife.com>
-
-    This document is released into the public domain. Absolutely no warranty is provided.
-    See http://www.coderforlife.com/projects/utilities.

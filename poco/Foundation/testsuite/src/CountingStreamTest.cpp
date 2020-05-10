@@ -9,8 +9,8 @@
 
 
 #include "CountingStreamTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/CountingStream.h"
 #include <sstream>
 
@@ -19,7 +19,7 @@ using Poco::CountingInputStream;
 using Poco::CountingOutputStream;
 
 
-CountingStreamTest::CountingStreamTest(const std::string& rName): CppUnit::TestCase(rName)
+CountingStreamTest::CountingStreamTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 

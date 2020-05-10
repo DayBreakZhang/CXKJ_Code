@@ -78,7 +78,7 @@ public:
 	Message(const Message& msg);
 		/// Creates a Message by copying another one.
 
-	Message(Message&& msg);
+	Message(Message&& msg) noexcept;
 		/// Creates a Message by copying another one.
 
 	Message(const Message& msg, const std::string& text);
@@ -90,11 +90,11 @@ public:
 	Message& operator = (const Message& msg);
 		/// Assignment operator.
 
-	Message& operator = (Message&& msg);
+	Message& operator = (Message&& msg) noexcept;
 		/// Assignment operator.
 
 	void swap(Message& msg);
-		/// Swaps the message with another one.	
+		/// Swaps the message with another one.
 
 	void setSource(const std::string& src);
 		/// Sets the source of the message.
@@ -128,16 +128,13 @@ public:
 
 	void setTid(long pid);
 		/// Sets the numeric thread identifier for the message.
-		
+
 	long getTid() const;
 		/// Returns the numeric thread identifier for the message.
 
-	IntPtr getOsTid() const;
-		/// Returns the numeric OS thread identifier for the message.
-
 	void setPid(long pid);
 		/// Sets the process identifier for the message.
-		
+
 	long getPid() const;
 		/// Returns the process identifier for the message.
 
@@ -147,7 +144,7 @@ public:
 		///
 		/// File must be a static string, such as the value of
 		/// the __FILE__ macro. The string is not copied
-		/// internally for performance reasons.	
+		/// internally for performance reasons.
 
 	const char* getSourceFile() const;
 		/// Returns the source file path of the code creating
@@ -203,7 +200,6 @@ private:
 	Priority    _prio;
 	Timestamp   _time;
 	long        _tid;
-	IntPtr      _ostid;
 	std::string _thread;
 	long        _pid;
 	const char* _file;
@@ -248,12 +244,6 @@ inline const std::string& Message::getThread() const
 inline long Message::getTid() const
 {
 	return _tid;
-}
-
-
-inline IntPtr Message::getOsTid() const
-{
-	return _ostid;
 }
 
 

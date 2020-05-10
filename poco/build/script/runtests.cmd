@@ -1,7 +1,5 @@
 @echo off
 rem
-rem $Id$
-rem
 rem A script for running the POCO testsuites.
 rem
 rem usage: runtests [64]

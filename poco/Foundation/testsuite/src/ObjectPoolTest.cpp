@@ -9,8 +9,8 @@
 
 
 #include "ObjectPoolTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/ObjectPool.h"
 #include "Poco/Exception.h"
 
@@ -18,7 +18,7 @@
 using Poco::ObjectPool;
 
 
-ObjectPoolTest::ObjectPoolTest(const std::string& rName): CppUnit::TestCase(rName)
+ObjectPoolTest::ObjectPoolTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 

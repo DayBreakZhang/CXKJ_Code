@@ -11,13 +11,12 @@
 #include "Poco/Exception.h"
 #include "Poco/Delegate.h"
 #include "Poco/Thread.h"
-#include "Poco/Environment.h"
 #include "RedisTest.h"
 #include "Poco/Redis/AsyncReader.h"
 #include "Poco/Redis/Command.h"
 #include "Poco/Redis/PoolableConnectionFactory.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include <iostream>
 
 
@@ -30,14 +29,12 @@ Poco::Redis::Client RedisTest::_redis;
 
 RedisTest::RedisTest(const std::string& name):
 	CppUnit::TestCase("Redis"),
-	_host("127.0.0.1"),
+	_host("localhost"),
 	_port(6379)
 {
 #if POCO_OS == POCO_OS_ANDROID
 	_host = "10.0.2.2";
 #endif
-	if(Poco::Environment::has("REDIS_HOST"))
-		_host = Poco::Environment::get("REDIS_HOST");
 	if (!_connected)
 	{
 		try
@@ -293,7 +290,7 @@ void RedisTest::testDECR()
 		Poco::Int64 result = _redis.execute<Poco::Int64>(decr);
 		fail("This must fail");
 	}
-	catch (RedisException&)
+	catch (RedisException& e)
 	{
 		// ERR value is not an integer or out of range
 	}
@@ -342,7 +339,7 @@ void RedisTest::testError()
 		BulkString result = _redis.execute<BulkString>(command);
 		fail("Invalid command must throw RedisException");
 	}
-	catch (RedisException&)
+	catch (RedisException& e)
 	{
 		// Must fail
 	}

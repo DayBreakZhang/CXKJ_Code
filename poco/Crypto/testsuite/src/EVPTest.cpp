@@ -14,8 +14,9 @@
 #include "Poco/Crypto/EVPPKey.h"
 #include "Poco/TemporaryFile.h"
 #include "Poco/StreamCopier.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
+#include <memory>
 #include <sstream>
 #include <fstream>
 #include <iostream>
@@ -41,12 +42,12 @@ void EVPTest::testRSAEVPPKey()
 {
 	try
 	{
-		RSAKey* key = new RSAKey(RSAKey::KL_1024, RSAKey::EXP_SMALL);
-		assertTrue (key->type() == Poco::Crypto::KeyPair::KT_RSA);
+		std::unique_ptr<RSAKey> key(new RSAKey(RSAKey::KL_1024, RSAKey::EXP_SMALL));
+		assertTrue(key->type() == Poco::Crypto::KeyPair::KT_RSA);
 		// construct EVPPKey from RSAKey*
-		EVPPKey* pKey = new EVPPKey(key);
+		EVPPKey* pKey = new EVPPKey(key.get());
 		// EVPPKey increments reference count, so freeing the original must be ok
-		delete key;
+		key.reset();
 
 		assertTrue (!pKey->isSupported(0));
 		assertTrue (!pKey->isSupported(-1));
@@ -54,11 +55,11 @@ void EVPTest::testRSAEVPPKey()
 		assertTrue (pKey->type() == EVP_PKEY_RSA);
 
 		// construct RSAKey from const EVPPKey&
-		key = new RSAKey(*pKey);
+		key.reset(new RSAKey(*pKey));
 		delete pKey;
-		assertTrue (key->type() == Poco::Crypto::KeyPair::KT_RSA);
+		assertTrue(key->type() == Poco::Crypto::KeyPair::KT_RSA);
 		// construct EVPPKey from RSAKey*
-		pKey = new EVPPKey(key);
+		pKey = new EVPPKey(key.get());
 		assertTrue (pKey->type() == EVP_PKEY_RSA);
 
 		BIO* bioPriv1 = BIO_new(BIO_s_mem());
@@ -216,20 +217,20 @@ void EVPTest::testECEVPPKey()
 		std::string curveName = ECKey::getCurveName();
 		if (!curveName.empty())
 		{
-			EVPPKey*pKey = new EVPPKey(curveName);
+			EVPPKey* pKey = new EVPPKey(curveName);
 			assertTrue (pKey != 0);
 			assertTrue (!pKey->isSupported(0));
 			assertTrue (!pKey->isSupported(-1));
 			assertTrue (pKey->isSupported(pKey->type()));
 			assertTrue (pKey->type() == EVP_PKEY_EC);
 
-			BIO*bioPriv1 = BIO_new(BIO_s_mem());
-			BIO*bioPub1 = BIO_new(BIO_s_mem());
+			BIO* bioPriv1 = BIO_new(BIO_s_mem());
+			BIO* bioPub1 = BIO_new(BIO_s_mem());
 			assertTrue (0 != PEM_write_bio_PrivateKey(bioPriv1, *pKey, NULL, NULL, 0, 0, NULL));
 			assertTrue (0 != PEM_write_bio_PUBKEY(bioPub1, *pKey));
-			char*pPrivData1;
+			char* pPrivData1;
 			long sizePriv1 = BIO_get_mem_data(bioPriv1, &pPrivData1);
-			char*pPubData1;
+			char* pPubData1;
 			long sizePub1 = BIO_get_mem_data(bioPub1, &pPubData1);
 
 			// construct EVPPKey from EVP_PKEY*
@@ -238,13 +239,13 @@ void EVPTest::testECEVPPKey()
 			// EVPPKey makes duplicate, so freeing the original must be ok
 			delete pKey;
 
-			BIO*bioPriv2 = BIO_new(BIO_s_mem());
-			BIO*bioPub2 = BIO_new(BIO_s_mem());
+			BIO* bioPriv2 = BIO_new(BIO_s_mem());
+			BIO* bioPub2 = BIO_new(BIO_s_mem());
 			assertTrue (0 != PEM_write_bio_PrivateKey(bioPriv2, evpPKey, NULL, NULL, 0, 0, NULL));
 			assertTrue (0 != PEM_write_bio_PUBKEY(bioPub2, evpPKey));
-			char*pPrivData2;
+			char* pPrivData2;
 			long sizePriv2 = BIO_get_mem_data(bioPriv2, &pPrivData2);
-			char*pPubData2;
+			char* pPubData2;
 			long sizePub2 = BIO_get_mem_data(bioPub2, &pPubData2);
 
 			assertTrue (sizePriv1 && (sizePriv1 == sizePriv2));
@@ -327,9 +328,8 @@ void EVPTest::testECEVPSaveLoadStream()
 			std::ostringstream strPrivE;
 			key2.save(&strPubE, &strPrivE, "testpwd");
 			assertTrue (strPubE.str() == pubKey);
-			/*TODO: figure out why EVP_PKEY_cmp() fails for identical public keys
 			assertTrue (key == key2);
-			assertTrue (!(key != key2));*/
+			assertTrue (!(key != key2));
 			ECKey ecKeyNE(curveName);
 			EVPPKey keyNE(&ecKeyNE);
 			assertTrue (key != keyNE);
@@ -383,9 +383,8 @@ void EVPTest::testECEVPSaveLoadStreamNoPass()
 			std::ostringstream strPrivE;
 			key2.save(&strPubE, &strPrivE);
 			assertTrue (strPubE.str() == pubKey);
-			/*TODO: figure out why EVP_PKEY_cmp() fails for identical public keys
 			assertTrue (key == key2);
-			assertTrue (!(key != key2));*/
+			assertTrue (!(key != key2));
 			ECKey ecKeyNE(curveName);
 			EVPPKey keyNE(&ecKeyNE);
 			assertTrue (key != keyNE);
@@ -428,8 +427,8 @@ void EVPTest::testECEVPSaveLoadFile()
 			TemporaryFile filePub;
 			TemporaryFile filePriv;
 			key.save(filePub.path(), filePriv.path(), "testpwd");
-			std::ifstream ifPub(filePub.path());
-			std::ifstream ifPriv(filePriv.path());
+			std::ifstream ifPub(filePub.path().c_str());
+			std::ifstream ifPriv(filePriv.path().c_str());
 			std::string pubKey;
 			std::string privKey;
 			StreamCopier::copyToString(ifPub, pubKey);
@@ -441,9 +440,8 @@ void EVPTest::testECEVPSaveLoadFile()
 			std::ostringstream strPrivE;
 			key2.save(&strPubE, &strPrivE, "testpwd");
 			assertTrue (strPubE.str() == pubKey);
-			/*TODO: figure out why EVP_PKEY_cmp() fails for identical public keys
 			assertTrue (key == key2);
-			assertTrue (!(key != key2));*/
+			assertTrue (!(key != key2));
 			ECKey ecKeyNE(curveName);
 			EVPPKey keyNE(&ecKeyNE);
 			assertTrue (key != keyNE);
@@ -484,8 +482,8 @@ void EVPTest::testECEVPSaveLoadFileNoPass()
 			TemporaryFile filePub;
 			TemporaryFile filePriv;
 			key.save(filePub.path(), filePriv.path());
-			std::ifstream ifPub(filePub.path());
-			std::ifstream ifPriv(filePriv.path());
+			std::ifstream ifPub(filePub.path().c_str());
+			std::ifstream ifPriv(filePriv.path().c_str());
 			std::string pubKey;
 			std::string privKey;
 			StreamCopier::copyToString(ifPub, pubKey);

@@ -9,8 +9,8 @@
 
 
 #include "HTTPSClientSessionTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/HTTPSClientSession.h"
 #include "Poco/Net/HTTPRequest.h"
 #include "Poco/Net/HTTPRequestHandler.h"
@@ -36,7 +36,6 @@
 #include <istream>
 #include <ostream>
 #include <sstream>
-#include <iostream>
 
 
 using namespace Poco::Net;
@@ -52,7 +51,7 @@ public:
 	TestRequestHandler()
 	{
 	}
-	
+
 	void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response)
 	{
 		response.setChunkedTransferEncoding(true);
@@ -253,7 +252,7 @@ void HTTPSClientSessionTest::testKeepAlive()
 	assertTrue (response.getKeepAlive());
 	std::ostringstream ostr1;
 	assertTrue (StreamCopier::copyStream(rs1, ostr1) == 0);
-	
+
 	request.setMethod(HTTPRequest::HTTP_GET);
 	request.setURI("/small");
 	s.sendRequest(request);
@@ -263,7 +262,7 @@ void HTTPSClientSessionTest::testKeepAlive()
 	std::ostringstream ostr2;
 	StreamCopier::copyStream(rs2, ostr2);
 	assertTrue (ostr2.str() == HTTPSTestServer::SMALL_BODY);
-	
+
 	request.setMethod(HTTPRequest::HTTP_GET);
 	request.setURI("/large");
 	s.sendRequest(request);
@@ -310,7 +309,7 @@ void HTTPSClientSessionTest::testProxy()
 	s.setProxy(
 		Application::instance().config().getString("testsuite.proxy.host"),
 		Application::instance().config().getInt("testsuite.proxy.port")
-		);
+	);
 	HTTPRequest request(HTTPRequest::HTTP_GET, "/public/poco/NetSSL.txt");
 	s.sendRequest(request);
 	X509Certificate cert = s.serverCertificate();
@@ -329,7 +328,7 @@ void HTTPSClientSessionTest::testCachedSession()
 	// ensure OpenSSL machinery is fully setup
 	Context::Ptr pDefaultServerContext = SSLManager::instance().defaultServerContext();
 	Context::Ptr pDefaultClientContext = SSLManager::instance().defaultClientContext();
-	
+
 	Context::Ptr pServerContext = new Context(
 		Context::SERVER_USE,
 		Application::instance().config().getString("openSSL.server.privateKeyFile"),
@@ -338,7 +337,7 @@ void HTTPSClientSessionTest::testCachedSession()
 		Context::VERIFY_NONE,
 		9,
 		true,
-		"ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");	
+		"ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
 	pServerContext->enableSessionCache(true, "TestSuite");
 	pServerContext->setSessionTimeout(10);
 	pServerContext->setSessionCacheSize(1000);
@@ -380,7 +379,7 @@ void HTTPSClientSessionTest::testCachedSession()
 	std::ostringstream ostr2;
 	StreamCopier::copyStream(rs2, ostr2);
 	assertTrue (ostr2.str() == HTTPSTestServer::SMALL_BODY);
-	
+
 	assertTrue (pSession1 == pSession2);
 
 	HTTPRequest request3(HTTPRequest::HTTP_GET, "/small");
@@ -398,7 +397,7 @@ void HTTPSClientSessionTest::testCachedSession()
 
 	Thread::sleep(15000); // wait for session to expire
 	pServerContext->flushSessionCache();
-	
+
 	HTTPRequest request4(HTTPRequest::HTTP_GET, "/small");
 	s2.sendRequest(request4);
 	Session::Ptr pSession4 = s2.sslSession();
@@ -428,7 +427,6 @@ void HTTPSClientSessionTest::testUnknownContentLength()
 	StreamCopier::copyStream(rs, ostr);
 	assertTrue (ostr.str() == HTTPSTestServer::SMALL_BODY);
 }
-
 
 void HTTPSClientSessionTest::testServerAbort()
 {
@@ -472,16 +470,10 @@ CppUnit::Test* HTTPSClientSessionTest::suite()
 	CppUnit_addTest(pSuite, HTTPSClientSessionTest, testPostLargeChunkedKeepAlive);
 	CppUnit_addTest(pSuite, HTTPSClientSessionTest, testKeepAlive);
 	CppUnit_addTest(pSuite, HTTPSClientSessionTest, testInterop);
-#ifdef FIXME
-	testProxy should use a public proxy server
-	http://www.publicproxyservers.com/proxy/list1.html
-	Really working public proxy servers - page 1 of 6.
-#endif
 	CppUnit_addTest(pSuite, HTTPSClientSessionTest, testProxy);
 	CppUnit_addTest(pSuite, HTTPSClientSessionTest, testCachedSession);
 	CppUnit_addTest(pSuite, HTTPSClientSessionTest, testUnknownContentLength);
-#if (POCO_OS != POCO_OS_CYGWIN)	// FIXME temporary bypass
 	CppUnit_addTest(pSuite, HTTPSClientSessionTest, testServerAbort);
-#endif
+
 	return pSuite;
 }

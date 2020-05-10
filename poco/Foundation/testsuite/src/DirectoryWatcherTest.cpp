@@ -14,8 +14,8 @@
 #ifndef POCO_NO_INOTIFY
 
 
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/DirectoryWatcher.h"
 #include "Poco/Delegate.h"
 #include "Poco/FileStream.h"
@@ -24,8 +24,8 @@
 using Poco::DirectoryWatcher;
 
 
-DirectoryWatcherTest::DirectoryWatcherTest(const std::string& rName):
-	CppUnit::TestCase(rName),
+DirectoryWatcherTest::DirectoryWatcherTest(const std::string& name): 
+	CppUnit::TestCase(name),
 	_error(false)
 {
 }

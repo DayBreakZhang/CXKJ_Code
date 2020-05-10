@@ -24,10 +24,10 @@
 
 #if defined(hpux) && defined(_XOPEN_SOURCE_EXTENDED) && defined(POCO_HPUX_IP_MREQ_HACK)
 // netinet/in.h does not define struct ip_mreq if
-// _XOPEN_SOURCE_EXTENDED is #define'd in HP-UX 11.x
+// _XOPEN_SOURCE_EXTENDED is #define'd in HP-UX 11.x 
 // versions prior to 11.30. Compile with -DPOCO_HPUX_IP_MREQ_HACK
 // if you experience problems.
-struct ip_mreq
+struct ip_mreq 
 {
 	struct in_addr imr_multiaddr;
 	struct in_addr imr_interface;
@@ -224,28 +224,28 @@ NetworkInterface MulticastSocket::findFirstInterface(const IPAddress& groupAddre
 	NetworkInterface::Map m = NetworkInterface::map();
 	if (groupAddress.family() == IPAddress::IPv4)
 	{
-		for (NetworkInterface::Map::const_iterator it = m.begin(); it != m.end(); ++it)
+		for (const auto& p: m)
 		{
-			if (it->second.supportsIPv4() &&
-				it->second.firstAddress(IPAddress::IPv4).isUnicast() &&
-				!it->second.isLoopback() &&
-				!it->second.isPointToPoint())
+			if (p.second.supportsIPv4() &&
+				p.second.firstAddress(IPAddress::IPv4).isUnicast() &&
+				!p.second.isLoopback() &&
+				!p.second.isPointToPoint())
 			{
-				return it->second;
+				return p.second;
 			}
 		}
 	}
 #ifdef POCO_HAVE_IPv6
 	else if (groupAddress.family() == IPAddress::IPv6)
 	{
-		for (NetworkInterface::Map::const_iterator it = m.begin(); it != m.end(); ++it)
+		for (const auto& p: m)
 		{
-			if (it->second.supportsIPv6() &&
-				it->second.firstAddress(IPAddress::IPv6).isUnicast() &&
-				!it->second.isLoopback() &&
-				!it->second.isPointToPoint())
+			if (p.second.supportsIPv6() &&
+				p.second.firstAddress(IPAddress::IPv6).isUnicast() &&
+				!p.second.isLoopback() &&
+				!p.second.isPointToPoint())
 			{
-				return it->second;
+				return p.second;
 			}
 		}
 	}

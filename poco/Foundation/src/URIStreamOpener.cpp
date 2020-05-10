@@ -32,8 +32,7 @@ URIStreamOpener::URIStreamOpener()
 
 URIStreamOpener::~URIStreamOpener()
 {
-	for (FactoryMap::iterator it = _map.begin(); it != _map.end(); ++it)
-		delete it->second;
+	for (auto& p: _map) delete p.second;
 }
 
 
@@ -78,7 +77,7 @@ std::istream* URIStreamOpener::open(const std::string& pathOrURI) const
 		Path path;
 		if (path.tryParse(pathOrURI, Path::PATH_GUESS))
 			return openFile(path);
-		else
+		else 
 			throw;
 	}
 }

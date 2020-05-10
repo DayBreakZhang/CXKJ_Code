@@ -42,34 +42,34 @@ public:
 
 	Exception(const Exception& exc);
 		/// Copy constructor.
-
-	~Exception() throw();
+		
+	~Exception() noexcept;
 		/// Destroys the exception and deletes the nested exception.
 
 	Exception& operator = (const Exception& exc);
 		/// Assignment operator.
 
-	virtual const char* name() const throw();
+	virtual const char* name() const noexcept;
 		/// Returns a static string describing the exception.
-
-	virtual const char* className() const throw();
+		
+	virtual const char* className() const noexcept;
 		/// Returns the name of the exception class.
-
-	virtual const char* what() const throw();
+		
+	virtual const char* what() const noexcept;
 		/// Returns a static string describing the exception.
 		///
 		/// Same as name(), but for compatibility with std::exception.
-
+		
 	const Exception* nested() const;
 		/// Returns a pointer to the nested exception, or
 		/// null if no nested exception exists.
-
+			
 	const std::string& message() const;
 		/// Returns the message text.
-
+			
 	int code() const;
 		/// Returns the exception code if defined.
-
+		
 	std::string displayText() const;
 		/// Returns a string consisting of the
 		/// message name and the message text.
@@ -79,7 +79,7 @@ public:
 		///
 		/// The copy can later be thrown again by
 		/// invoking rethrow() on it.
-
+		
 	virtual void rethrow() const;
 		/// (Re)Throws the exception.
 		///
@@ -96,26 +96,11 @@ protected:
 
 	void extendedMessage(const std::string& arg);
 		/// Sets the extended message for the exception.
-
-	void addBacktrace();
-		/// Appends backtrace (if available) to the
-		/// message.
-
+		
 private:
-	std::string& msg() const
-	{
-		if (_msg.find(name()) == std::string::npos)
-		{
-			std::string s(name());
-			s.append(": ");
-			_msg.insert(0, s);
-		}
-		return _msg;
-	}
-
-	mutable std::string _msg;
-	Exception*          _pNested;
-	int                 _code;
+	std::string _msg;
+	Exception*  _pNested;
+	int			_code;
 };
 
 
@@ -161,10 +146,10 @@ inline int Exception::code() const
 		CLS(const std::string& msg, const std::string& arg, int code = CODE);		\
 		CLS(const std::string& msg, const Poco::Exception& exc, int code = CODE);	\
 		CLS(const CLS& exc);														\
-		~CLS() throw();																\
+		~CLS() noexcept;																\
 		CLS& operator = (const CLS& exc);											\
-		const char* name() const throw();											\
-		const char* className() const throw();										\
+		const char* name() const noexcept;											\
+		const char* className() const noexcept;										\
 		Poco::Exception* clone() const;												\
 		void rethrow() const;														\
 	};
@@ -173,22 +158,22 @@ inline int Exception::code() const
 	POCO_DECLARE_EXCEPTION_CODE(API, CLS, BASE, 0)
 
 #define POCO_IMPLEMENT_EXCEPTION(CLS, BASE, NAME)													\
-	CLS::CLS(int otherCode): BASE(otherCode)																	\
+	CLS::CLS(int code): BASE(code)																	\
 	{																								\
 	}																								\
-	CLS::CLS(const std::string& msg, int otherCode): BASE(msg, otherCode)										\
+	CLS::CLS(const std::string& msg, int code): BASE(msg, code)										\
 	{																								\
 	}																								\
-	CLS::CLS(const std::string& msg, const std::string& arg, int otherCode): BASE(msg, arg, otherCode)		\
+	CLS::CLS(const std::string& msg, const std::string& arg, int code): BASE(msg, arg, code)		\
 	{																								\
 	}																								\
-	CLS::CLS(const std::string& msg, const Poco::Exception& exc, int otherCode): BASE(msg, exc, otherCode)	\
+	CLS::CLS(const std::string& msg, const Poco::Exception& exc, int code): BASE(msg, exc, code)	\
 	{																								\
 	}																								\
 	CLS::CLS(const CLS& exc): BASE(exc)																\
 	{																								\
 	}																								\
-	CLS::~CLS() throw()																				\
+	CLS::~CLS() noexcept																			\
 	{																								\
 	}																								\
 	CLS& CLS::operator = (const CLS& exc)															\
@@ -196,11 +181,11 @@ inline int Exception::code() const
 		BASE::operator = (exc);																		\
 		return *this;																				\
 	}																								\
-	const char* CLS::name() const throw()															\
+	const char* CLS::name() const noexcept															\
 	{																								\
 		return NAME;																				\
 	}																								\
-	const char* CLS::className() const throw()														\
+	const char* CLS::className() const noexcept														\
 	{																								\
 		return typeid(*this).name();																\
 	}																								\
@@ -244,12 +229,6 @@ POCO_DECLARE_EXCEPTION(Foundation_API, PoolOverflowException, RuntimeException)
 POCO_DECLARE_EXCEPTION(Foundation_API, NoPermissionException, RuntimeException)
 POCO_DECLARE_EXCEPTION(Foundation_API, OutOfMemoryException, RuntimeException)
 POCO_DECLARE_EXCEPTION(Foundation_API, DataException, RuntimeException)
-POCO_DECLARE_EXCEPTION(Foundation_API, InterruptedException, RuntimeException)
-POCO_DECLARE_EXCEPTION(Foundation_API, IndexOutOfBoundsException, RuntimeException)
-POCO_DECLARE_EXCEPTION(Foundation_API, UnsupportedOperationException, RuntimeException)
-POCO_DECLARE_EXCEPTION(Foundation_API, EmptyStackException, RuntimeException)
-POCO_DECLARE_EXCEPTION(Foundation_API, StackOverflowException, RuntimeException)
-POCO_DECLARE_EXCEPTION(Foundation_API, ArithmeticException, RuntimeException)
 
 POCO_DECLARE_EXCEPTION(Foundation_API, DataFormatException, DataException)
 POCO_DECLARE_EXCEPTION(Foundation_API, SyntaxException, DataException)

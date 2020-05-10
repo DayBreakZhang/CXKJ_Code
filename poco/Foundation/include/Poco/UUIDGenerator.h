@@ -53,7 +53,7 @@ public:
 		///
 		/// Throws a SystemException if no MAC address can be
 		/// obtained.
-	
+
 	UUID createFromName(const UUID& nsid, const std::string& name);
 		/// Creates a name-based UUID.
 
@@ -66,10 +66,10 @@ public:
 
 	UUID createFromName(const UUID& nsid, const std::string& name, DigestEngine& de, UUID::Version version);
 		/// Creates a name-based UUID, using the given digest engine and version.
-		
+
 	UUID createRandom();
 		/// Creates a random UUID.
-		
+
 	UUID createOne();
 		/// Tries to create and return a time-based UUID (see create()), and,
 		/// if that does not work due to the unavailability of a MAC address,
@@ -78,9 +78,16 @@ public:
 		/// The UUID::version() method can be used to determine the actual kind of
 		/// the UUID generated.
 
+	void seed(UInt32 n);
+		/// Seeds the internal pseudo random generator for time-based UUIDs with the given seed.
+
+	void seed();
+		/// Seeds the internal pseudo random generator used for time-based UUIDs
+		/// with a random seed obtained from a RandomInputStream.
+
 	static UUIDGenerator& defaultGenerator();
 		/// Returns a reference to the default UUIDGenerator.
-		
+
 protected:
 	Timestamp::UtcTimeVal timeStamp();
 	void getNode();
@@ -92,7 +99,7 @@ private:
 	int                 _ticks;
 	Environment::NodeId _node;
 	bool                _haveNode;
-	
+
 	UUIDGenerator(const UUIDGenerator&);
 	UUIDGenerator& operator = (const UUIDGenerator&);
 };

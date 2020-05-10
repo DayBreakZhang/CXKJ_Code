@@ -9,8 +9,8 @@
 
 
 #include "UniqueExpireLRUCacheTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Exception.h"
 #include "Poco/UniqueExpireLRUCache.h"
 #include "Poco/UniqueAccessExpireLRUCache.h"
@@ -46,7 +46,7 @@ typedef AccessExpirationDecorator<int> DIntVal;
 #define DURWAIT  300
 
 
-UniqueExpireLRUCacheTest::UniqueExpireLRUCacheTest(const std::string& rName): CppUnit::TestCase(rName)
+UniqueExpireLRUCacheTest::UniqueExpireLRUCacheTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -127,7 +127,7 @@ void UniqueExpireLRUCacheTest::testExpireN()
 	assertTrue (aCache.has(3));
 	tmp = aCache.get(1);
 	SharedPtr<IntVal> tmp2 = aCache.get(3);
-	assertTrue (tmp->value == 2);
+	assertTrue (tmp->value == 2); 
 	assertTrue (tmp2->value == 4);
 
 	Thread::sleep(DURHALFSLEEP+25); //3|1

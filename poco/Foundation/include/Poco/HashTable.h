@@ -32,7 +32,7 @@ namespace Poco {
 
 
 //@ deprecated
-template <class Key, class Value, class KeyHashFunction = HashFunction<Key> >
+template <class Key, class Value, class KeyHashFunction = HashFunction<Key>>
 class HashTable
 	/// A HashTable stores a key value pair that can be looked up via a hashed key.
 	///
@@ -51,9 +51,9 @@ public:
 	typedef typename HashEntryMap::const_iterator ConstIterator;
 	typedef typename HashEntryMap::iterator Iterator;
 
-	HashTable(UInt32 initialSize = 251):
-		_entries(0),
-		_size(0),
+	HashTable(UInt32 initialSize = 251): 
+		_entries(0), 
+		_size(0), 
 		_maxCapacity(initialSize)
 		/// Creates the HashTable.
 	{

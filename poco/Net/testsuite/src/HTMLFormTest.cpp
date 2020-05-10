@@ -9,8 +9,8 @@
 
 
 #include "HTMLFormTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/HTMLForm.h"
 #include "Poco/Net/PartSource.h"
 #include "Poco/Net/StringPartSource.h"
@@ -37,7 +37,7 @@ namespace
 		StringPartHandler()
 		{
 		}
-		
+
 		void handlePart(const MessageHeader& header, std::istream& stream)
 		{
 			_disp = header["Content-Disposition"];
@@ -49,7 +49,7 @@ namespace
 				ch = stream.get();
 			}
 		}
-		
+
 		const std::string& data() const
 		{
 			return _data;
@@ -64,7 +64,7 @@ namespace
 		{
 			return _type;
 		}
-		
+
 	private:
 		std::string _data;
 		std::string _disp;
@@ -91,7 +91,7 @@ void HTMLFormTest::testWriteUrl()
 	form.set("field3", "value=3");
 	form.set("field4", "value&4");
 	form.set("field5", "value+5");
-	
+
 	std::ostringstream ostr;
 	form.write(ostr);
 	std::string s = ostr.str();
@@ -106,12 +106,12 @@ void HTMLFormTest::testWriteMultipart()
 	form.set("field2", "value 2");
 	form.set("field3", "value=3");
 	form.set("field4", "value&4");
-	
+
 	form.addPart("attachment1", new StringPartSource("This is an attachment"));
 	StringPartSource* pSPS = new StringPartSource("This is another attachment", "text/plain", "att2.txt");
 	pSPS->headers().set("Content-ID", "1234abcd");
 	form.addPart("attachment2", pSPS);
-	
+
 	std::ostringstream ostr;
 	form.write(ostr, "MIME_boundary_0123456789");
 	std::string s = ostr.str();
@@ -146,13 +146,6 @@ void HTMLFormTest::testWriteMultipart()
 		"--MIME_boundary_0123456789--\r\n"
 	);
 	assertTrue (s.length() == form.calculateContentLength());
-
-	const HTMLForm::PartVec& parts = form.getPartList();
-	assertTrue (parts.size() == 2);
-	assertTrue (parts[0].name() == "attachment1");
-	assertTrue (parts[1].name() == "attachment2");
-	assertTrue (parts[1].filename() == "att2.txt");
-	assertTrue (parts[1].headers()["Content-ID"] == "1234abcd");
 }
 
 
@@ -173,7 +166,7 @@ void HTMLFormTest::testReadUrlGETMultiple()
 	HTTPRequest req("GET", "/form.cgi?field1=value1&field1=value%202&field1=value%3D3&field1=value%264");
 	HTMLForm form(req);
 	assertTrue (form.size() == 4);
-	
+
 	HTMLForm::ConstIterator it = form.find("field1");
 	assertTrue (it != form.end());
 	assertTrue (it->first == "field1" && it->second == "value1");
@@ -263,7 +256,7 @@ void HTMLFormTest::testReadMultipart()
 	HTTPRequest req("POST", "/form.cgi");
 	req.setContentType(HTMLForm::ENCODING_MULTIPART + "; boundary=\"MIME_boundary_0123456789\"");
 	StringPartHandler sah;
-	HTMLForm form(req, istr, sah);	
+	HTMLForm form(req, istr, sah);
 	assertTrue (form.size() == 4);
 	assertTrue (form["field1"] == "value1");
 	assertTrue (form["field2"] == "value 2");
@@ -283,7 +276,7 @@ void HTMLFormTest::testSubmit1()
 	form.set("field2", "value 2");
 	form.set("field3", "value=3");
 	form.set("field4", "value&4");
-	
+
 	HTTPRequest req("GET", "/form.cgi");
 	form.prepareSubmit(req);
 	assertTrue (req.getURI() == "/form.cgi?field1=value1&field2=value%202&field3=value%3D3&field4=value%264");
@@ -297,7 +290,7 @@ void HTMLFormTest::testSubmit2()
 	form.set("field2", "value 2");
 	form.set("field3", "value=3");
 	form.set("field4", "value&4");
-	
+
 	HTTPRequest req("POST", "/form.cgi");
 	form.prepareSubmit(req);
 	assertTrue (req.getContentType() == HTMLForm::ENCODING_URL);
@@ -312,7 +305,7 @@ void HTMLFormTest::testSubmit3()
 	form.set("field2", "value 2");
 	form.set("field3", "value=3");
 	form.set("field4", "value&4");
-	
+
 	HTTPRequest req("POST", "/form.cgi", HTTPMessage::HTTP_1_1);
 	form.prepareSubmit(req);
 	std::string expCT(HTMLForm::ENCODING_MULTIPART);
@@ -331,7 +324,7 @@ void HTMLFormTest::testSubmit4()
 	form.add("field1", "value 2");
 	form.add("field1", "value=3");
 	form.add("field1", "value&4");
-	
+
 	HTTPRequest req("GET", "/form.cgi");
 	form.prepareSubmit(req);
 
@@ -408,7 +401,7 @@ void HTMLFormTest::testFieldLimitMultipart()
 	form.setFieldLimit(3);
 	try
 	{
-		form.load(req, istr, sah);	
+		form.load(req, istr, sah);
 		fail("field limit violated - must throw");
 	}
 	catch (Poco::Net::HTMLFormException&)

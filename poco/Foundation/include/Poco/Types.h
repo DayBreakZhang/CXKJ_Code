@@ -22,132 +22,53 @@
 #include <cstdint>
 
 
-#define POCO_HAVE_INT64 1
-
-
 namespace Poco {
 
 
-typedef std::int8_t   Int8;
-typedef std::uint8_t  UInt8;
-typedef std::int16_t  Int16;
-typedef std::uint16_t UInt16;
-typedef std::int32_t  Int32;
-typedef std::uint32_t UInt32;
-typedef std::int64_t  Int64;
-typedef std::uint64_t UInt64;
+using Int8    = std::int8_t;
+using UInt8   = std::uint8_t;
+using Int16   = std::int16_t;
+using UInt16  = std::uint16_t;
+using Int32   = std::int32_t;
+using UInt32  = std::uint32_t;
+using Int64   = std::int64_t;
+using UInt64  = std::uint64_t;
+using IntPtr  = std::intptr_t;
+using UIntPtr = std::uintptr_t;
 
 
 #if defined(_MSC_VER)
-	//
-	// Windows/Visual C++
-	//
-
 	#if defined(_WIN64)
 		#define POCO_PTR_IS_64_BIT 1
-		typedef std::int64_t  IntPtr;
-		typedef std::uint64_t UIntPtr;
-	#else
-		typedef std::int32_t  IntPtr;
-		typedef std::uint32_t UIntPtr;
 	#endif
-
+	#define POCO_HAVE_INT64 1
 #elif defined(__GNUC__) || defined(__clang__)
-	//
-	// Unix/GCC/Clang
-	//
-
 	#if defined(_WIN64)
 		#define POCO_PTR_IS_64_BIT 1
-		typedef std::int64_t  IntPtr;
-		typedef std::uint64_t UIntPtr;
 	#else
 		#if defined(__LP64__)
-			typedef std::int64_t  IntPtr;
-			typedef std::uint64_t UIntPtr;
 			#define POCO_PTR_IS_64_BIT 1
 			#define POCO_LONG_IS_64_BIT 1
-		#else
-			typedef std::int32_t  IntPtr;
-			typedef std::uint32_t UIntPtr;
+			#if POCO_OS == POCO_OS_LINUX || POCO_OS == POCO_OS_FREE_BSD || POCO_OS == POCO_OS_ANDROID
+				#define POCO_INT64_IS_LONG 1
+			#endif
 		#endif
 	#endif
-
-#elif defined(__DECCXX)
-	//
-	// Compaq C++
-	//
-
-	typedef Int64 IntPtr;
-	typedef UInt64 UIntPtr;
-	#define POCO_PTR_IS_64_BIT 1
-	#define POCO_LONG_IS_64_BIT 1
-
-#elif defined(__HP_aCC)
-	//
-	// HP Ansi C++
-	//
-
-	#if defined(__LP64__)
-		#define POCO_PTR_IS_64_BIT 1
-		#define POCO_LONG_IS_64_BIT 1
-		typedef Int64 IntPtr;
-		typedef UInt64 UIntPtr;
-	#else
-		typedef Int32 IntPtr;
-		typedef UInt32 UIntPtr;
-	#endif
-
+	#define POCO_HAVE_INT64 1
 #elif defined(__SUNPRO_CC)
-	//
-	// SUN Forte C++
-	//
-
 	#if defined(__sparcv9)
 		#define POCO_PTR_IS_64_BIT 1
 		#define POCO_LONG_IS_64_BIT 1
-		typedef Int64 IntPtr;
-		typedef UInt64 UIntPtr;
-	#else
-		typedef Int32 IntPtr;
-		typedef UInt32 UIntPtr;
 	#endif
-
+	#define POCO_HAVE_INT64 1
 #elif defined(__IBMCPP__)
-	//
-	// IBM XL C++
-	//
-
 	#if defined(__64BIT__)
 		#define POCO_PTR_IS_64_BIT 1
 		#define POCO_LONG_IS_64_BIT 1
-		typedef Int64 IntPtr;
-		typedef UInt64 UIntPtr;
-	#else
-		typedef Int32 IntPtr;
-		typedef UInt32 UIntPtr;
 	#endif
-
-#elif defined(__sgi)
-	//
-	// MIPSpro C++
-	//
-
-	#if _MIPS_SZLONG == 64
-		#define POCO_PTR_IS_64_BIT 1
-		#define POCO_LONG_IS_64_BIT 1
-		typedef Int64 IntPtr;
-		typedef UInt64 UIntPtr;
-	#else
-		typedef Int32 IntPtr;
-		typedef UInt32 UIntPtr;
-	#endif
-
-#endif
-
-
-#if defined(POCO_PTR_IS_64_BIT) && (POCO_PTR_IS_64_BIT == 1)
-	#define POCO_64_BIT
+	#define POCO_HAVE_INT64 1
+#elif defined(_DIAB_TOOL)
+	#define POCO_HAVE_INT64 1
 #endif
 
 

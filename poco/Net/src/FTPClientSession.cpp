@@ -31,7 +31,7 @@ namespace Net {
 FTPClientSession::FTPClientSession():
 	_pControlSocket(0),
 	_pDataStream(0),
-	_port(0),		
+	_port(FTP_PORT),
 	_passiveMode(true),
 	_fileType(TYPE_BINARY),
 	_supports1738(true),
@@ -41,7 +41,7 @@ FTPClientSession::FTPClientSession():
 {
 }
 
-	
+
 FTPClientSession::FTPClientSession(const StreamSocket& socket, bool readWelcomeMessage):
 	_pControlSocket(new DialogSocket(socket)),
 	_pDataStream(0),
@@ -55,14 +55,14 @@ FTPClientSession::FTPClientSession(const StreamSocket& socket, bool readWelcomeM
 	_timeout(DEFAULT_TIMEOUT)
 {
 	_pControlSocket->setReceiveTimeout(_timeout);
-	if (readWelcomeMessage) 
+	if (readWelcomeMessage)
 	{
 		receiveServerReadyReply();
 	}
-	else 
+	else
 	{
 		_serverReady = true;
-	}	
+	}
 }
 
 
@@ -73,7 +73,7 @@ FTPClientSession::FTPClientSession(const std::string& host,
 	_pControlSocket(new DialogSocket(SocketAddress(host, port))),
 	_pDataStream(0),
 	_host(host),
-	_port(port),		
+	_port(port),
 	_passiveMode(true),
 	_fileType(TYPE_BINARY),
 	_supports1738(true),
@@ -98,6 +98,7 @@ FTPClientSession::~FTPClientSession()
 	}
 }
 
+
 void FTPClientSession::setTimeout(const Poco::Timespan& timeout)
 {
 	if (!isOpen())
@@ -107,7 +108,7 @@ void FTPClientSession::setTimeout(const Poco::Timespan& timeout)
 	_pControlSocket->setReceiveTimeout(timeout);
 }
 
-	
+
 Poco::Timespan FTPClientSession::getTimeout() const
 {
 	return _timeout;
@@ -120,7 +121,7 @@ void FTPClientSession::setPassive(bool flag, bool useRFC1738)
 	_supports1738 = useRFC1738;
 }
 
-	
+
 bool FTPClientSession::getPassive() const
 {
 	return _passiveMode;
@@ -149,21 +150,22 @@ void FTPClientSession::open(const std::string& host,
 	}
 }
 
+
 void  FTPClientSession::receiveServerReadyReply()
 {
-	if (_serverReady)
-		return;
+	if (_serverReady) return;
 	std::string response;
 	int status = _pControlSocket->receiveStatusMessage(response);
 	if (!isPositiveCompletion(status))
 		throw FTPException("Cannot receive status message", response, status);
-		
+
 	{
 		Poco::FastMutex::ScopedLock lock(_wmMutex);
 		_welcomeMessage = response;
 	}
 	_serverReady = true;
 }
+
 
 void FTPClientSession::login(const std::string& username, const std::string& password)
 {
@@ -196,19 +198,29 @@ void FTPClientSession::logout()
 
 	if (_isLoggedIn)
 	{
-		try { endTransfer(); }
-		catch (...) { }
+		try
+		{
+			endTransfer();
+		}
+		catch (...)
+		{
+		}
 		_isLoggedIn = false;
-		std::string response;		
-		sendCommand("QUIT", response);		
+		std::string response;
+		sendCommand("QUIT", response);
 	}
 }
 
 
 void FTPClientSession::close()
 {
-	try { logout(); }
-	catch(...){ }
+	try
+	{
+		logout();
+	}
+	catch (...)
+	{
+	}
 	_serverReady = false;
 	if (_pControlSocket)
 	{
@@ -273,7 +285,7 @@ void FTPClientSession::cdup()
 		throw FTPException("Cannot change directory", response, status);
 }
 
-	
+
 void FTPClientSession::rename(const std::string& oldName, const std::string& newName)
 {
 	std::string response;
@@ -285,7 +297,7 @@ void FTPClientSession::rename(const std::string& oldName, const std::string& new
 		throw FTPException(std::string("Cannot rename to ") + newName, response, status);
 }
 
-	
+
 void FTPClientSession::remove(const std::string& path)
 {
 	std::string response;
@@ -324,13 +336,13 @@ std::istream& FTPClientSession::beginDownload(const std::string& path)
 	return *_pDataStream;
 }
 
-	
+
 void FTPClientSession::endDownload()
 {
 	endTransfer();
 }
 
-	
+
 std::ostream& FTPClientSession::beginUpload(const std::string& path)
 {
 	if (!isOpen())
@@ -366,7 +378,7 @@ void FTPClientSession::endList()
 	endTransfer();
 }
 
-	
+
 void FTPClientSession::abort()
 {
 	if (!isOpen())
@@ -417,7 +429,7 @@ std::string FTPClientSession::extractPath(const std::string& response)
 			if (*it == '"')
 			{
 				++it;
-				if (it == end || (it != end && *it != '"')) break;
+				if (it == end || *it != '"') break;
 			}
 			path += *it++;
 		}
@@ -519,9 +531,9 @@ bool FTPClientSession::sendEPRT(const SocketAddress& addr)
 void FTPClientSession::sendPORT(const SocketAddress& addr)
 {
 	std::string arg(addr.host().toString());
-	for (std::string::iterator it = arg.begin(); it != arg.end(); ++it)
+	for (auto& ch: arg)
 	{
-		if (*it == '.') *it = ',';
+		if (ch == '.') ch = ',';
 	}
 	arg += ',';
 	Poco::UInt16 port = addr.port();
@@ -597,8 +609,8 @@ void FTPClientSession::parseExtAddress(const std::string& str, SocketAddress& ad
 	if (it != end && *it == delim) ++it;
 	if (it != end && *it == delim) ++it;
 	Poco::UInt16 port = 0;
-	while (it != end && Poco::Ascii::isDigit(*it)) { port *= 10; port += *it++ - '0'; }	
-	addr = SocketAddress(_pControlSocket->peerAddress().host(), port);	
+	while (it != end && Poco::Ascii::isDigit(*it)) { port *= 10; port += *it++ - '0'; }
+	addr = SocketAddress(_pControlSocket->peerAddress().host(), port);
 }
 
 
@@ -614,5 +626,6 @@ void FTPClientSession::endTransfer()
 			throw FTPException("Data transfer failed", response, status);
 	}
 }
+
 
 } } // namespace Poco::Net

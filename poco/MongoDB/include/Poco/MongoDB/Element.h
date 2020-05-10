@@ -43,7 +43,7 @@ class MongoDB_API Element
 	/// Represents an Element of a Document or an Array.
 {
 public:
-	typedef Poco::SharedPtr<Element> Ptr;
+	using Ptr = Poco::SharedPtr<Element>;
 
 	explicit Element(const std::string& name);
 		/// Creates the Element with the given name.
@@ -78,7 +78,7 @@ inline const std::string& Element::name() const
 }
 
 
-typedef std::list<Element::Ptr> ElementSet;
+using ElementSet = std::list<Element::Ptr>;
 
 
 template<typename T>
@@ -94,7 +94,7 @@ struct ElementTraits<double>
 {
 	enum { TypeId = 0x01 };
 
-	static std::string toString(const double& value, int /*indent*/ = 0)
+	static std::string toString(const double& value, int indent = 0)
 	{
 		return Poco::NumberFormatter::format(value);
 	}
@@ -109,13 +109,53 @@ struct ElementTraits<std::string>
 {
 	enum { TypeId = 0x02 };
 
-	static std::string toString(const std::string& value, int /*indent*/ = 0)
+	static std::string toString(const std::string& value, int indent = 0)
 	{
-		std::string result;
-		result.append(1, '"');
-		result.append(UTF8::escape(value));
-		result.append(1, '"');
-		return result;
+		std::ostringstream oss;
+
+		oss << '"';
+
+		for (std::string::const_iterator it = value.begin(); it != value.end(); ++it)
+		{
+			switch (*it)
+			{
+			case '"':
+				oss << "\\\"";
+				break;
+			case '\\':
+				oss << "\\\\";
+				break;
+			case '\b':
+				oss << "\\b";
+				break;
+			case '\f':
+				oss << "\\f";
+				break;
+			case '\n':
+				oss << "\\n";
+				break;
+			case '\r':
+				oss << "\\r";
+				break;
+			case '\t':
+				oss << "\\t";
+				break;
+			default:
+				{
+					if ( *it > 0 && *it <= 0x1F )
+					{
+						oss << "\\u" << std::hex << std::uppercase << std::setfill('0') << std::setw(4) << static_cast<int>(*it);
+					}
+					else
+					{
+						oss << *it;
+					}
+					break;
+				}
+			}
+		}
+		oss << '"';
+		return oss.str();
 	}
 };
 
@@ -145,7 +185,7 @@ struct ElementTraits<bool>
 {
 	enum { TypeId = 0x08 };
 
-	static std::string toString(const bool& value, int /*indent*/ = 0)
+	static std::string toString(const bool& value, int indent = 0)
 	{
 		return value ? "true" : "false";
 	}
@@ -177,7 +217,7 @@ struct ElementTraits<Int32>
 	enum { TypeId = 0x10 };
 
 
-	static std::string toString(const Int32& value, int /*indent*/ = 0)
+	static std::string toString(const Int32& value, int indent = 0)
 	{
 		return Poco::NumberFormatter::format(value);
 	}
@@ -191,7 +231,7 @@ struct ElementTraits<Timestamp>
 {
 	enum { TypeId = 0x09 };
 
-	static std::string toString(const Timestamp& value, int /*indent*/ = 0)
+	static std::string toString(const Timestamp& value, int indent = 0)
 	{
 		std::string result;
 		result.append(1, '"');
@@ -219,7 +259,7 @@ inline void BSONWriter::write<Timestamp>(Timestamp& from)
 }
 
 
-typedef Nullable<unsigned char> NullValue;
+using NullValue = Nullable<unsigned char>;
 
 
 // BSON Null Value
@@ -229,7 +269,7 @@ struct ElementTraits<NullValue>
 {
 	enum { TypeId = 0x0A };
 
-	static std::string toString(const NullValue& /*value*/, int /*indent*/ = 0)
+	static std::string toString(const NullValue& value, int indent = 0)
 	{
 		return "null";
 	}
@@ -237,13 +277,13 @@ struct ElementTraits<NullValue>
 
 
 template<>
-inline void BSONReader::read<NullValue>(NullValue& /*to*/)
+inline void BSONReader::read<NullValue>(NullValue& to)
 {
 }
 
 
 template<>
-inline void BSONWriter::write<NullValue>(NullValue& /*from*/)
+inline void BSONWriter::write<NullValue>(NullValue& from)
 {
 }
 
@@ -262,7 +302,7 @@ struct ElementTraits<BSONTimestamp>
 {
 	enum { TypeId = 0x11 };
 
-	static std::string toString(const BSONTimestamp& value, int /*indent*/ = 0)
+	static std::string toString(const BSONTimestamp& value, int indent = 0)
 	{
 		std::string result;
 		result.append(1, '"');
@@ -303,7 +343,7 @@ struct ElementTraits<Int64>
 {
 	enum { TypeId = 0x12 };
 
-	static std::string toString(const Int64& value, int /*indent*/ = 0)
+	static std::string toString(const Int64& value, int indent = 0)
 	{
 		return NumberFormatter::format(value);
 	}

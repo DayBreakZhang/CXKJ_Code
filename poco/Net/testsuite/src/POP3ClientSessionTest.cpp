@@ -9,19 +9,17 @@
 
 
 #include "POP3ClientSessionTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "DialogServer.h"
 #include "Poco/Net/POP3ClientSession.h"
 #include "Poco/Net/MailMessage.h"
-#include "Poco/Net/MailRecipient.h"
 #include "Poco/Net/NetException.h"
 
 
 using Poco::Net::POP3ClientSession;
 using Poco::Net::MessageHeader;
 using Poco::Net::MailMessage;
-using Poco::Net::MailRecipient;
 using Poco::Net::POP3Exception;
 
 
@@ -205,7 +203,7 @@ void POP3ClientSessionTest::testRetrieveMessages()
 	server.addResponse(
 		"+OK Here comes the message\r\n"
 		"From: john.doe@no.where\r\n"
-		"To: \"Jane Doe\" <jane.doe@no.where>, walter.foo@no.where\r\n"
+		"To: jane.doe@no.where\r\n"
 		"Subject: test\r\n"
 		"\r\n"
 		"."
@@ -213,9 +211,7 @@ void POP3ClientSessionTest::testRetrieveMessages()
 	server.addResponse(
 		"+OK Here comes the message\r\n"
 		"From: john.doe@no.where\r\n"
-		"To: \"Jane Doe\" <jane.doe@no.where>, walter.foo@no.where\r\n"
-		"CC: \"Homer Simpson\" <homer.simpson@no.where>, bart.simpson@no.where\r\n"
-		"BCC: lisa.simpson@no.where, Maggie Simpson <maggie.simpson@no.where>\r\n" // tolerate non-quoted real name
+		"To: jane.doe@no.where\r\n"
 		"Subject: test\r\n"
 		"\r\n"
 		"Hello Jane,\r\n"
@@ -235,33 +231,13 @@ void POP3ClientSessionTest::testRetrieveMessages()
 	std::string cmd = server.popCommand();
 	assertTrue (cmd == "TOP 1 0");
 	assertTrue (header.get("From") == "john.doe@no.where");
-	assertTrue (header.get("To") == "\"Jane Doe\" <jane.doe@no.where>, walter.foo@no.where");
+	assertTrue (header.get("To") == "jane.doe@no.where");
 	assertTrue (header.get("Subject") == "test");
 
 	MailMessage message;
 	session.retrieveMessage(2, message);
 	cmd = server.popCommand();
 	assertTrue (cmd == "RETR 2");
-	MailMessage::Recipients recipients = message.recipients();
-	assertTrue (recipients.size() == 6);
-	assertTrue (recipients[0].getAddress() == "jane.doe@no.where");
-	assertTrue (recipients[0].getRealName() == "Jane Doe");
-	assertTrue (recipients[0].getType() == MailRecipient::PRIMARY_RECIPIENT);
-	assertTrue (recipients[1].getAddress() == "walter.foo@no.where");
-	assertTrue (recipients[1].getRealName().empty());
-	assertTrue (recipients[1].getType() == MailRecipient::PRIMARY_RECIPIENT);
-	assertTrue (recipients[2].getAddress() == "homer.simpson@no.where");
-	assertTrue (recipients[2].getRealName() == "Homer Simpson");
-	assertTrue (recipients[2].getType() == MailRecipient::CC_RECIPIENT);
-	assertTrue (recipients[3].getAddress() == "bart.simpson@no.where");
-	assertTrue (recipients[3].getRealName().empty());
-	assertTrue (recipients[3].getType() == MailRecipient::CC_RECIPIENT);
-	assertTrue (recipients[4].getAddress() == "lisa.simpson@no.where");
-	assertTrue (recipients[4].getRealName().empty());
-	assertTrue (recipients[4].getType() == MailRecipient::BCC_RECIPIENT);
-	assertTrue (recipients[5].getAddress() == "maggie.simpson@no.where");
-	assertTrue (recipients[5].getRealName() == "Maggie Simpson");
-	assertTrue (recipients[5].getType() == MailRecipient::BCC_RECIPIENT);
 
 	assertTrue (message.getContent() ==
 		"Hello Jane,\r\n"

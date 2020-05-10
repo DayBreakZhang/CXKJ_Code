@@ -37,7 +37,7 @@ class Redis_API Client
 	/// bit integer, a simple string, a bulk string, an array or an error. The
 	/// first element of the command array is the Redis command. A simple string
 	/// is a string that cannot contain a CR or LF character. A bulk string is
-	/// implemented as a typedef for Poco::Nullable<std::string>. This is
+	/// implemented as an alias for Poco::Nullable<std::string>. This is
 	/// because a bulk string can represent a Null value.
 	///
 	///     BulkString bs = client.execute<BulkString>(...);
@@ -71,7 +71,7 @@ class Redis_API Client
 	///     command << "list";
 {
 public:
-	typedef SharedPtr<Client> Ptr;
+	using Ptr = SharedPtr<Client>;
 
 	Client();
 		/// Creates an unconnected Client.
@@ -113,12 +113,6 @@ public:
 	void connect(const Net::SocketAddress& addrs, const Timespan& timeout);
 		/// Connects to the given Redis server.
 
-    bool sendAuth(const std::string& password);
-        /// Sends password to Redis server
-
-    bool isAuthenticated();
-        /// Returns true when the client is authenticated
-
 	void disconnect();
 		/// Disconnects from the Redis server.
 
@@ -139,7 +133,7 @@ public:
 		/// Array and void. When the reply is an Error, it will throw
 		/// a RedisException.
 	{
-		T result;
+		T result = T();
 		writeCommand(command, true);
 		readReply(result);
 		return result;
@@ -205,7 +199,6 @@ private:
 	Net::StreamSocket _socket;
 	RedisInputStream* _input;
 	RedisOutputStream* _output;
-    bool _authenticated;
 };
 
 
@@ -239,10 +232,6 @@ inline void Client::setReceiveTimeout(const Timespan& timeout)
 	_socket.setReceiveTimeout(timeout);
 }
 
-inline bool Client::isAuthenticated()
-{
-    return _authenticated;
-}
 
 } } // namespace Poco::Redis
 

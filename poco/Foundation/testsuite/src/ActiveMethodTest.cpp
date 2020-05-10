@@ -9,8 +9,8 @@
 
 
 #include "ActiveMethodTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/ActiveMethod.h"
 #include "Poco/Thread.h"
 #include "Poco/Event.h"
@@ -90,7 +90,7 @@ namespace
 }
 
 
-ActiveMethodTest::ActiveMethodTest(const std::string& rName): CppUnit::TestCase(rName)
+ActiveMethodTest::ActiveMethodTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -196,7 +196,7 @@ void ActiveMethodTest::testFailure()
 	assertTrue (result.available());
 	assertTrue (result.failed());
 	std::string msg = result.error();
-	assertTrue (msg.find("n == 100") != std::string::npos);
+	assertTrue (msg == "n == 100");
 }
 
 

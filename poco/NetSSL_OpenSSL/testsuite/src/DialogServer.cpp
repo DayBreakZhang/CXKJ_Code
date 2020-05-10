@@ -18,6 +18,7 @@
 #include "Poco/Net/Context.h"
 #include "Poco/Net/SecureStreamSocketImpl.h"
 
+
 using Poco::Net::Socket;
 using Poco::Net::DialogSocket;
 using Poco::Net::SocketAddress;
@@ -29,6 +30,7 @@ using Poco::Exception;
 using Poco::Net::Context;
 using Poco::Net::Session;
 using Poco::Net::SecureStreamSocketImpl;
+
 
 DialogServer::DialogServer(bool acceptCommands, bool ssl):
 	_socket(SocketAddress()),
@@ -57,9 +59,9 @@ Poco::UInt16 DialogServer::port() const
 
 
 void handleDataSSLrequest(DialogSocket& ds, bool ssl, Session::Ptr& sslSession)
-{	
+{
 	if (ssl)
-	{		
+	{
 		try
 		{
 			Context::Ptr cDefaultServerContext = SSLManager::instance().defaultServerContext();
@@ -70,10 +72,13 @@ void handleDataSSLrequest(DialogSocket& ds, bool ssl, Session::Ptr& sslSession)
 				ds = sss;
 			}
 		}
-		catch (Exception&) {
+		catch (Exception& exc) 
+		{
+			std::cout << exc.displayText() << std::endl;
 		}
 	}
 }
+
 
 void handleSSLrequest(DialogSocket& ds, bool ssl, Session::Ptr& sslSession)
 {
@@ -108,6 +113,7 @@ void handleSSLrequest(DialogSocket& ds, bool ssl, Session::Ptr& sslSession)
 	}
 }
 
+
 void DialogServer::run()
 {
 	_ready.set();
@@ -131,7 +137,7 @@ void DialogServer::run()
 			if (_acceptCommands)
 			{
 				try
-				{					
+				{
 
 					std::string command;
 					while (ds.receiveMessage(command))
@@ -143,7 +149,7 @@ void DialogServer::run()
 						}
 						else if ((command == "PBSZ 0") || (command == "PROT P"))
 						{
-							ds.sendMessage("200 OK");							
+							ds.sendMessage("200 OK");
 							continue;
 						}
 
@@ -173,7 +179,7 @@ void DialogServer::run()
 const std::string& DialogServer::lastCommand() const
 {
 	FastMutex::ScopedLock lock(_mutex);
-	
+
 	static const std::string EMPTY;
 	if (_lastCommands.empty())
 		return EMPTY;
@@ -221,7 +227,7 @@ void DialogServer::addResponse(const std::string& response)
 	_nextResponses.push_back(response);
 }
 
-	
+
 void DialogServer::clearCommands()
 {
 	FastMutex::ScopedLock lock(_mutex);
@@ -229,11 +235,11 @@ void DialogServer::clearCommands()
 	_lastCommands.clear();
 }
 
-		
+
 void DialogServer::clearResponses()
 {
 	FastMutex::ScopedLock lock(_mutex);
-	
+
 	_nextResponses.clear();
 }
 
@@ -243,10 +249,12 @@ void DialogServer::log(bool flag)
 	_log = flag;
 }
 
+
 void DialogServer::setSslSession(Session::Ptr cSession)
 {
 	_SSLsession = cSession;
 }
+
 
 Session::Ptr DialogServer::getSslSession()
 {

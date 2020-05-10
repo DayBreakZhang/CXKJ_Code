@@ -21,7 +21,6 @@
 #include "Poco/Foundation.h"
 #include "Poco/Buffer.h"
 #include "Poco/MemoryStream.h"
-#include "Poco/ByteOrder.h"
 #include <vector>
 #include <istream>
 
@@ -71,14 +70,16 @@ public:
 	BinaryReader& operator >> (unsigned short& value);
 	BinaryReader& operator >> (int& value);
 	BinaryReader& operator >> (unsigned int& value);
-#ifndef POCO_LONG_IS_64_BIT
 	BinaryReader& operator >> (long& value);
 	BinaryReader& operator >> (unsigned long& value);
-#endif // POCO_LONG_IS_64_BIT
 	BinaryReader& operator >> (float& value);
 	BinaryReader& operator >> (double& value);
-	BinaryReader& operator >> (Int64& value);
-	BinaryReader& operator >> (UInt64& value);
+
+#if defined(POCO_HAVE_INT64)
+	BinaryReader& operator >> (long long& value);
+	BinaryReader& operator >> (unsigned long long& value);
+#endif
+
 	BinaryReader& operator >> (std::string& value);
 
 	template <typename T>
@@ -103,10 +104,12 @@ public:
 		/// See BinaryWriter::write7BitEncoded() for a description
 		/// of the compression algorithm.
 
+#if defined(POCO_HAVE_INT64)
 	void read7BitEncoded(UInt64& value);
 		/// Reads a 64-bit unsigned integer in compressed format.
 		/// See BinaryWriter::write7BitEncoded() for a description
 		/// of the compression algorithm.
+#endif
 
 	void readRaw(std::streamsize length, std::string& value);
 		/// Reads length bytes of raw data into value.
@@ -119,22 +122,22 @@ public:
 		/// the reader for the encountered byte order.
 		/// A byte-order mark is a 16-bit integer with a value of 0xFEFF,
 		/// written in host byte order.
-		
+
 	bool good();
 		/// Returns _istr.good();
-		
+
 	bool fail();
 		/// Returns _istr.fail();
 
 	bool bad();
 		/// Returns _istr.bad();
-	
+
 	bool eof();
 		/// Returns _istr.eof();
 
 	std::istream& stream() const;
 		/// Returns the underlying stream.
-		
+
 	StreamByteOrder byteOrder() const;
 		/// Returns the byte-order used by the reader, which is
 		/// either BIG_ENDIAN_BYTE_ORDER or LITTLE_ENDIAN_BYTE_ORDER.
@@ -146,42 +149,6 @@ public:
 		/// Returns the number of available bytes in the stream.
 
 private:
-
-#ifdef POCO_OS_FAMILY_WINDOWS
-#pragma warning(push)
-#pragma warning(disable : 4800) // forcing value to bool 'true' or 'false' (performance warning)
-#endif
-
-	template<typename T>
-	BinaryReader& read(T& value, bool flipBytes)
-	{
-		_istr.read((char*) &value, sizeof(value));
-		if (flipBytes) value = static_cast<T>(ByteOrder::flipBytes(value));
-		return *this;
-	}
-
-#ifdef POCO_OS_FAMILY_WINDOWS
-#pragma warning(pop)
-#endif
-
-	template<typename T>
-	void read7BitEncoded(T& value)
-	{
-		char c;
-		value = 0;
-		int s = 0;
-		do
-		{
-			c = 0;
-			_istr.read(&c, 1);
-			T x = (c & 0x7F);
-			x <<= s;
-			value += x;
-			s += 7;
-		}
-		while (c & 0x80);
-	}
-
 	std::istream&  _istr;
 	bool           _flipBytes;
 	TextConverter* _pTextConverter;
@@ -193,17 +160,17 @@ class BasicMemoryBinaryReader : public BinaryReader
 	/// A convenient wrapper for using Buffer and MemoryStream with BinaryReader.
 {
 public:
-	BasicMemoryBinaryReader(const Buffer<T>& dataBuffer, StreamByteOrder order = NATIVE_BYTE_ORDER):
-		BinaryReader(_istr, order),
-		_data(dataBuffer),
-		_istr(dataBuffer.begin(), dataBuffer.capacity())
+	BasicMemoryBinaryReader(const Buffer<T>& data, StreamByteOrder byteOrder = NATIVE_BYTE_ORDER):
+		BinaryReader(_istr, byteOrder),
+		_data(data),
+		_istr(data.begin(), data.capacity())
 	{
 	}
 
-	BasicMemoryBinaryReader(const Buffer<T>& dataBuffer, TextEncoding& encoding, StreamByteOrder order = NATIVE_BYTE_ORDER):
-		BinaryReader(_istr, encoding, order),
-		_data(dataBuffer),
-		_istr(dataBuffer.begin(), dataBuffer.capacity())
+	BasicMemoryBinaryReader(const Buffer<T>& data, TextEncoding& encoding, StreamByteOrder byteOrder = NATIVE_BYTE_ORDER):
+		BinaryReader(_istr, encoding, byteOrder),
+		_data(data),
+		_istr(data.begin(), data.capacity())
 	{
 	}
 

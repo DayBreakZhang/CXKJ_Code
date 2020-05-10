@@ -3,22 +3,55 @@
 //
 
 
-#include "Poco/CppUnit/TextTestResult.h"
-#include "Poco/CppUnit/CppUnitException.h"
-#include "Poco/CppUnit/Test.h"
-#include "Poco/CppUnit/estring.h"
+#include "CppUnit/TextTestResult.h"
+#include "CppUnit/CppUnitException.h"
+#include "CppUnit/Test.h"
+#include "CppUnit/estring.h"
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <iomanip>
 #include <cstdlib>
 #include <cctype>
+#include <exception>
 
 
 namespace CppUnit {
 
 
-TextTestResult::TextTestResult():
+TextTestResult::TextTestResult() :
 	_ostr(std::cout)
 {
+}
+
+
+TextTestResult::TextTestResult(const std::string& ignore):
+	_ostr(std::cout)
+{
+	if (!ignore.empty())
+	{
+		try
+		{
+			std::ifstream ifs(ignore);
+			if (ifs.is_open())
+			{
+				char line[256];
+				while (ifs.getline(line, sizeof(line)))
+				{
+					if (line[0] == '#')
+						continue;
+					std::string ignored(line);
+					ignoring(ignored);
+				}
+				ifs.close();
+			}
+		}
+		catch (std::exception& e)
+		{
+			std::cout << e.what() << std::endl;
+		}
+
+	}
 	setup();
 }
 
@@ -26,33 +59,59 @@ TextTestResult::TextTestResult():
 TextTestResult::TextTestResult(std::ostream& ostr):
 	_ostr(ostr)
 {
+}
+
+
+TextTestResult::TextTestResult(std::ostream& ostr, const std::string& ignore) :
+	_ostr(ostr)
+{
+	if (!ignore.empty())
+	{
+		std::ifstream ifs(ignore);
+		if (ifs.is_open())
+		{
+			char line[256];
+			while (ifs.getline(line, sizeof(line)))
+			{
+				if (line[0] == '#')
+					continue;
+				std::string ignored(line);
+				ignoring(ignored);
+			}
+			ifs.close();
+		}
+	}
 	setup();
+}
+
+
+void TextTestResult::ignoring(const std::string ignore)
+{
+	std::string::const_iterator it = ignore.begin();
+	std::string::const_iterator end = ignore.end();
+	for (;;)
+	{
+		while (it != end && (std::isspace(*it) || *it == '"' || *it == ',' || *it == '\'')) ++it;
+		if (it == end)
+			break;
+
+		std::string test;
+		while (it != end && *it != ',' && *it != '"' && *it != '\'') test += *it++;
+		if (!test.empty()) _ignored.insert(test.erase(test.find_last_not_of(" \n\r\t") + 1));
+	}
 }
 
 
 void TextTestResult::setup()
 {
 #if !defined(_WIN32_WCE)
-	const char* ignore = std::getenv("CPPUNIT_IGNORE");
-	const char* verbose = std::getenv("CPPUNIT_VERBOSE");
-	if (ignore)
+	const char* env = std::getenv("CPPUNIT_IGNORE");
+	if (env)
 	{
-		std::string ignored = ignore;
-		std::string::const_iterator it = ignored.begin();
-		std::string::const_iterator end = ignored.end();
-		for (;;)
-		{
-			while (it != end && (std::isspace(*it) || *it == '"' || *it == ',' || *it == '\'')) ++it;
-			if (it == end)
-				break;
-
-			std::string test;
-			while (it != end && *it != ',' && *it != '"' && *it != '\'') test += *it++;
-			if (!test.empty()) _ignored.insert(test);
-			if (verbose)
-				_ostr << "ignored: " << test << std::endl;
-		}
+		std::string ignored = env;
+		ignoring(ignored);
 	}
+
 #endif
 }
 
@@ -88,7 +147,7 @@ void TextTestResult::addFailure(Test* test, CppUnitException* e)
 void TextTestResult::startTest(Test* test)
 {
 	TestResult::startTest(test);
-	_ostr << "\n" << shortName(test->toString()) << ": ";
+	_ostr << "\n" << shortName(test->toString()) << ": " << std::flush;
 }
 
 
@@ -133,7 +192,7 @@ void TextTestResult::printErrors(std::ostream& stream)
 					stream << " data line " << e->data1LineNumber();
 				}
 			}
-			stream << "\n";
+			stream << std::endl;
 			i++;
 		}
 	}
@@ -182,7 +241,7 @@ void TextTestResult::printFailures(std::ostream& stream)
 					stream << " data line " << e->data1LineNumber();
 				}
 			}
-			stream << "\n";
+			stream << std::endl;
 			i++;
 		}
 	}
@@ -205,7 +264,7 @@ void TextTestResult::printHeader(std::ostream& stream)
 		          << runTests() << " tests)"
 		          << std::endl;
 	else
-		stream << "!!!FAILURES!!!" << std::endl
+		stream << "!!!FAILURES!!!" << "\n"
 		          << "Runs: "
 		          << runTests ()
 		          << "   Failures: "

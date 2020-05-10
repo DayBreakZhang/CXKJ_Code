@@ -42,7 +42,7 @@ void WindowsConsoleChannel::log(const Message& msg)
 {
 	std::string text = msg.getText();
 	text += "\r\n";
-
+	
 	if (_isFile)
 	{
 		DWORD written;

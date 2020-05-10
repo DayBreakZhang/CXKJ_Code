@@ -9,8 +9,8 @@
 
 
 #include "ExpireLRUCacheTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Exception.h"
 #include "Poco/ExpireLRUCache.h"
 #include "Poco/AccessExpireLRUCache.h"
@@ -26,7 +26,7 @@ using namespace Poco;
 #define DURWAIT  300
 
 
-ExpireLRUCacheTest::ExpireLRUCacheTest(const std::string& rName): CppUnit::TestCase(rName)
+ExpireLRUCacheTest::ExpireLRUCacheTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -93,7 +93,7 @@ void ExpireLRUCacheTest::testExpireN()
 	assertTrue (aCache.has(3));
 	tmp = aCache.get(1);
 	SharedPtr<int> tmp2 = aCache.get(3);
-	assertTrue (*tmp == 2);
+	assertTrue (*tmp == 2); 
 	assertTrue (*tmp2 == 4);
 
 	Thread::sleep(DURHALFSLEEP+25); //3|1
@@ -303,6 +303,20 @@ void ExpireLRUCacheTest::testDuplicateAdd()
 }
 
 
+void ExpireLRUCacheTest::testAccessExpireGet()
+{
+	ExpireLRUCache<int, int> aCache(3, DURSLEEP);
+	aCache.add(1, 2); // 1
+	assertTrue (aCache.has(1));
+	SharedPtr<int> tmp = aCache.get(1);
+	assertTrue (!tmp.isNull());
+	assertTrue (*tmp == 2);
+	Thread::sleep(DURWAIT);
+	tmp = aCache.get(1);
+	assertTrue (tmp.isNull());
+}
+
+
 void ExpireLRUCacheTest::setUp()
 {
 }
@@ -326,6 +340,7 @@ CppUnit::Test* ExpireLRUCacheTest::suite()
 	CppUnit_addTest(pSuite, ExpireLRUCacheTest, testCacheSize2);
 	CppUnit_addTest(pSuite, ExpireLRUCacheTest, testCacheSizeN);
 	CppUnit_addTest(pSuite, ExpireLRUCacheTest, testDuplicateAdd);
+	CppUnit_addTest(pSuite, ExpireLRUCacheTest, testAccessExpireGet);
 
 	return pSuite;
 }

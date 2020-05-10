@@ -21,8 +21,19 @@
 #include "Poco/Foundation.h"
 #include "Poco/Event.h"
 #include "Poco/Mutex.h"
-#include "Poco/Environment.h"
-#include "Poco/Thread_STD.h"
+
+
+#if defined(POCO_OS_FAMILY_WINDOWS)
+#if defined(_WIN32_WCE)
+#include "Poco/Thread_WINCE.h"
+#else
+#include "Poco/Thread_WIN32.h"
+#endif
+#elif defined(POCO_VXWORKS)
+#include "Poco/Thread_VX.h"
+#else
+#include "Poco/Thread_POSIX.h"
+#endif
 
 
 namespace Poco {
@@ -97,7 +108,7 @@ public:
 	void setOSPriority(int prio, int policy = POLICY_DEFAULT);
 		/// Sets the thread's priority, using an operating system specific
 		/// priority value. Use getMinOSPriority() and getMaxOSPriority() to
-		/// obtain minimum and maximum priority values. Additionally,
+		/// obtain mininum and maximum priority values. Additionally,
 		/// a scheduling policy can be specified. The policy is currently
 		/// only used on POSIX platforms where the values SCHED_OTHER (default),
 		/// SCHED_FIFO and SCHED_RR are supported.
@@ -122,17 +133,6 @@ public:
 		/// Typically, the real stack size is rounded up to the nearest
 		/// page size multiple.
 
-	void setAffinity(int cpu);
-		/// Binds the thread to run only on the CPU core with the
-		/// given index.
-		///
-		/// Does nothing if the system does not support CPU affinity for
-		/// threads.
-
-	int getAffinity() const;
-		/// Returns the index of the CPU core this thread has been bound to,
-		/// or -1 if the thread has not been bound to a CPU.
-
 	int getStackSize() const;
 		/// Returns the thread's stack size in bytes.
 		/// If the default stack size is used, 0 is returned.
@@ -144,14 +144,27 @@ public:
 		/// valid during the entire lifetime of the thread, as
 		/// only a reference to it is stored internally.
 
+	void start(Poco::SharedPtr<Runnable> pTarget);
+		/// Starts the thread with the given target.
+		///
+		/// The Thread ensures that the given target stays
+		/// alive while the thread is running.
+
 	void start(Callable target, void* pData = 0);
 		/// Starts the thread with the given target and parameter.
 
 	template <class Functor>
-	void startFunc(Functor fn)
+	void startFunc(const Functor& fn)
 		/// Starts the thread with the given functor object or lambda.
 	{
 		startImpl(new FunctorRunnable<Functor>(fn));
+	}
+
+	template <class Functor>
+	void startFunc(Functor&& fn)
+		/// Starts the thread with the given functor object or lambda.
+	{
+		startImpl(new FunctorRunnable<Functor>(std::move(fn)));
 	}
 
 	void join();
@@ -211,11 +224,8 @@ public:
 		/// Returns the Thread object for the currently active thread.
 		/// If the current thread is the main thread, 0 is returned.
 
-	static TID currentTid();
-		/// Returns the native thread ID for the current thread.
-
-	static long currentOsTid();
-		/// Returns the operating system specific thread ID for the current thread.
+ 	static TID currentTid();
+ 		/// Returns the native thread ID for the current thread.
 
 protected:
 	ThreadLocalStorage& tls();
@@ -236,6 +246,11 @@ protected:
 	public:
 		FunctorRunnable(const Functor& functor):
 			_functor(functor)
+		{
+		}
+
+		FunctorRunnable(Functor&& functor):
+			_functor(std::move(functor))
 		{
 		}
 
@@ -352,18 +367,6 @@ inline void Thread::setStackSize(int size)
 }
 
 
-inline void Thread::setAffinity(int cpu)
-{
-	setAffinityImpl(cpu);
-}
-
-
-inline int Thread::getAffinity() const
-{
-	return getAffinityImpl();
-}
-
-
 inline int Thread::getStackSize() const
 {
 	return getStackSizeImpl();
@@ -373,12 +376,6 @@ inline int Thread::getStackSize() const
 inline Thread::TID Thread::currentTid()
 {
 	return currentTidImpl();
-}
-
-
-inline long Thread::currentOsTid()
-{
-	return currentOsTidImpl();
 }
 
 

@@ -108,7 +108,7 @@ HTTPResponse::HTTPResponse():
 {
 }
 
-	
+
 HTTPResponse::HTTPResponse(HTTPStatus status, const std::string& reason):
 	_status(status),
 	_reason(reason)
@@ -116,7 +116,7 @@ HTTPResponse::HTTPResponse(HTTPStatus status, const std::string& reason):
 }
 
 
-	
+
 HTTPResponse::HTTPResponse(const std::string& version, HTTPStatus status, const std::string& reason):
 	HTTPMessage(version),
 	_status(status),
@@ -124,7 +124,7 @@ HTTPResponse::HTTPResponse(const std::string& version, HTTPStatus status, const 
 {
 }
 
-	
+
 HTTPResponse::HTTPResponse(HTTPStatus status):
 	_status(status),
 	_reason(getReasonForStatus(status))
@@ -140,8 +140,28 @@ HTTPResponse::HTTPResponse(const std::string& version, HTTPStatus status):
 }
 
 
+HTTPResponse::HTTPResponse(const HTTPResponse& other):
+	HTTPMessage(other),
+	_status(other._status),
+	_reason(other._reason)
+{
+}
+
+
 HTTPResponse::~HTTPResponse()
 {
+}
+
+
+HTTPResponse& HTTPResponse::operator = (const HTTPResponse& other)
+{
+	if (this != &other)
+	{
+		HTTPMessage::operator = (other);
+		_status = other._status;
+		_reason = other._reason;
+	}
+	return *this;
 }
 
 
@@ -155,8 +175,8 @@ void HTTPResponse::setStatus(const std::string& status)
 {
 	setStatus((HTTPStatus) NumberParser::parse(status));
 }
-	
-	
+
+
 void HTTPResponse::setReason(const std::string& reason)
 {
 	_reason = reason;
@@ -169,7 +189,7 @@ void HTTPResponse::setStatusAndReason(HTTPStatus status, const std::string& reas
 	_reason = reason;
 }
 
-	
+
 void HTTPResponse::setStatusAndReason(HTTPStatus status)
 {
 	setStatusAndReason(status, getReasonForStatus(status));
@@ -181,7 +201,7 @@ void HTTPResponse::setDate(const Poco::Timestamp& dateTime)
 	set(DATE, DateTimeFormatter::format(dateTime, DateTimeFormat::HTTP_FORMAT));
 }
 
-	
+
 Poco::Timestamp HTTPResponse::getDate() const
 {
 	const std::string& dateTime = get(DATE);
@@ -225,7 +245,7 @@ void HTTPResponse::read(std::istream& istr)
 	std::string version;
 	std::string status;
 	std::string reason;
-	
+
 	int ch =  istr.get();
 	if (istr.bad()) throw NetException("Error reading HTTP response header");
 	if (ch == eof) throw NoMessageException();
@@ -267,7 +287,7 @@ const std::string& HTTPResponse::getReasonForStatus(HTTPStatus status)
 		return HTTP_REASON_CREATED;
 	case HTTP_ACCEPTED:
 		return HTTP_REASON_ACCEPTED;
-	case HTTP_NONAUTHORITATIVE:	
+	case HTTP_NONAUTHORITATIVE:
 		return HTTP_REASON_NONAUTHORITATIVE;
 	case HTTP_NO_CONTENT:
 		return HTTP_REASON_NO_CONTENT;

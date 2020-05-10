@@ -45,7 +45,7 @@ public:
 		REDIS_ERROR          /// Redis Error
 	};
 
-	typedef SharedPtr<RedisType> Ptr;
+	using Ptr = SharedPtr<RedisType>;
 
 	RedisType();
 		/// Creates the RedisType.
@@ -75,7 +75,7 @@ public:
 		/// Reads the value from the stream.
 
 	virtual std::string toString() const = 0;
-		/// Converts the value to a RESP (Redis Serialization Protocol) string.
+		/// Converts the value to a RESP (REdis Serialization Protocol) string.
 
 	static RedisType::Ptr createRedisType(char marker);
 		/// Create a Redis type based on the marker:
@@ -174,9 +174,9 @@ struct RedisTypeTraits<std::string>
 };
 
 
-typedef Nullable<std::string> BulkString;
+using BulkString = Nullable<std::string>;
 	/// A bulk string is a string that can contain a NULL value.
-	/// So, BulkString is a typedef for Nullable<std::string>.
+	/// So, BulkString is an alias for Nullable<std::string>.
 
 
 template<>
@@ -199,7 +199,7 @@ struct RedisTypeTraits<BulkString>
 		{
 			std::string s = value.value();
 			return marker
-				+ NumberFormatter::format(static_cast<Poco::UInt64>(s.length()))
+				+ NumberFormatter::format(s.length())
 				+ LineEnding::NEWLINE_CRLF
 				+ s
 				+ LineEnding::NEWLINE_CRLF;

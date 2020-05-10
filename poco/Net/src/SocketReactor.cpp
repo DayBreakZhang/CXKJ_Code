@@ -18,9 +18,7 @@
 #include "Poco/ErrorHandler.h"
 #include "Poco/Thread.h"
 #include "Poco/Exception.h"
-#ifdef max
-#undef max
-#endif
+
 
 using Poco::Exception;
 using Poco::ErrorHandler;
@@ -73,9 +71,7 @@ void SocketReactor::run()
 			if (!hasSocketHandlers())
 			{
 				onIdle();
-				Timespan::TimeDiff ms = _timeout.totalMilliseconds();
-				poco_assert_dbg(ms <= std::numeric_limits<long>::max());
-				Thread::trySleep(static_cast<long>(ms));
+				Thread::trySleep(static_cast<long>(_timeout.totalMilliseconds()));
 			}
 			else
 			{
@@ -122,11 +118,11 @@ bool SocketReactor::hasSocketHandlers()
 	if (!_pollSet.empty())
 	{
 		ScopedLock lock(_mutex);
-		for (EventHandlerMap::iterator it = _handlers.begin(); it != _handlers.end(); ++it)
+		for (auto& p: _handlers)
 		{
-			if (it->second->accepts(_pReadableNotification) ||
-				it->second->accepts(_pWritableNotification) ||
-				it->second->accepts(_pErrorNotification)) return true;
+			if (p.second->accepts(_pReadableNotification) ||
+				p.second->accepts(_pWritableNotification) ||
+				p.second->accepts(_pErrorNotification)) return true;
 		}
 	}
 

@@ -20,6 +20,7 @@
 
 #include "Poco/Net/Net.h"
 #include "Poco/Net/SocketDefs.h"
+#include "Poco/RefCountedObject.h"
 #include <vector>
 
 
@@ -28,10 +29,10 @@ namespace Net {
 namespace Impl {
 
 
-class IPAddressImpl
+class IPAddressImpl : public Poco::RefCountedObject
 {
 public:
-	typedef AddressFamily::Family Family;
+	using Family = AddressFamily::Family;
 	
 	virtual ~IPAddressImpl();
 

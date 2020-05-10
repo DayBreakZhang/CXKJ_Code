@@ -9,8 +9,8 @@
 
 
 #include "AnyTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Exception.h"
 #include "Poco/Any.h"
 #include "Poco/Bugcheck.h"
@@ -40,7 +40,7 @@ public:
 };
 
 
-AnyTest::AnyTest(const std::string& rName): CppUnit::TestCase(rName)
+AnyTest::AnyTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -227,7 +227,7 @@ void AnyTest::testInt()
 	std::string* s = AnyCast<std::string>(&a);
 	assertTrue (s == NULL);
 
-	int tmp = AnyCast<int>(a);
+	int POCO_UNUSED tmp = AnyCast<int>(a);
 	const Any c = a;
 	tmp = AnyCast<int>(a);
 }

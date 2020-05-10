@@ -9,8 +9,8 @@
 
 
 #include "ValidatorTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Util/RegExpValidator.h"
 #include "Poco/Util/IntValidator.h"
 #include "Poco/Util/Option.h"
@@ -52,7 +52,7 @@ void ValidatorTest::testRegExpValidator()
 	catch (InvalidArgumentException& exc)
 	{
 		std::string s(exc.message());
-		assertTrue (s.find("argument for option does not match regular expression [0-9]+") != std::string::npos);
+		assertTrue (s == "argument for option does not match regular expression [0-9]+");
 	}
 
 	try
@@ -63,7 +63,7 @@ void ValidatorTest::testRegExpValidator()
 	catch (InvalidArgumentException& exc)
 	{
 		std::string s(exc.message());
-		assertTrue (s.find("argument for option does not match regular expression [0-9]+") != std::string::npos);
+		assertTrue (s == "argument for option does not match regular expression [0-9]+");
 	}
 
 	try
@@ -74,7 +74,7 @@ void ValidatorTest::testRegExpValidator()
 	catch (InvalidArgumentException& exc)
 	{
 		std::string s(exc.message());
-		assertTrue (s.find("argument for option does not match regular expression [0-9]+") != std::string::npos);
+		assertTrue (s == "argument for option does not match regular expression [0-9]+");
 	}
 
 	try
@@ -85,7 +85,7 @@ void ValidatorTest::testRegExpValidator()
 	catch (InvalidArgumentException& exc)
 	{
 		std::string s(exc.message());
-		assertTrue (s.find("argument for option does not match regular expression [0-9]+") != std::string::npos);
+		assertTrue (s == "argument for option does not match regular expression [0-9]+");
 	}
 }
 
@@ -107,7 +107,7 @@ void ValidatorTest::testIntValidator()
 	catch (InvalidArgumentException& exc)
 	{
 		std::string s(exc.message());
-		assertTrue (s.find("argument for option must be in range 0 to 100") != std::string::npos);
+		assertTrue (s == "argument for option must be in range 0 to 100");
 	}
 
 	try
@@ -118,7 +118,7 @@ void ValidatorTest::testIntValidator()
 	catch (InvalidArgumentException& exc)
 	{
 		std::string s(exc.message());
-		assertTrue (s.find("argument for option must be in range 0 to 100") != std::string::npos);
+		assertTrue (s == "argument for option must be in range 0 to 100");
 	}
 
 	try
@@ -129,7 +129,7 @@ void ValidatorTest::testIntValidator()
 	catch (InvalidArgumentException& exc)
 	{
 		std::string s(exc.message());
-		assertTrue (s.find("argument for option must be an integer") != std::string::npos);
+		assertTrue (s == "argument for option must be an integer");
 	}
 }
 

@@ -9,8 +9,8 @@
 
 
 #include "SystemConfigurationTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Util/SystemConfiguration.h"
 #include "Poco/AutoPtr.h"
 #include "Poco/Exception.h"
@@ -82,11 +82,10 @@ void SystemConfigurationTest::testKeys()
 
 	pConf->keys("system", keys);
 #if defined(POCO_VXWORKS)
-	assertTrue (keys.size() == 14);
+	assertTrue (keys.size() == 10);
 #else
-	assertTrue (keys.size() == 15);
+	assertTrue (keys.size() == 16);
 #endif
-
 	assertTrue (std::find(keys.begin(), keys.end(), "osName") != keys.end());
 	assertTrue (std::find(keys.begin(), keys.end(), "osVersion") != keys.end());
 	assertTrue (std::find(keys.begin(), keys.end(), "osArchitecture") != keys.end());
@@ -98,7 +97,6 @@ void SystemConfigurationTest::testKeys()
 	assertTrue (std::find(keys.begin(), keys.end(), "cacheHomeDir") != keys.end());
 	assertTrue (std::find(keys.begin(), keys.end(), "dataHomeDir") != keys.end());
 	assertTrue (std::find(keys.begin(), keys.end(), "tempDir") != keys.end());
-	assertTrue (std::find(keys.begin(), keys.end(), "configDir") != keys.end());
 	assertTrue (std::find(keys.begin(), keys.end(), "dateTime") != keys.end());
 #if !defined(POCO_VXWORKS)
 	assertTrue (std::find(keys.begin(), keys.end(), "pid") != keys.end());

@@ -9,8 +9,8 @@
 
 
 #include "NodeAppenderTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/DOM/NodeAppender.h"
 #include "Poco/DOM/Element.h"
 #include "Poco/DOM/Document.h"

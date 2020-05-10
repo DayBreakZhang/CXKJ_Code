@@ -15,15 +15,10 @@
 
 
 #include "Poco/Crypto/Crypto.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 #include "Poco/Crypto/PKCS12Container.h"
 #include "Poco/Crypto/X509Certificate.h"
 
-namespace Poco {
-namespace Crypto {
-	class PKCS12Container;
-}
-}
 
 class PKCS12ContainerTest: public CppUnit::TestCase
 {

@@ -63,7 +63,7 @@ class TimeRequestHandler: public HTTPRequestHandler
 	/// Return a HTML document with the current date and time.
 {
 public:
-	TimeRequestHandler(const std::string& format):
+	TimeRequestHandler(const std::string& format): 
 		_format(format)
 	{
 	}
@@ -76,7 +76,7 @@ public:
 		SecureStreamSocket socket = static_cast<HTTPServerRequestImpl&>(request).socket();
 		if (socket.havePeerCertificate())
 		{
-			auto cert = socket.peerCertificate();
+			X509Certificate cert = socket.peerCertificate();
 			app.logger().information("Client certificate: " + cert.subjectName());
 		}
 		else

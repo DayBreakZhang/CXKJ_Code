@@ -36,7 +36,7 @@ class Foundation_API FormattingChannel: public Channel
 	/// to the destination channel.
 {
 public:
-	typedef AutoPtr<FormattingChannel> Ptr;
+	using Ptr = AutoPtr<FormattingChannel>;
 
 	FormattingChannel();
 		/// Creates a FormattingChannel.

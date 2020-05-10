@@ -56,7 +56,7 @@ int ICMPClient::ping(const std::string& address, int repeat) const
 }
 
 
-int ICMPClient::ping(const SocketAddress& address, int repeat) const
+int ICMPClient::ping(SocketAddress& address, int repeat) const
 {
 	if (repeat <= 0) return 0;
 
@@ -72,10 +72,10 @@ int ICMPClient::ping(const SocketAddress& address, int repeat) const
 			int sent = icmpSocket.sendTo(address);
 			if (icmpSocket.packetSize() == sent)
 			{
-				SocketAddress responseAddress(address);
+				SocketAddress requestAddress(address);
 				++eventArgs;
-				int t = icmpSocket.receiveFrom(responseAddress);
-				poco_assert (address.host() == responseAddress.host());
+				int t = icmpSocket.receiveFrom(address);
+				poco_assert (address.host() == requestAddress.host());
 				eventArgs.setReplyTime(i, t);
 				pingReply.notify(this, eventArgs);
 			}
@@ -121,7 +121,7 @@ int ICMPClient::pingIPv4(const std::string& address, int repeat,
 }
 
 
-int ICMPClient::ping(const SocketAddress& address,
+int ICMPClient::ping(SocketAddress& address,
 	IPAddress::Family family, int repeat,
 	int dataSize, int ttl, int timeout)
 {
@@ -134,11 +134,11 @@ int ICMPClient::ping(const SocketAddress& address,
 	{
 		try
 		{
+			SocketAddress requestAddress(address);
 			if (icmpSocket.sendTo(address) == icmpSocket.packetSize())
 			{
-				SocketAddress responseAddress(address);
-				icmpSocket.receiveFrom(responseAddress);
-				poco_assert (address.host() == responseAddress.host());
+				icmpSocket.receiveFrom(address);
+				poco_assert (address.host() == requestAddress.host());
 				++received;
 			}
 		}

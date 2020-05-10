@@ -10,8 +10,8 @@
 
 #include "PriorityEventTest.h"
 #include "DummyDelegate.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/PriorityDelegate.h"
 #include "Poco/PriorityExpire.h"
 #include "Poco/Thread.h"
@@ -24,7 +24,7 @@ using namespace Poco;
 #define LARGEINC 100
 
 
-PriorityEventTest::PriorityEventTest(const std::string& rName): CppUnit::TestCase(rName)
+PriorityEventTest::PriorityEventTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -486,7 +486,7 @@ void PriorityEventTest::setUp()
 {
 	_count = 0;
 	// must clear events, otherwise repeating test executions will fail
-	// because tests are only created once, only setup is called before
+	// because tests are only created once, only setup is called before 
 	// each test run
 	Void.clear();
 	Simple.clear();

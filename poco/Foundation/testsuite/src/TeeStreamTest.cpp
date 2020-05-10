@@ -9,8 +9,8 @@
 
 
 #include "TeeStreamTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/TeeStream.h"
 #include <sstream>
 
@@ -19,7 +19,7 @@ using Poco::TeeInputStream;
 using Poco::TeeOutputStream;
 
 
-TeeStreamTest::TeeStreamTest(const std::string& rName): CppUnit::TestCase(rName)
+TeeStreamTest::TeeStreamTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 

@@ -1,7 +1,11 @@
 //
 // AutoTransaction.h
 //
-// Forward for the AutoTransaction class header.
+// Library: Data
+// Package: DataCore
+// Module:  AutoTransaction
+//
+// Forward header for the Transaction class.
 //
 // Copyright (c) 2006, Applied Informatics Software Engineering GmbH.
 // and Contributors.
@@ -9,5 +13,23 @@
 // SPDX-License-Identifier:	BSL-1.0
 //
 
-#include "Poco/Data/Data.h"
-#include "Poco/SQL/AutoTransaction.h"
+
+
+#ifndef Data_AutoTransaction_INCLUDED
+#define Data_AutoTransaction_INCLUDED
+
+
+#include "Poco/Data/Transaction.h"
+
+
+namespace Poco {
+namespace Data {
+
+
+using AutoTransaction = Transaction;
+
+
+} } // namespace Poco::Data
+
+
+#endif // Data_AutoTransaction_INCLUDED

@@ -1,17 +1,6 @@
 //
 // Table.h
 //
-// Library: PDF
-// Package: PDFCore
-// Module:  Table
-//
-// Definition of the Table class.
-//
-// Copyright (c) 2006, Applied Informatics Software Engineering GmbH.
-// and Contributors.
-//
-// SPDX-License-Identifier:	BSL-1.0
-//
 
 
 #ifndef PDF_Table_INCLUDED

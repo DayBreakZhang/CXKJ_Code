@@ -21,7 +21,7 @@
 #if defined(_WIN32_WCE)
 #include "File_WINCE.cpp"
 #else
-#include "File_WIN32.cpp"
+#include "File_WIN32U.cpp"
 #endif
 #elif defined(POCO_VXWORKS)
 #include "File_VX.cpp"
@@ -39,18 +39,17 @@ File::File()
 }
 
 
-File::File(const std::string& rPath): FileImpl(rPath)
-{
-	poco_assert(std::char_traits<char>::length(rPath.data()) == rPath.size());
-}
-
-
-File::File(const char* pPath): FileImpl(std::string(pPath))
+File::File(const std::string& path): FileImpl(path)
 {
 }
 
 
-File::File(const Path& rPath): FileImpl(rPath.toString())
+File::File(const char* path): FileImpl(std::string(path))
+{
+}
+
+
+File::File(const Path& path): FileImpl(path.toString())
 {
 }
 
@@ -72,25 +71,24 @@ File& File::operator = (const File& file)
 }
 
 
-File& File::operator = (const std::string& rPath)
+File& File::operator = (const std::string& path)
 {
-	poco_assert(std::char_traits<char>::length(rPath.data()) == rPath.size());
-	setPathImpl(rPath);
+	setPathImpl(path);
 	return *this;
 }
 
 
-File& File::operator = (const char* pPath)
+File& File::operator = (const char* path)
 {
-	poco_check_ptr (pPath);
-	setPathImpl(pPath);
+	poco_check_ptr (path);
+	setPathImpl(path);
 	return *this;
 }
 
 
-File& File::operator = (const Path& rPath)
+File& File::operator = (const Path& path)
 {
-	setPathImpl(rPath.toString());
+	setPathImpl(path.toString());
 	return *this;
 }
 
@@ -208,28 +206,26 @@ File& File::setExecutable(bool flag)
 }
 
 
-void File::copyTo(const std::string& rPath) const
+void File::copyTo(const std::string& path, int options) const
 {
-	poco_assert(std::char_traits<char>::length(rPath.data()) == rPath.size());
 	Path src(getPathImpl());
-	Path dest(rPath);
-	File destFile(rPath);
+	Path dest(path);
+	File destFile(path);
 	if ((destFile.exists() && destFile.isDirectory()) || dest.isDirectory())
 	{
 		dest.makeDirectory();
 		dest.setFileName(src.getFileName());
 	}
 	if (isDirectory())
-		copyDirectory(dest.toString());
+		copyDirectory(dest.toString(), options);
 	else
-		copyToImpl(dest.toString());
+		copyToImpl(dest.toString(), options);
 }
 
 
-void File::copyDirectory(const std::string& rPath) const
+void File::copyDirectory(const std::string& path, int options) const
 {
-	poco_assert(std::char_traits<char>::length(rPath.data()) == rPath.size());
-	File target(rPath);
+	File target(path);
 	target.createDirectories();
 
 	Path src(getPathImpl());
@@ -238,31 +234,29 @@ void File::copyDirectory(const std::string& rPath) const
 	DirectoryIterator end;
 	for (; it != end; ++it)
 	{
-		it->copyTo(rPath);
+		it->copyTo(path, options);
 	}
 }
 
 
-void File::moveTo(const std::string& rPath)
+void File::moveTo(const std::string& path, int options)
 {
-	poco_assert(std::char_traits<char>::length(rPath.data()) == rPath.size());
-	copyTo(rPath);
+	copyTo(path, options);
 	remove(true);
-	setPathImpl(rPath);
+	setPathImpl(path);
 }
 
 
-void File::renameTo(const std::string& rPath)
+void File::renameTo(const std::string& path, int options)
 {
-	poco_assert(std::char_traits<char>::length(rPath.data()) == rPath.size());
-	renameToImpl(rPath);
-	setPathImpl(rPath);
+	renameToImpl(path, options);
+	setPathImpl(path);
 }
 
 
-void File::linkTo(const std::string& rPath, LinkType type) const
+void File::linkTo(const std::string& path, LinkType type) const
 {
-	linkToImpl(rPath, type);
+	linkToImpl(path, type);
 }
 
 
@@ -272,9 +266,9 @@ void File::remove(bool recursive)
 	{
 		std::vector<File> files;
 		list(files);
-		for (std::vector<File>::iterator it = files.begin(); it != files.end(); ++it)
+		for (auto& f: files)
 		{
-			it->remove(true);
+			f.remove(true);
 		}
 
 		// Note: On Windows, removing a directory may not succeed at first

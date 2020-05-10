@@ -67,23 +67,21 @@ Application::Application():
 	_initialized(false),
 	_unixOptions(true),
 	_pLogger(&Logger::get("ApplicationStartup")),
-	_stopOptionsProcessing(false),
-	_loadedConfigs(0)
+	_stopOptionsProcessing(false)
 {
 	setup();
 }
 
 
-Application::Application(int argc, char* pArgv[]):
+Application::Application(int argc, char* argv[]):
 	_pConfig(new LayeredConfiguration),
 	_initialized(false),
 	_unixOptions(true),
 	_pLogger(&Logger::get("ApplicationStartup")),
-	_stopOptionsProcessing(false),
-	_loadedConfigs(0)
+	_stopOptionsProcessing(false)
 {
 	setup();
-	init(argc, pArgv);
+	init(argc, argv);
 }
 
 
@@ -96,10 +94,10 @@ Application::~Application()
 void Application::setup()
 {
 	poco_assert (_pInstance == 0);
-
+	
 	_pConfig->add(new SystemConfiguration, PRIO_SYSTEM, false);
 	_pConfig->add(new MapConfiguration, PRIO_APPLICATION, true);
-
+	
 	addSubsystem(new LoggingSubsystem);
 	
 #if defined(POCO_OS_FAMILY_UNIX) && !defined(POCO_VXWORKS)
@@ -127,14 +125,14 @@ void Application::addSubsystem(Subsystem* pSubsystem)
 }
 
 
-void Application::init(int argc, char* pArgv[])
+void Application::init(int argc, char* argv[])
 {
-	setArgs(argc, pArgv);
+	setArgs(argc, argv);
 	init();
 }
 
 
-#if defined (POCO_OS_FAMILY_WINDOWS) && !defined(POCO_NO_WSTRING)
+#if defined(_WIN32)
 void Application::init(int argc, wchar_t* argv[])
 {
 	std::vector<std::string> args;
@@ -166,6 +164,7 @@ void Application::init()
 	_pConfig->setString("application.dir", appPath.parent().toString());
 	_pConfig->setString("application.configDir", Path::configHome() + appPath.getBaseName() + Path::separator());
 	_pConfig->setString("application.cacheDir", Path::cacheHome() + appPath.getBaseName() + Path::separator());
+	_pConfig->setString("application.tempDir", Path::tempHome() + appPath.getBaseName() + Path::separator());
 	_pConfig->setString("application.dataDir", Path::dataHome() + appPath.getBaseName() + Path::separator());
 	processOptions();
 }
@@ -179,10 +178,10 @@ const char* Application::name() const
 
 void Application::initialize(Application& self)
 {
-	for (SubsystemVec::iterator it = _subsystems.begin(); it != _subsystems.end(); ++it)
+	for (auto& pSub: _subsystems)
 	{
-		_pLogger->debug(std::string("Initializing subsystem: ") + (*it)->name());
-		(*it)->initialize(self);
+		_pLogger->debug(std::string("Initializing subsystem: ") + pSub->name());
+		pSub->initialize(self);
 	}
 	_initialized = true;
 }
@@ -192,10 +191,10 @@ void Application::uninitialize()
 {
 	if (_initialized)
 	{
-		for (SubsystemVec::reverse_iterator it = _subsystems.rbegin(); it != _subsystems.rend(); ++it)
+		for (auto& pSub: _subsystems)
 		{
-			_pLogger->debug(std::string("Uninitializing subsystem: ") + (*it)->name());
-			(*it)->uninitialize();
+			_pLogger->debug(std::string("Uninitializing subsystem: ") + pSub->name());
+			pSub->uninitialize();
 		}
 		_initialized = false;
 	}
@@ -204,10 +203,10 @@ void Application::uninitialize()
 
 void Application::reinitialize(Application& self)
 {
-	for (SubsystemVec::iterator it = _subsystems.begin(); it != _subsystems.end(); ++it)
+	for (auto& pSub: _subsystems)
 	{
-		_pLogger->debug(std::string("Re-initializing subsystem: ") + (*it)->name());
-		(*it)->reinitialize(self);
+		_pLogger->debug(std::string("Re-initializing subsystem: ") + pSub->name());
+		pSub->reinitialize(self);
 	}
 }
 
@@ -250,14 +249,13 @@ int Application::loadConfiguration(int priority)
 		++n;
 	}
 #endif
-	if (n > 0 && _loadedConfigs == 0)
+	if (n > 0)
 	{
 		if (!confPath.isAbsolute())
 			_pConfig->setString("application.configDir", confPath.absolute().parent().toString());
 		else
 			_pConfig->setString("application.configDir", confPath.parent().toString());
 	}
-	_loadedConfigs += n;
 	return n;
 }
 
@@ -295,14 +293,13 @@ void Application::loadConfiguration(const std::string& path, int priority)
 #endif
 	else throw Poco::InvalidArgumentException("Unsupported configuration file type", ext);
 
-	if (n > 0 && _loadedConfigs == 0)
+	if (n > 0 && !_pConfig->has("application.configDir"))
 	{
 		if (!confPath.isAbsolute())
 			_pConfig->setString("application.configDir", confPath.absolute().parent().toString());
 		else
 			_pConfig->setString("application.configDir", confPath.parent().toString());
 	}
-	_loadedConfigs += n;
 }
 
 
@@ -352,21 +349,21 @@ int Application::run()
 }
 
 
-int Application::main(const ArgVec& /*args*/)
+int Application::main(const ArgVec& args)
 {
 	return EXIT_OK;
 }
 
 
-void Application::setArgs(int argc, char* pArgv[])
+void Application::setArgs(int argc, char* argv[])
 {
-	_command = pArgv[0];
+	_command = argv[0];
 	_pConfig->setInt("application.argc", argc);
 	_unprocessedArgs.reserve(argc);
 	std::string argvKey = "application.argv[";
 	for (int i = 0; i < argc; ++i)
 	{
-		std::string arg(pArgv[i]);
+		std::string arg(argv[i]);
 		_pConfig->setString(argvKey + NumberFormatter::format(i) + "]", arg);
 		_unprocessedArgs.push_back(arg);
 	}
@@ -398,13 +395,13 @@ void Application::processOptions()
 	ArgVec::iterator it = _unprocessedArgs.begin();
 	while (it != _unprocessedArgs.end() && !_stopOptionsProcessing)
 	{
-		std::string argName;
+		std::string name;
 		std::string value;
-		if (processor.process(*it, argName, value))
+		if (processor.process(*it, name, value))
 		{
-			if (!argName.empty()) // "--" option to end options processing or deferred argument
+			if (!name.empty()) // "--" option to end options processing or deferred argument
 			{
-				handleOption(argName, value);
+				handleOption(name, value);
 			}
 			it = _unprocessedArgs.erase(it);
 		}
@@ -433,12 +430,11 @@ void Application::getApplicationPath(Poco::Path& appPath) const
 	}
 	else
 	{
-		if (!Environment::has("PATH") || !Path::find(Environment::get("PATH"), _command, appPath))
+		if (!Path::find(Environment::get("PATH"), _command, appPath))
 			appPath = Path(_workingDirAtLaunch, _command);
 		appPath.makeAbsolute();
 	}
 #elif defined(POCO_OS_FAMILY_WINDOWS)
-	#if !defined(POCO_NO_WSTRING)
 		wchar_t path[1024];
 		int n = GetModuleFileNameW(0, path, sizeof(path)/sizeof(wchar_t));
 		if (n > 0)
@@ -448,14 +444,6 @@ void Application::getApplicationPath(Poco::Path& appPath) const
 			appPath = p;
 		}
 		else throw SystemException("Cannot get application file name.");
-	#else
-		char path[1024];
-		int n = GetModuleFileNameA(0, path, sizeof(path));
-		if (n > 0)
-			appPath = path;
-		else
-			throw SystemException("Cannot get application file name.");
-	#endif
 #else
 	appPath = _command;
 #endif
@@ -531,18 +519,18 @@ bool Application::findAppConfigFile(const Path& basePath, const std::string& app
 }
 
 
-void Application::defineOptions(OptionSet& rOptions)
+void Application::defineOptions(OptionSet& options)
 {
-	for (SubsystemVec::iterator it = _subsystems.begin(); it != _subsystems.end(); ++it)
+	for (auto& pSub: _subsystems)
 	{
-		(*it)->defineOptions(rOptions);
+		pSub->defineOptions(options);
 	}
 }
 
 
-void Application::handleOption(const std::string& rName, const std::string& value)
+void Application::handleOption(const std::string& name, const std::string& value)
 {
-	const Option& option = _options.getOption(rName);
+	const Option& option = _options.getOption(name);
 	if (option.validator())
 	{
 		option.validator()->validate(option, value);
@@ -555,14 +543,14 @@ void Application::handleOption(const std::string& rName, const std::string& valu
 	}
 	if (option.callback())
 	{
-		option.callback()->invoke(rName, value);
+		option.callback()->invoke(name, value);
 	}
 }
 
 
-void Application::setLogger(Logger& rLogger)
+void Application::setLogger(Logger& logger)
 {
-	_pLogger = &rLogger;
+	_pLogger = &logger;
 }
 
 

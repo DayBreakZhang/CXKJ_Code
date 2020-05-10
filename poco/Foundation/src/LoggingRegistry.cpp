@@ -60,7 +60,7 @@ void LoggingRegistry::registerChannel(const std::string& name, Channel::Ptr pCha
 	_channelMap[name] = ChannelPtr(pChannel, true);
 }
 
-
+	
 void LoggingRegistry::registerFormatter(const std::string& name, Formatter::Ptr pFormatter)
 {
 	FastMutex::ScopedLock lock(_mutex);

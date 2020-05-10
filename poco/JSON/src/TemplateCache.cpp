@@ -13,7 +13,6 @@
 
 
 #include "Poco/File.h"
-#include "Poco/Format.h"
 #include "Poco/JSON/TemplateCache.h"
 
 
@@ -24,7 +23,7 @@ namespace JSON {
 TemplateCache* TemplateCache::_pInstance = 0;
 
 
-TemplateCache::TemplateCache()
+TemplateCache::TemplateCache(): _pLogger(0)
 {
 	setup();
 }
@@ -47,7 +46,7 @@ Template::Ptr TemplateCache::getTemplate(const Path& path)
 {
 	if (_pLogger)
 	{
-		_pLogger->trace("Trying to load %s", path.toString());
+		poco_trace_f1(*_pLogger, "Trying to load %s", path.toString());
 	}
 
 	Path templatePath = resolvePath(path);
@@ -55,7 +54,7 @@ Template::Ptr TemplateCache::getTemplate(const Path& path)
 	
 	if (_pLogger)
 	{
-		_pLogger->trace("Path resolved to %s", templatePathname);
+		poco_trace_f1(*_pLogger, "Path resolved to %s", templatePathname);
 	}
 	
 	File templateFile(templatePathname);
@@ -69,7 +68,7 @@ Template::Ptr TemplateCache::getTemplate(const Path& path)
 		{
 			if (_pLogger)
 			{
-				_pLogger->information("Loading template %s", templatePath.toString());
+				poco_information_f1(*_pLogger, "Loading template %s", templatePath.toString());
 			}
 
 			tpl = new Template(templatePath);
@@ -83,7 +82,7 @@ Template::Ptr TemplateCache::getTemplate(const Path& path)
 			{
 				if (_pLogger)
 				{
-					_pLogger->error("Template %s contains an error: %s", templatePath.toString(), jte.message());
+					poco_error_f2(*_pLogger, "Template %s contains an error: %s", templatePath.toString(), jte.message());
 				}
 			}
 		}
@@ -91,7 +90,7 @@ Template::Ptr TemplateCache::getTemplate(const Path& path)
 		{
 			if (_pLogger)
 			{
-				_pLogger->error("Template file %s doesn't exist", templatePath.toString());
+				poco_error_f1(*_pLogger, "Template file %s doesn't exist", templatePath.toString());
 			}
 			throw FileNotFoundException(templatePathname);
 		}
@@ -103,7 +102,7 @@ Template::Ptr TemplateCache::getTemplate(const Path& path)
 		{
 			if (_pLogger)
 			{
-				_pLogger->information("Reloading template %s", templatePath.toString());
+				poco_information_f1(*_pLogger, "Reloading template %s", templatePath.toString());
 			}
 
 			tpl = new Template(templatePath);
@@ -117,7 +116,7 @@ Template::Ptr TemplateCache::getTemplate(const Path& path)
 			{
 				if (_pLogger)
 				{
-					_pLogger->error("Template %s contains an error: %s", templatePath.toString(), jte.message());
+					poco_error_f2(*_pLogger, "Template %s contains an error: %s", templatePath.toString(), jte.message());
 				}
 			}
 		}
@@ -132,22 +131,22 @@ Path TemplateCache::resolvePath(const Path& path) const
 	if (path.isAbsolute())
 		return path;
 
-	for (std::vector<Path>::const_iterator it = _includePaths.begin(); it != _includePaths.end(); ++it)
+	for (const auto& p: _includePaths)
 	{
-		Path templatePath(*it, path);
+		Path templatePath(p, path);
 
 		File templateFile(templatePath);
 		if (templateFile.exists())
 		{
 			if (_pLogger)
 			{
-				_pLogger->trace("%s template file resolved to %s", path.toString(), templatePath.toString());
+				poco_trace_f2(*_pLogger, "%s template file resolved to %s", path.toString(), templatePath.toString());
 			}
 			return templatePath;
 		}
 		if (_pLogger)
 		{
-			_pLogger->trace("%s doesn't exist", templatePath.toString());
+			poco_trace_f1(*_pLogger, "%s doesn't exist", templatePath.toString());
 		}
 	}
 

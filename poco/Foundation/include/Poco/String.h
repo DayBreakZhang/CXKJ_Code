@@ -103,9 +103,11 @@ S& trimInPlace(S& str)
 	while (first <= last && Ascii::isSpace(str[first])) ++first;
 	while (last >= first && Ascii::isSpace(str[last])) --last;
 
-	str.resize(last + 1);
-	str.erase(0, first);
-
+	if (last >= 0)
+	{
+		str.resize(last + 1);
+		str.erase(0, first);
+	}
 	return str;
 }
 
@@ -403,7 +405,7 @@ S translateInPlace(S& str, const typename S::value_type* from, const typename S:
 	poco_check_ptr (to);
 	str = translate(str, S(from), S(to));
 #if defined(__SUNPRO_CC)
-	// Fix around the RVO bug in SunStudio 12.4
+// Fix around the RVO bug in SunStudio 12.4
 	S ret(str);
 	return ret;
 #else
@@ -686,7 +688,7 @@ struct i_char_traits : public std::char_traits<charT>
 };
 
 
-typedef std::basic_string<char, i_char_traits<char> > istring;
+typedef std::basic_string<char, i_char_traits<char>> istring;
 	/// Case-insensitive std::string counterpart.
 
 

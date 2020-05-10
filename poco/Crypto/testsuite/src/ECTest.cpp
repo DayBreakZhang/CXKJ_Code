@@ -10,8 +10,8 @@
 
 
 #include "ECTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Crypto/ECKey.h"
 #include "Poco/Crypto/ECDSADigestEngine.h"
 #include <openssl/pem.h>
@@ -30,15 +30,6 @@ ECTest::ECTest(const std::string& name): CppUnit::TestCase(name)
 
 ECTest::~ECTest()
 {
-}
-
-
-void ECTest::testCurveNIDName()
-{
-	std::string curveName = ECKey::getCurveName();
-	assertTrue (!curveName.empty());
-	assertTrue (ECKey::getCurveNID(curveName) != -1);
-	assertTrue (ECKey::hasCurve(curveName));
 }
 
 
@@ -137,7 +128,7 @@ void ECTest::testECDSASignSha256()
 			ECKey keyPub(&iPub);
 			ECDSADigestEngine eng2(keyPub, "SHA256");
 			eng2.update(msg.c_str(), static_cast<unsigned>(msg.length()));
-			assertTrue (eng2.verify(sig));
+			assertTrue(eng2.verify(sig));
 		}
 		else
 			std::cerr << "No elliptic curves found!" << std::endl;
@@ -200,7 +191,6 @@ CppUnit::Test* ECTest::suite()
 {
 	CppUnit::TestSuite* pSuite = new CppUnit::TestSuite("ECTest");
 
-	CppUnit_addTest(pSuite, ECTest, testCurveNIDName);
 	CppUnit_addTest(pSuite, ECTest, testECNewKeys);
 	CppUnit_addTest(pSuite, ECTest, testECNewKeysNoPassphrase);
 	CppUnit_addTest(pSuite, ECTest, testECDSASignSha256);

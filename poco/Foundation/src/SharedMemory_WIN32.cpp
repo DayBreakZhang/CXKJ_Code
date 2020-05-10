@@ -49,13 +49,12 @@ SharedMemoryImpl::SharedMemoryImpl(const std::string& name, std::size_t size, Sh
 			throw SystemException(format("Cannot create shared memory object %s [Error %d: %s]", _name, static_cast<int>(dwRetVal), Error::getMessage(dwRetVal)));
 
 		_memHandle = OpenFileMappingW(PAGE_READONLY, FALSE, utf16name.c_str());
-
 		if (!_memHandle)
 		{
 			dwRetVal = GetLastError();
 			throw SystemException(format("Cannot open shared memory object %s [Error %d: %s]", _name, static_cast<int>(dwRetVal), Error::getMessage(dwRetVal)));
 		}
-#endif
+#endif 
 	}
 	map();
 }

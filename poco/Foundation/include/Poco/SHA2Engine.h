@@ -19,11 +19,14 @@
 // SPDX-License-Identifier:	BSL-1.0
 //
 
+
 #ifndef Foundation_SHA2Engine_INCLUDED
 #define Foundation_SHA2Engine_INCLUDED
 
+
 #include "Poco/Foundation.h"
 #include "Poco/DigestEngine.h"
+
 
 namespace Poco {
 
@@ -41,9 +44,9 @@ public:
 		SHA_512 = 512
 	};
 
-	SHA2Engine(ALGORITHM algorithm = SHA_512);
+	SHA2Engine(ALGORITHM algorithm = SHA_256);
 	~SHA2Engine();
-		
+
 	std::size_t digestLength() const;
 	void reset();
 	const DigestEngine::Digest& digest();

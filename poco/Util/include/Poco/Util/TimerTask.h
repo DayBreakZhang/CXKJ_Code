@@ -37,11 +37,11 @@ class Util_API TimerTask: public Poco::RefCountedObject, public Poco::Runnable
 	/// function to implement the actual task logic.
 {
 public:
-	typedef Poco::AutoPtr<TimerTask> Ptr;
-	
+	using Ptr = Poco::AutoPtr<TimerTask>;
+
 	TimerTask();
 		/// Creates the TimerTask.
-		
+
 	void cancel();
 		/// Cancels the execution of the timer.
 		/// If the task has been scheduled for one-time execution and has
@@ -52,28 +52,54 @@ public:
 		///
 		/// Warning: A TimerTask that has been cancelled must not be scheduled again.
 		/// An attempt to do so results in a Poco::Util::IllegalStateException being thrown.
-	
+
 	bool isCancelled() const;
 		/// Returns true iff the TimerTask has been cancelled by a call
 		/// to cancel().
-	
+
 	Poco::Timestamp lastExecution() const;
 		/// Returns the time of the last execution of the timer task.
 		///
 		/// Returns 0 if the timer has never been executed.
-		
+
 protected:
 	~TimerTask();
 		/// Destroys the TimerTask.
-	
+
 private:
 	TimerTask(const TimerTask&);
 	TimerTask& operator = (const TimerTask&);
-	
+
 	Poco::Timestamp _lastExecution;
 	bool _isCancelled;
-	
+
 	friend class TaskNotification;
+};
+
+
+template <typename Fn>
+class TimerFunc: public TimerTask
+	/// A simple adapter that allows using a functor or lambda
+	/// with Poco::Util::Timer, used by timerFunc().
+{
+public:
+	explicit TimerFunc(const Fn& fn):
+		_fn(fn)
+	{
+	}
+
+	explicit TimerFunc(Fn&& fn):
+		_fn(std::move(fn))
+	{
+	}
+
+	void run()
+	{
+		_fn();
+	}
+
+private:
+	Fn _fn;
 };
 
 

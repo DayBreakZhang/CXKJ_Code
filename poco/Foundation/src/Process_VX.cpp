@@ -45,6 +45,12 @@ int ProcessHandleImpl::wait() const
 }
 
 
+int ProcessHandleImpl::tryWait() const
+{
+	throw Poco::NotImplementedException("Process::tryWait()");
+}
+
+
 //
 // ProcessImpl
 //

@@ -9,8 +9,8 @@
 
 
 #include "FormatTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Any.h"
 #include "Poco/Format.h"
 #include "Poco/Exception.h"
@@ -22,7 +22,7 @@ using Poco::Int64;
 using Poco::UInt64;
 
 
-FormatTest::FormatTest(const std::string& rName): CppUnit::TestCase(rName)
+FormatTest::FormatTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -87,7 +87,7 @@ void FormatTest::testInt()
 	assertTrue (s == "  42");
 	s = format("%04hu", hu);
 	assertTrue (s == "0042");
-
+	
 	s = format("%*hu", 4, hu);
 	assertTrue (s == "  42");
 	s = format("%0*hu", 4, hu);
@@ -126,7 +126,7 @@ void FormatTest::testInt()
 	assertTrue (s == "  42");
 	s = format("%04u", u);
 	assertTrue (s == "0042");
-
+	
 	s = format("%*u", 4, u);
 	assertTrue (s == "  42");
 	s = format("%0*u", 4, u);
@@ -152,7 +152,7 @@ void FormatTest::testInt()
 	assertTrue (s == "  42");
 	s = format("%04lu", ul);
 	assertTrue (s == "0042");
-
+	
 	s = format("%*lu", 4, ul);
 	assertTrue (s == "  42");
 	s = format("%0*lu", 4, ul);
@@ -165,7 +165,7 @@ void FormatTest::testInt()
 	assertTrue (s == "  42");
 	s = format("%04lx", xl);
 	assertTrue (s == "0042");
-
+	
 	s = format("%*lx", 4, xl);
 	assertTrue (s == "  42");
 	s = format("%0*lx", 4, xl);
@@ -178,7 +178,7 @@ void FormatTest::testInt()
 	assertTrue (s == "  42");
 	s = format("%04Ld", i64);
 	assertTrue (s == "0042");
-
+	
 	s = format("%*Ld", 4, i64);
 	assertTrue (s == "  42");
 	s = format("%0*Ld", 4, i64);
@@ -191,7 +191,7 @@ void FormatTest::testInt()
 	assertTrue (s == "  42");
 	s = format("%04Lu", ui64);
 	assertTrue (s == "0042");
-
+	
 	s = format("%*Lu", 4, ui64);
 	assertTrue (s == "  42");
 	s = format("%0*Lu", 4, ui64);
@@ -264,7 +264,7 @@ void FormatTest::testAnyInt()
 	char c = 42;
 	std::string s(format("%?i", c));
 	assertTrue (s == "42");
-
+	
 	c = 43;
 	s.clear();
 	format(s, "%?i", c);
@@ -340,7 +340,7 @@ void FormatTest::testFloatFix()
 	assertTrue (s == "  1.50");
 	s = format("%-6.2f", d);
 	assertTrue (s == "1.50  ");
-
+	
 	s = format("%*.*f", 6, 2, d);
 	assertTrue (s == "  1.50");
 	s = format("%-*.*f", 6,2, d);
@@ -431,6 +431,9 @@ void FormatTest::testMultiple()
 
 	s = format("%d%d%d%d%d%d", 1, 2, 3, 4, 5, 6);
 	assertTrue (s == "123456");
+
+	s = format("%d%d%d%d%d%d%d%d%d%d", 1, 2, 3, 4, 5, 6, 7, 8, 9, 0);
+	assertTrue (s == "1234567890");
 }
 
 

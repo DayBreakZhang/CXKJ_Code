@@ -11,7 +11,7 @@ every other Unix platform, as well as Cygwin and MinGW on Windows.
 Why GNU Make? Well, GNU Make is available virtually everywhere
 and it's usually readily available, such as on Linux and Mac OS X.
 Sure, there are more advanced build systems out there, but the
-philosophy for POCO is download -- compile -- go. Requiring the user
+philisophy for POCO is download -- compile -- go. Requiring the user
 to download and install another build tool just for getting
 POCO to work is unacceptable.
 
@@ -740,111 +740,56 @@ compiling in 32 bit mode.
 compiling in 64 bit mode.
 
 
-!LIBFLAGS
-
-<*LIBFLAGS*> specifies additional flags passed to the linker when building
-a static library.
-
-
-!LIBFLAGS32
-
-<*LIBFLAGS32*> specifies additional flags passed to the linker when building
-a static library if compiling in 32 bit mode.
-
-
-!LIBFLAGS64
-
-<*LIBFLAGS64*> specifies additional flags passed to the linker when building
-a static library if compiling in 64 bit mode.
-
-
-!SHLIBFLAGS
-
-<*SHLIBFLAGS*> specifies additional flags passed to the linker when building
-a shared library.
-
-
-!SHLIBFLAGS32
-
-<*SHLIBFLAGS32*> specifies additional flags passed to the linker when building
-a shared library if compiling in 32 bit mode.
-
-
-!SHLIBFLAGS64
-
-<*SHLIBFLAGS64*> specifies additional flags passed to the linker when building
-a shared library if compiling in 64 bit mode.
-
-
-!DYLIBFLAGS
-
-<*DYLIBFLAGS*> specifies additional flags passed to the linker when building
-a dynamically loadable shared library.
-
-
-!DYLIBFLAGS32
-
-<*DYLIBFLAGS32*> specifies additional flags passed to the linker when building
-a dynamically loadable shared library if compiling in 32 bit mode.
-
-
-!DYLIBFLAGS64
-
-<*DYLIBFLAGS64*> specifies additional flags passed to the linker when building
-a dynamically loadable shared library if compiling in 64 bit mode.
-
-
 !LINKFLAGS
 
-<*LINKFLAGS*> specifies additional flags passed to the linker when building
-an executable.
+<*LINKFLAGS*> specifies additional flags passed to the linker.
 
 
 !LINKFLAGS32
 
-<*LINKFLAGS32*> specifies additional flags passed to the linker when building
-an executable if compiling in 32 bit mode.
+<*LINKFLAGS32*> specifies additional flags passed to the linker if
+compiling in 32 bit mode.
 
 
 !LINKFLAGS64
 
-<*LINKFLAGS64*> specifies additional flags passed to the linker when building
-an executable if compiling in 64 bit mode.
+<*LINKFLAGS64*> specifies additional flags passed to the linker if
+compiling in 64 bit mode.
 
 
 !STATICOPT_CC
 
-<*STATICOPT_CC*> specifies additional flags passed to the C compiler
+<*STATICOPT_CC*> specifies additonal flags passed to the C compiler
 if compiling for static linking.
 
 
 !STATICOPT_CXX
 
-<*STATICOPT_CXX*> specifies additional flags passed to the C++ compiler if
+<*STATICOPT_CXX*> specifies additonal flags passed to the C++ compiler if
 compiling for static linking.
 
 
 !STATICOPT_LINK
 
-<*STATICOPT_LINK*> specifies additional flags passed to the linker for
+<*STATICOPT_LINK*> specifies additonal flags passed to the linker for
 static linking.
 
 
 !SHAREDOPT_CC
 
-<*SHAREDOPT_CC*> specifies additional flags passed to the C compiler
-for dynamic linking.
+<*SHAREDOPT_CC*> specifies additonal flags passed to the C compiler if
+compiling for dynamic linking.
 
 
 !SHAREDOPT_CXX
 
-<*SHAREDOPT_CXX*> specifies additional flags passed to the C++ compiler if
+<*SHAREDOPT_CXX*> specifies additonal flags passed to the C++ compiler if
 compiling for dynamic linking.
 
 
 !SHAREDOPT_LINK
 
-<*SHAREDOPT_LINK*> specifies additional flags passed to the linker for dynamic linking.
+<*SHAREDOPT_LINK*> specifies additonal flags passed to the linker for dynamic linking.
 
 
 !DEBUGOPT_CC

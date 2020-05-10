@@ -9,8 +9,8 @@
 
 
 #include "SyslogTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/RemoteSyslogChannel.h"
 #include "Poco/Net/RemoteSyslogListener.h"
 #include "Poco/Net/DNS.h"
@@ -27,11 +27,13 @@ class CachingChannel: public Poco::Channel
 	/// Caches the last n Messages in memory
 {
 public:
-	typedef Poco::AutoPtr<CachingChannel> Ptr;
 	typedef std::list<Poco::Message> Messages;
-
+	
 	CachingChannel(std::size_t n = 100);
 		/// Creates the CachingChannel. Caches n messages in memory
+
+	~CachingChannel();
+		/// Destroys the CachingChannel.
 
 	void log(const Poco::Message& msg);
 		/// Writes the log message to the cache
@@ -42,10 +44,6 @@ public:
 	std::size_t getMaxSize() const;
 
 	std::size_t getCurrentSize() const;
-
-protected:
-	~CachingChannel();
-		/// Destroys the CachingChannel.
 
 private:
 	CachingChannel(const CachingChannel&);
@@ -129,7 +127,7 @@ void SyslogTest::testListener()
 	channel->open();
 	Poco::AutoPtr<RemoteSyslogListener> listener = new RemoteSyslogListener(51400);
 	listener->open();
-	CachingChannel::Ptr pCL = new CachingChannel;
+	auto pCL = Poco::makeAuto<CachingChannel>();
 	listener->addChannel(pCL);
 	assertTrue (pCL->getCurrentSize() == 0);
 	Poco::Message msg("asource", "amessage", Poco::Message::PRIO_CRITICAL);
@@ -154,7 +152,7 @@ void SyslogTest::testChannelOpenClose()
 	channel->open();
 	Poco::AutoPtr<RemoteSyslogListener> listener = new RemoteSyslogListener(51400);
 	listener->open();
-	CachingChannel::Ptr pCL = new CachingChannel;
+	auto pCL = Poco::makeAuto<CachingChannel>();
 	listener->addChannel(pCL);
 
 	assertTrue (pCL->getCurrentSize() == 0);
@@ -194,7 +192,7 @@ void SyslogTest::testOldBSD()
 	channel->open();
 	Poco::AutoPtr<RemoteSyslogListener> listener = new RemoteSyslogListener(51400);
 	listener->open();
-	CachingChannel::Ptr pCL = new CachingChannel;
+	auto pCL = Poco::makeAuto<CachingChannel>();
 	listener->addChannel(pCL);
 	assertTrue (pCL->getCurrentSize() == 0);
 	Poco::Message msg("asource", "amessage", Poco::Message::PRIO_CRITICAL);
@@ -220,9 +218,9 @@ void SyslogTest::testStructuredData()
 	channel->open();
 	Poco::AutoPtr<RemoteSyslogListener> listener = new RemoteSyslogListener(51400);
 	listener->open();
-	CachingChannel::Ptr cl = new CachingChannel;
-	listener->addChannel(cl);
-	assertTrue (cl->getCurrentSize() == 0);
+	auto pCL = Poco::makeAuto<CachingChannel>();
+	listener->addChannel(pCL);
+	assertTrue (pCL->getCurrentSize() == 0);
 	Poco::Message msg1("asource", "amessage", Poco::Message::PRIO_CRITICAL);
 	msg1.set("structured-data", "[exampleSDID@32473 iut=\"3\" eventSource=\"Application\" eventID=\"1011\"]");
 	channel->log(msg1);
@@ -232,9 +230,9 @@ void SyslogTest::testStructuredData()
 	Poco::Thread::sleep(1000);
 	listener->close();
 	channel->close();
-	assertTrue (cl->getCurrentSize() == 2);
+	assertTrue (pCL->getCurrentSize() == 2);
 	std::vector<Poco::Message> msgs;
-	cl->getMessages(msgs, 0, 10);
+	pCL->getMessages(msgs, 0, 10);
 	assertTrue (msgs.size() == 2);
 
 	assertTrue (msgs[0].getSource() == "asource");

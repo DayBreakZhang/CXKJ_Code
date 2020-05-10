@@ -16,7 +16,7 @@
 
 #include "Poco/MongoDB/MongoDB.h"
 #include "Poco/MongoDB/Connection.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class MongoDBTest: public CppUnit::TestCase

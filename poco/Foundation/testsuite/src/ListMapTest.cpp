@@ -9,8 +9,8 @@
 
 
 #include "ListMapTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/ListMap.h"
 #include "Poco/Exception.h"
 #include <map>
@@ -19,7 +19,7 @@
 using Poco::ListMap;
 
 
-ListMapTest::ListMapTest(const std::string& rName): CppUnit::TestCase(rName)
+ListMapTest::ListMapTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -72,20 +72,20 @@ void ListMapTest::testInsert()
 
 void ListMapTest::testInsertOrder()
 {
-	const int N = 1000;
+	const int POCO_UNUSED N = 1000;
 
 	typedef ListMap<std::string, int> StrToIntMap;
 	StrToIntMap lm;
 
 	lm.insert(StrToIntMap::ValueType("foo", 42));
 	lm.insert(StrToIntMap::ValueType("bar", 43));
-	
+
 	StrToIntMap::Iterator it = lm.begin();
 	assertTrue (it != lm.end() && it->first == "foo" && it->second == 42);
-	
+
 	++it;
 	assertTrue (it != lm.end() && it->first == "bar" && it->second == 43);
-	
+
 	++it;
 	assertTrue (it == lm.end());
 
@@ -93,15 +93,15 @@ void ListMapTest::testInsertOrder()
 
  	it = lm.begin();
 	assertTrue (it != lm.end() && it->first == "foo" && it->second == 42);
-	
+
 	++it;
 	assertTrue (it != lm.end() && it->first == "foo" && it->second == 44);
 
 	++it;
 	assertTrue (it != lm.end() && it->first == "bar" && it->second == 43);
-	
+
 	++it;
-	assertTrue (it == lm.end());	
+	assertTrue (it == lm.end());	 
 }
 
 
@@ -213,16 +213,16 @@ void ListMapTest::testIntIndex()
 	hm[1] = 2;
 	hm[2] = 4;
 	hm[3] = 6;
-	
+
 	assertTrue (hm.size() == 3);
 	assertTrue (hm[1] == 2);
 	assertTrue (hm[2] == 4);
 	assertTrue (hm[3] == 6);
-	
+
 	try
 	{
 		const IntMap& im = hm;
-		int x = im[4];
+		int POCO_UNUSED x = im[4];
 		fail("no such key - must throw");
 	}
 	catch (Poco::NotFoundException&)

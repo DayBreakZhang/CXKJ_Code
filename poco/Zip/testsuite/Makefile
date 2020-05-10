@@ -11,6 +11,6 @@ objects = ZipTestSuite Driver \
 
 target         = testrunner
 target_version = 1
-target_libs    = PocoZip PocoFoundation PocoCppUnit
+target_libs    = PocoZip PocoFoundation CppUnit
 
 include $(POCO_BASE)/build/rules/exec

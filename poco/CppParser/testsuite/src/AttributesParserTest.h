@@ -15,7 +15,7 @@
 
 
 #include "Poco/CppParser/CppParser.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class AttributesParserTest: public CppUnit::TestCase

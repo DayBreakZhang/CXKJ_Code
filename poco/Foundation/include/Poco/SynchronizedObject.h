@@ -33,7 +33,7 @@ class Foundation_API SynchronizedObject
 	/// scenario.
 {
 public:
-	typedef Poco::ScopedLock<SynchronizedObject> ScopedLock;
+	using ScopedLock = Poco::ScopedLock<SynchronizedObject>;
 	
 	SynchronizedObject();
 		/// Creates the object.
@@ -55,8 +55,8 @@ public:
 		/// other threads.
 		
 	void notify() const;
-		/// Signals the object.
-		/// Exactly only one thread waiting for the object
+		/// Signals the object. 
+		/// Exactly only one thread waiting for the object 
 		/// can resume execution.
 
 	void wait() const;

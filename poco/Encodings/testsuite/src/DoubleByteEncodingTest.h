@@ -14,7 +14,7 @@
 #define DoubleByteEncodingTest_INCLUDED
 
 
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
 
 
 class DoubleByteEncodingTest: public CppUnit::TestCase

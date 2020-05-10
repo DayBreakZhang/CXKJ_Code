@@ -9,8 +9,8 @@
 
 
 #include "TextEncodingTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/TextEncoding.h"
 #include "Poco/Latin1Encoding.h"
 #include "Poco/Latin2Encoding.h"
@@ -24,7 +24,7 @@
 using namespace Poco;
 
 
-TextEncodingTest::TextEncodingTest(const std::string& rName): CppUnit::TestCase(rName)
+TextEncodingTest::TextEncodingTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -36,9 +36,6 @@ TextEncodingTest::~TextEncodingTest()
 
 void TextEncodingTest::testTextEncoding()
 {
-	TextEncoding& ascii = TextEncoding::byName("ASCII");
-	assertTrue (std::string("US-ASCII") == ascii.canonicalName());
-
 	TextEncoding& utf8 = TextEncoding::byName("utf8");
 	assertTrue (std::string("UTF-8") == utf8.canonicalName());
 	
@@ -94,44 +91,6 @@ void TextEncodingTest::testTextEncoding()
 }
 
 
-void TextEncodingTest::testTextEncodingManager()
-{
-	TextEncodingRegistry registry;
-
-	assertTrue (registry.has("us-ascii"));
-	assertTrue (registry.has("US-ASCII"));
-	assertTrue (registry.has("ascii"));
-	assertTrue (registry.has("ASCII"));
-
-	assertTrue (registry.has("utf-8"));
-	assertTrue (registry.has("UTF-8"));
-
-	assertTrue (registry.has("utf-16"));
-	assertTrue (registry.has("UTF-16"));
-
-	assertTrue (registry.has("utf-32"));
-	assertTrue (registry.has("UTF-32"));
-
-	assertTrue (registry.has("iso-8859-1"));
-	assertTrue (registry.has("ISO-8859-1"));
-
-	assertTrue (registry.has("iso-8859-2"));
-	assertTrue (registry.has("ISO-8859-2"));
-
-	assertTrue (registry.has("iso-8859-15"));
-	assertTrue (registry.has("ISO-8859-15"));
-
-	assertTrue (registry.has("windows-1250"));
-	assertTrue (registry.has("WINDOWS-1250"));
-
-	assertTrue (registry.has("windows-1251"));
-	assertTrue (registry.has("WINDOWS-1251"));
-
-	assertTrue (registry.has("windows-1252"));
-	assertTrue (registry.has("WINDOWS-1252"));
-}
-
-
 void TextEncodingTest::setUp()
 {
 }
@@ -147,7 +106,6 @@ CppUnit::Test* TextEncodingTest::suite()
 	CppUnit::TestSuite* pSuite = new CppUnit::TestSuite("TextEncodingTest");
 
 	CppUnit_addTest(pSuite, TextEncodingTest, testTextEncoding);
-	CppUnit_addTest(pSuite, TextEncodingTest, testTextEncodingManager);
 
 	return pSuite;
 }

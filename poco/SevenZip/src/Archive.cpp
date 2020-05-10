@@ -42,7 +42,7 @@ public:
 		initialize();
 		open();
 	}
-	
+
 	~ArchiveImpl()
 	{
 		try
@@ -54,27 +54,27 @@ public:
 			poco_unexpected();
 		}
 	}
-	
+
 	const std::string& path() const
 	{
 		return _path;
 	}
-	
+
 	std::size_t size() const
 	{
 		return _entries.size();
 	}
-	
+
 	Archive::ConstIterator begin() const
 	{
 		return _entries.begin();
 	}
-	
+
 	Archive::ConstIterator end() const
 	{
 		return _entries.end();
 	}
-	
+
 	std::string extract(const ArchiveEntry& entry, const std::string& destPath)
 	{
 		Poco::Path basePath;
@@ -91,9 +91,9 @@ public:
 		Poco::Path extractedPath(basePath);
 		extractedPath.append(entryPath);
 		extractedPath.makeAbsolute();
-		
+
 		if (entry.isFile())
-		{	
+		{
 			Poco::UInt32 blockIndex = 0;
 			Byte* pOutBuffer = 0;
 			std::size_t outBufferSize = 0;
@@ -115,7 +115,7 @@ public:
 				try
 				{
 					poco_assert (extractedSize == entry.size());
-				
+
 					Poco::Path parent = extractedPath.parent();
 					Poco::File dir(parent.toString());
 					dir.createDirectories();
@@ -140,10 +140,10 @@ public:
 			Poco::File dir(extractedPath.toString());
 			dir.createDirectories();
 		}
-		
+
 		return extractedPath.toString();
 	}
-	
+
 protected:
 	void initialize()
 	{
@@ -162,7 +162,7 @@ protected:
 	{
 		checkFile();
 
-#if defined(POCO_OS_FAMILY_WINDOWS)
+#if defined(_WIN32)
 		std::wstring wpath;
 		Poco::UnicodeConverter::toUTF16(_path, wpath);
 		if (InFile_OpenW(&_archiveStream.file, wpath.c_str()) != SZ_OK)
@@ -170,7 +170,7 @@ protected:
 			throw Poco::OpenFileException(_path);
 		}
 #endif
-	
+
 		_lookStream.realStream = &_archiveStream.s;
 		LookToRead_Init(&_lookStream);
 
@@ -185,24 +185,24 @@ protected:
 			handleError(err);
 		}
 	}
-	
+
 	void close()
 	{
 		SzArEx_Free(&_db, &_szAlloc);
 		File_Close(&_archiveStream.file);
 	}
-	
+
 	void loadEntries()
 	{
 		_entries.reserve(_db.db.NumFiles);
 		for (Poco::UInt32 i = 0; i < _db.db.NumFiles; i++)
 		{
 			const CSzFileItem *f = _db.db.Files + i;
-			
+
 			ArchiveEntry::EntryType type = f->IsDir ? ArchiveEntry::ENTRY_DIRECTORY : ArchiveEntry::ENTRY_FILE;
 			Poco::UInt32 attributes = f->AttribDefined ? f->Attrib : 0;
 			Poco::UInt64 size = f->Size;
-			
+
 			std::vector<Poco::UInt16> utf16Path;
 			std::size_t utf16PathLen = SzArEx_GetFileNameUtf16(&_db, i, 0);
 			utf16Path.resize(utf16PathLen, 0);
@@ -213,7 +213,7 @@ protected:
 			Poco::TextConverter converter(utf16Encoding, utf8Encoding);
 			std::string utf8Path;
 			converter.convert(&utf16Path[0], (int) utf16PathLen*sizeof(Poco::UInt16), utf8Path);
-						
+
 			Poco::Timestamp lastModified(0);
 			if (f->MTimeDefined)
 			{
@@ -223,12 +223,12 @@ protected:
 				tv /= 10;
 				lastModified = tv;
 			}
-			
+
 			ArchiveEntry entry(type, utf8Path, size, lastModified, attributes, i);
 			_entries.push_back(entry);
 		}
 	}
-	
+
 	void checkFile()
 	{
 		Poco::File f(_path);
@@ -245,13 +245,13 @@ protected:
 			throw Poco::FileAccessDeniedException(_path);
 		}
 	}
-	
+
 	void handleError(int err)
 	{
 		std::string arg;
 		handleError(err, arg);
 	}
-	
+
 	void handleError(int err, const std::string& arg)
 	{
 		switch (err)
@@ -303,7 +303,7 @@ Archive::Archive(const std::string& path):
 {
 }
 
-	
+
 Archive::~Archive()
 {
 	delete _pImpl;
@@ -315,7 +315,7 @@ const std::string& Archive::path() const
 	return _pImpl->path();
 }
 
-	
+
 std::size_t Archive::size() const
 {
 	return _pImpl->size();
@@ -327,7 +327,7 @@ Archive::ConstIterator Archive::begin() const
 	return _pImpl->begin();
 }
 
-	
+
 Archive::ConstIterator Archive::end() const
 {
 	return _pImpl->end();
@@ -360,7 +360,7 @@ void Archive::extract(const std::string& destPath)
 	}
 }
 
-	
+
 std::string Archive::extract(const ArchiveEntry& entry, const std::string& destPath)
 {
 	return _pImpl->extract(entry, destPath);

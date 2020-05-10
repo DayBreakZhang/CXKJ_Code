@@ -3,14 +3,14 @@
 //
 // Library: Zip
 // Package: Zip
-// Module:	ZipFileInfo
+// Module:  ZipFileInfo
 //
 // Definition of the ZipFileInfo class.
 //
 // Copyright (c) 2007, Applied Informatics Software Engineering GmbH.
 // and Contributors.
 //
-// SPDX-License-Identifier: BSL-1.0
+// SPDX-License-Identifier:	BSL-1.0
 //
 
 
@@ -195,21 +195,21 @@ private:
 		FULLEXTRA_DATA_SIZE = 28
 	};
 	
-	enum
+	enum 
 	{
 		DEFAULT_UNIX_FILE_MODE = 0640,
 		DEFAULT_UNIX_DIR_MODE  = 0755
 	};
 
-	char		   _rawInfo[FULLHEADER_SIZE];
+	char           _rawInfo[FULLHEADER_SIZE];
 	Poco::UInt32   _crc32;
 	Poco::UInt64   _compressedSize;
 	Poco::UInt64   _uncompressedSize;
 	Poco::UInt64   _localHeaderOffset;
-	std::string	   _fileName;
+	std::string    _fileName;
 	Poco::DateTime _lastModifiedAt;
-	std::string	   _extraField;
-	std::string	   _fileComment;
+	std::string    _extraField;
+	std::string    _fileComment;
 };
 
 
@@ -455,7 +455,7 @@ inline void ZipFileInfo::setCompressionLevel(ZipCommon::CompressionLevel cl)
 {
 	// bit 1 and 2 indicate the level
 	Poco::UInt16 val = static_cast<Poco::UInt16>(cl);
-	val <<= 1;
+	val <<= 1; 
 	Poco::UInt16 mask = 0xfff9;
 	_rawInfo[GENERAL_PURPOSE_POS] = ((_rawInfo[GENERAL_PURPOSE_POS] & mask) | val);
 }

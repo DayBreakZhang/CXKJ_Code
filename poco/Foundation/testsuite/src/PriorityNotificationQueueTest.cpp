@@ -9,8 +9,8 @@
 
 
 #include "PriorityNotificationQueueTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/PriorityNotificationQueue.h"
 #include "Poco/Notification.h"
 #include "Poco/Thread.h"
@@ -25,7 +25,7 @@ using Poco::Thread;
 using Poco::RunnableAdapter;
 
 
-namespace
+namespace 
 {
 	class QTestNotification: public Notification
 	{
@@ -47,7 +47,7 @@ namespace
 }
 
 
-PriorityNotificationQueueTest::PriorityNotificationQueueTest(const std::string& rName): CppUnit::TestCase(rName)
+PriorityNotificationQueueTest::PriorityNotificationQueueTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 

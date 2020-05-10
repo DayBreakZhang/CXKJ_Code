@@ -33,7 +33,7 @@ class Foundation_API SplitterChannel: public Channel
 	/// channels simultaneously.
 {
 public:
-	typedef AutoPtr<SplitterChannel> Ptr;
+	using Ptr = AutoPtr<SplitterChannel>;
 
 	SplitterChannel();
 		/// Creates the SplitterChannel.
@@ -46,7 +46,7 @@ public:
 
 	void log(const Message& msg);
 		/// Sends the given Message to all
-		/// attaches channels.
+		/// attaches channels. 
 
 	void setProperty(const std::string& name, const std::string& value);
 		/// Sets or changes a configuration property.
@@ -68,7 +68,7 @@ protected:
 
 private:
 	typedef std::vector<Channel::Ptr> ChannelVec;
-
+	
 	ChannelVec        _channels;
 	mutable FastMutex _mutex;
 };

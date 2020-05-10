@@ -14,8 +14,8 @@
 #ifdef POCO_NET_HAS_INTERFACE
 
 
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/NetworkInterface.h"
 #include "Poco/Net/IPAddress.h"
 #include <iostream>
@@ -75,10 +75,10 @@ void NetworkInterfaceTest::testMap()
 			std::cout << "=============" << std::endl << std::endl;
 		}
 	}
-	catch(Poco::NotImplementedException e)
+	catch (Poco::NotImplementedException e)
 	{
 	#if POCO_OS != POCO_OS_ANDROID
-		throw e;
+		throw;
 	#endif
 	}
 }
@@ -119,10 +119,10 @@ void NetworkInterfaceTest::testList()
 			std::cout << "==============" << std::endl << std::endl;
 		}
 	}
-	catch(Poco::NotImplementedException e)
+	catch (Poco::NotImplementedException e)
 	{
 	#if POCO_OS != POCO_OS_ANDROID
-		throw e;
+		throw;
 	#endif
 	}
 }
@@ -139,10 +139,10 @@ void NetworkInterfaceTest::testForName()
 			assertTrue (ifc.name() == it->second.name());
 		}
 	}
-	catch(Poco::NotImplementedException e)
+	catch (Poco::NotImplementedException e)
 	{
 	#if POCO_OS != POCO_OS_ANDROID
-		throw e;
+		throw;
 	#endif
 	}
 }
@@ -184,10 +184,10 @@ void NetworkInterfaceTest::testForAddress()
 			}
 		}
 	}
-	catch(Poco::NotImplementedException e)
+	catch (Poco::NotImplementedException e)
 	{
 	#if POCO_OS != POCO_OS_ANDROID
-		throw e;
+		throw;
 	#endif
 	}
 }
@@ -204,10 +204,10 @@ void NetworkInterfaceTest::testForIndex()
 			assertTrue (ifc.index() == it->second.index());
 		}
 	}
-	catch(Poco::NotImplementedException e)
+	catch (Poco::NotImplementedException e)
 	{
 	#if POCO_OS != POCO_OS_ANDROID
-		throw e;
+		throw;
 	#endif
 	}
 }
@@ -231,10 +231,10 @@ void NetworkInterfaceTest::testMapIpOnly()
 				std::cout << "MAC Address:" << mac << std::endl;
 		}
 	}
-	catch(Poco::NotImplementedException e)
+	catch (Poco::NotImplementedException e)
 	{
 	#if POCO_OS != POCO_OS_ANDROID
-		throw e;
+		throw;
 	#endif
 	}
 }
@@ -251,10 +251,10 @@ void NetworkInterfaceTest::testMapUpOnly()
 			assertTrue (it->second.isUp());
 		}
 	}
-	catch(Poco::NotImplementedException e)
+	catch (Poco::NotImplementedException e)
 	{
 	#if POCO_OS != POCO_OS_ANDROID
-		throw e;
+		throw;
 	#endif
 	}
 }
@@ -275,6 +275,7 @@ void NetworkInterfaceTest::testListMapConformance()
 		for (; mapIt != m.end(); ++mapIt)
 		{
 			NetworkInterface::MACAddress mac(mapIt->second.macAddress());
+
 			typedef NetworkInterface::AddressList List;
 			const List& ipList = mapIt->second.addressList();
 			if (ipList.size() > 0)
@@ -297,10 +298,10 @@ void NetworkInterfaceTest::testListMapConformance()
 
 		assertTrue (counter == l.size());
 	}
-	catch(Poco::NotImplementedException e)
+	catch (Poco::NotImplementedException e)
 	{
 	#if POCO_OS != POCO_OS_ANDROID
-		throw e;
+		throw;
 	#endif
 	}
 }

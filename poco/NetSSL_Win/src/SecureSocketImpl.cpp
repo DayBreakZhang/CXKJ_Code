@@ -245,7 +245,7 @@ void SecureSocketImpl::close()
 		serverDisconnect(&_hCreds, &_hContext);
 	else
 		clientDisconnect(&_hCreds, &_hContext);
-	
+
 	_pSocket->close();
 	cleanup();
 }
@@ -276,7 +276,7 @@ void SecureSocketImpl::verifyPeerCertificate()
 {
 	if (_peerHostName.empty())
 		_peerHostName = _pSocket->peerAddress().host().toString();
-		
+
 	verifyPeerCertificate(_peerHostName);
 }
 
@@ -362,7 +362,7 @@ int SecureSocketImpl::sendBytes(const void* buffer, int length, int flags)
 		SecBuffer* pExtraBuffer = 0;
 
 		std::memcpy(_sendBuffer.begin() + _streamSizes.cbHeader, pBuffer + dataSent, dataSize);
-		
+
 		msg.setSecBufferStreamHeader(0, _sendBuffer.begin(), _streamSizes.cbHeader);
 		msg.setSecBufferData(1, _sendBuffer.begin() + _streamSizes.cbHeader, dataSize);
 		msg.setSecBufferStreamTrailer(2, _sendBuffer.begin() + _streamSizes.cbHeader + dataSize, _streamSizes.cbTrailer);
@@ -452,7 +452,7 @@ int SecureSocketImpl::receiveBytes(void* buffer, int length, int flags)
 			if (needData)
 			{
 				int numBytes = receiveRawBytes(_recvBuffer.begin() + _recvBufferOffset, _ioBufferSize - _recvBufferOffset);
-					
+
 				if (numBytes == -1)
 					return -1;
 				else if (numBytes == 0)
@@ -652,7 +652,7 @@ SECURITY_STATUS SecureSocketImpl::decodeBufferFull(BYTE* pBuffer, DWORD bufSize,
 		}
 	}
 	while (securityStatus == SEC_E_OK && pBuffer);
-	
+
 	if (overflowOffset > 0)
 	{
 		_overflowBuffer.resize(overflowOffset);
@@ -700,7 +700,7 @@ void SecureSocketImpl::connectSSL(bool completeHandshake)
 
 	if (_peerHostName.empty())
 	{
-		_peerHostName = _pSocket->peerAddress().host().toString();
+		_peerHostName = _pSocket->address().host().toString();
 	}
 
 	initClientContext();
@@ -808,7 +808,7 @@ void SecureSocketImpl::performInitialClientHandshake()
 			throw SSLException("Handshake failed", Utility::formatError(_securityStatus));
 		}
 	}
-	
+
 	// incomplete credentials: more calls to InitializeSecurityContext needed
 	// send the token
 	sendInitialTokenOutBuffer();
@@ -853,7 +853,7 @@ SECURITY_STATUS SecureSocketImpl::performClientHandshakeLoop()
 	while (_securityStatus == SEC_I_CONTINUE_NEEDED || _securityStatus == SEC_E_INCOMPLETE_MESSAGE || _securityStatus == SEC_I_INCOMPLETE_CREDENTIALS)
 	{
 		performClientHandshakeLoopCondReceive();
-		
+
 		if (_securityStatus == SEC_E_OK)
 		{
 			performClientHandshakeLoopOK();
@@ -966,14 +966,16 @@ void SecureSocketImpl::performClientHandshakeLoopReceive()
 void SecureSocketImpl::performClientHandshakeLoopCondReceive()
 {
 	poco_assert_dbg (_securityStatus == SEC_E_INCOMPLETE_MESSAGE || SEC_I_CONTINUE_NEEDED);
-	
+
 	performClientHandshakeLoopInit();
 	if (_needData)
 	{
+		if (_recvBuffer.capacity() != IO_BUFFER_SIZE)
+			_recvBuffer.setCapacity(IO_BUFFER_SIZE);
 		performClientHandshakeLoopReceive();
 	}
 	else _needData = true;
-		
+
 	_inSecBuffer.setSecBufferToken(0, _recvBuffer.begin(), _recvBufferOffset);
 	// inbuffer 1 should be empty
 	_inSecBuffer.setSecBufferEmpty(1);
@@ -1164,12 +1166,12 @@ bool SecureSocketImpl::serverHandshakeLoop(PCtxtHandle phContext, PCredHandle ph
 
 void SecureSocketImpl::clientVerifyCertificate(const std::string& hostName)
 {
-	if (_pContext->verificationMode() == Context::VERIFY_NONE) return;	
+	if (_pContext->verificationMode() == Context::VERIFY_NONE) return;
 	if (!_pPeerCertificate) throw SSLException("No Server certificate");
 	if (hostName.empty()) throw SSLException("Server name not set");
 
 	X509Certificate cert(_pPeerCertificate, true);
-	
+
 	if (!cert.verify(hostName))
 	{
 		VerificationErrorArgs args(cert, 0, SEC_E_CERT_EXPIRED, "The certificate host names do not match the server host name");
@@ -1178,7 +1180,7 @@ void SecureSocketImpl::clientVerifyCertificate(const std::string& hostName)
 			throw InvalidCertificateException("Host name verification failed");
 	}
 
-	verifyCertificateChainClient(_pPeerCertificate);	
+	verifyCertificateChainClient(_pPeerCertificate);
 }
 
 
@@ -1309,14 +1311,14 @@ void SecureSocketImpl::verifyCertificateChainClient(PCCERT_CONTEXT pServerCert)
 
 void SecureSocketImpl::serverVerifyCertificate()
 {
-	if (_pContext->verificationMode() < Context::VERIFY_STRICT) return;	
+	if (_pContext->verificationMode() < Context::VERIFY_STRICT) return;
 
 	// we are now in Strict mode
 	if (!_pPeerCertificate) throw SSLException("No client certificate");
 
 	DWORD status = SEC_E_OK;
 	X509Certificate cert(_pPeerCertificate, true);
-	
+
 	PCCERT_CHAIN_CONTEXT pChainContext = NULL;
 	CERT_CHAIN_PARA chainPara;
 	std::memset(&chainPara, 0, sizeof(chainPara));
@@ -1381,7 +1383,7 @@ void SecureSocketImpl::serverVerifyCertificate()
 		{
 			certs.push_back(pChainContext->rgpChain[i]->rgpElement[k]->pCertContext);
 		}
-	
+
 		CERT_REVOCATION_STATUS revStat;
 		revStat.cbSize = sizeof(CERT_REVOCATION_STATUS);
 
@@ -1467,7 +1469,7 @@ LONG SecureSocketImpl::serverDisconnect(PCredHandle phCreds, CtxtHandle* phConte
 	}
 
 	AutoSecBufferDesc<1> tokBuffer(&_securityFunctions, false);
-	
+
 	DWORD tokenType = SCHANNEL_SHUTDOWN;
 	tokBuffer.setSecBufferToken(0, &tokenType, sizeof(tokenType));
 	DWORD status = _securityFunctions.ApplyControlToken(phContext, &tokBuffer);
@@ -1520,7 +1522,7 @@ void SecureSocketImpl::stateIllegal()
 
 void SecureSocketImpl::stateConnected()
 {
-	_peerHostName = _pSocket->peerAddress().host().toString();
+	_peerHostName = _pSocket->address().host().toString();
 	initClientContext();
 	performInitialClientHandshake();
 }

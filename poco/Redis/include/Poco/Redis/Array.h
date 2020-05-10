@@ -35,7 +35,7 @@ class Redis_API Array
 	/// value.
 {
 public:
-	typedef std::vector<RedisType::Ptr>::const_iterator const_iterator;
+	using const_iterator = std::vector<RedisType::Ptr>::const_iterator;
 
 	Array();
 		/// Creates an Array. As long as there are no elements added,
@@ -157,7 +157,7 @@ private:
 	void checkNull();
 		/// Checks for null array and sets a new vector if true.
 
-	Nullable<std::vector<RedisType::Ptr> > _elements;
+	Nullable<std::vector<RedisType::Ptr>> _elements;
 };
 
 
@@ -302,8 +302,8 @@ struct RedisTypeTraits<Array>
 		{
 			for(int i = 0; i < length; ++i)
 			{
-				char mark = static_cast<char>(input.get());
-				RedisType::Ptr element = RedisType::createRedisType(mark);
+				char marker = input.get();
+				RedisType::Ptr element = RedisType::createRedisType(marker);
 
 				if ( element.isNull() )
 					throw RedisException("Wrong answer received from Redis server");

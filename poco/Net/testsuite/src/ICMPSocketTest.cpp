@@ -9,8 +9,8 @@
 
 
 #include "ICMPSocketTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "UDPEchoServer.h"
 #include "Poco/Net/ICMPSocket.h"
 #include "Poco/Net/ICMPPacketImpl.h"
@@ -51,7 +51,6 @@ void ICMPSocketTest::testAssign()
 	ICMPSocket s1(IPAddress::IPv4);
 	ICMPSocket s2(s1);
 }
-
 
 void ICMPSocketTest::testSendToReceiveFrom()
 {

@@ -28,7 +28,7 @@ namespace MongoDB {
 
 class MongoDB_API KillCursorsRequest: public RequestMessage
 	/// Class for creating an OP_KILL_CURSORS client request. This
-	/// request is used to kill cursors, which are still open,
+	/// request is used to kill cursors, which are still open, 
 	/// returned by query requests.
 {
 public:
@@ -53,7 +53,7 @@ protected:
 inline std::vector<Int64>& KillCursorsRequest::cursors()
 {
 	return _cursors;
-}
+} 
 
 
 } } // namespace Poco::MongoDB

@@ -31,9 +31,9 @@
 namespace Poco {
 
 
-template <typename ch, typename tr>
+template <typename ch, typename tr> 
 class BasicMemoryStreamBuf: public std::basic_streambuf<ch, tr>
-	/// BasicMemoryStreamBuf is a simple implementation of a
+	/// BasicMemoryStreamBuf is a simple implementation of a 
 	/// stream buffer for reading and writing from a memory area.
 	///
 	/// This streambuf only supports unidirectional streams.
@@ -172,7 +172,7 @@ private:
 //
 // We provide an instantiation for char
 //
-typedef BasicMemoryStreamBuf<char, std::char_traits<char> > MemoryStreamBuf;
+typedef BasicMemoryStreamBuf<char, std::char_traits<char>> MemoryStreamBuf;
 
 
 class Foundation_API MemoryIOS: public virtual std::ios

@@ -32,9 +32,9 @@ MapConfiguration::~MapConfiguration()
 
 void MapConfiguration::copyTo(AbstractConfiguration& config)
 {
-	for (iterator it = _map.begin(); it != _map.end(); ++it)
+	for (const auto& p: _map)
 	{
-		config.setString(it->first, it->second);
+		config.setString(p.first, p.second);
 	}
 }
 
@@ -65,24 +65,24 @@ void MapConfiguration::setRaw(const std::string& key, const std::string& value)
 
 void MapConfiguration::enumerate(const std::string& key, Keys& range) const
 {
-	std::set<std::string> keySet;
+	std::set<std::string> keys;
 	std::string prefix = key;
 	if (!prefix.empty()) prefix += '.';
 	std::string::size_type psize = prefix.size();
-	for (StringMap::const_iterator it = _map.begin(); it != _map.end(); ++it)
+	for (const auto& p: _map)
 	{
-		if (it->first.compare(0, psize, prefix) == 0)
+		if (p.first.compare(0, psize, prefix) == 0)
 		{
 			std::string subKey;
-			std::string::size_type pos = it->first.find('.', psize);
-			if (pos == std::string::npos)
-				subKey = it->first.substr(psize);
+			std::string::size_type end = p.first.find('.', psize);
+			if (end == std::string::npos)
+				subKey = p.first.substr(psize);
 			else
-				subKey = it->first.substr(psize, pos - psize);
-			if (keySet.find(subKey) == keySet.end())
+				subKey = p.first.substr(psize, end - psize);
+			if (keys.find(subKey) == keys.end())
 			{
 				range.push_back(subKey);
-				keySet.insert(subKey);
+				keys.insert(subKey);
 			}
 		}
 	}

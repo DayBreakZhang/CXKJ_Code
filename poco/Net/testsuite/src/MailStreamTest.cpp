@@ -9,8 +9,8 @@
 
 
 #include "MailStreamTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/MailStream.h"
 #include "Poco/StreamCopier.h"
 #include <sstream>
@@ -84,7 +84,7 @@ void MailStreamTest::testMailOutputStream()
 	mos << msg;
 	mos.close();
 	std::string s(ostr.str());
-	assertTrue (s ==
+	assertTrue (s == 
 		"From: john.doe@no.domain\r\n"
 		"To: jane.doe@no.domain\r\n"
 		"Subject: test\r\n"

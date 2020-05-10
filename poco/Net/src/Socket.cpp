@@ -20,6 +20,7 @@
 #if defined(POCO_HAVE_FD_EPOLL)
 #include <sys/epoll.h>
 #elif defined(POCO_HAVE_FD_POLL)
+#include "Poco/SharedPtr.h"
 #include <poll.h>
 #endif
 
@@ -78,8 +79,7 @@ int Socket::select(SocketList& readList, SocketList& writeList, SocketList& exce
 	int epollfd = -1;
 	{
 		struct epoll_event eventsIn[epollSize];
-		memset(eventsIn, 0, sizeof(epoll_event) * epollSize );
-
+		memset(eventsIn, 0, sizeof(eventsIn));
 		struct epoll_event* eventLast = eventsIn;
 		for (SocketList::iterator it = readList.begin(); it != readList.end(); ++it)
 		{
@@ -165,7 +165,7 @@ int Socket::select(SocketList& readList, SocketList& writeList, SocketList& exce
 	}
 
 	struct epoll_event eventsOut[epollSize];
-	memset(eventsOut, 0, sizeof(epoll_event) * epollSize );
+	memset(eventsOut, 0, sizeof(eventsOut));
 
 	Poco::Timespan remainingTime(timeout);
 	int rc;
@@ -206,10 +206,12 @@ int Socket::select(SocketList& readList, SocketList& writeList, SocketList& exce
 	return readList.size() + writeList.size() + exceptList.size();
 
 #elif defined(POCO_HAVE_FD_POLL)
+	typedef Poco::SharedPtr<pollfd, Poco::ReferenceCounter, Poco::ReleaseArrayPolicy<pollfd>> SharedPollArray;
+
 	nfds_t nfd = readList.size() + writeList.size() + exceptList.size();
 	if (0 == nfd) return 0;
 
-	std::unique_ptr<pollfd[]> pPollArr(new pollfd[nfd]());
+	SharedPollArray pPollArr = new pollfd[nfd]();
 
 	int idx = 0;
 	for (SocketList::iterator it = readList.begin(); it != readList.end(); ++it)
@@ -254,7 +256,7 @@ int Socket::select(SocketList& readList, SocketList& writeList, SocketList& exce
 	do
 	{
 		Poco::Timestamp start;
-		rc = ::poll(pPollArr.get(), nfd, remainingTime.totalMilliseconds());
+		rc = ::poll(pPollArr, nfd, remainingTime.totalMilliseconds());
 		if (rc < 0 && SocketImpl::lastError() == POCO_EINTR)
 		{
 			Poco::Timestamp end;

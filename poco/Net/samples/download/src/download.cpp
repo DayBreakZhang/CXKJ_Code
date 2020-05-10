@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 {
 	HTTPStreamFactory::registerFactory();
 	FTPStreamFactory::registerFactory();
-	
+
 	if (argc != 2)
 	{
 		Path p(argv[0]);
@@ -55,6 +55,6 @@ int main(int argc, char** argv)
 		std::cerr << exc.displayText() << std::endl;
 		return 1;
 	}
-		
+
 	return 0;
 }

@@ -1,12 +1,27 @@
 #ifndef PDJSON_H
 #define PDJSON_H
 
-#ifdef __cplusplus
+#if defined(__cplusplus)
 extern "C" {
 #endif // __cplusplus
 
 #include <stdio.h>
-#include <stdbool.h>
+
+#if !defined(__cplusplus) && !defined(_MSC_VER) // for poco 1.8.x we must compile as C++
+	#if defined(__STDC_VERSION__) || (__STDC_VERSION__ >= 199901L)
+		#include <stdbool.h>
+	#else
+	#ifndef bool
+		#define bool int
+	#endif
+	#ifndef true
+		#define true 1
+	#endif
+	#ifndef false
+		#define false 0
+	#endif
+	#endif // __STDC_VERSION__
+#endif
 
 enum json_type {
     JSON_ERROR = 1, JSON_DONE,
@@ -25,7 +40,7 @@ typedef int (*json_user_io) (void *user);
 typedef struct json_stream json_stream;
 typedef struct json_allocator json_allocator;
 
-extern const char *json_typename[];
+//extern const char *json_typename[];
 
 void json_open_buffer(json_stream *json, const void *buffer, size_t size);
 void json_open_string(json_stream *json, const char *string);
@@ -91,7 +106,7 @@ struct json_stream {
     char errmsg[128];
 };
 
-#ifdef __cplusplus
+#if defined(__cplusplus)
 } // extern "C"
 #endif // __cplusplus
 

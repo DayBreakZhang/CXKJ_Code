@@ -9,8 +9,8 @@
 
 
 #include "ConfigurationViewTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Util/MapConfiguration.h"
 #include "Poco/AutoPtr.h"
 #include "Poco/Exception.h"
@@ -46,7 +46,7 @@ void ConfigurationViewTest::testView()
 	assertTrue (std::find(keys.begin(), keys.end(), "prop2") != keys.end());
 	assertTrue (std::find(keys.begin(), keys.end(), "prop3") != keys.end());
 	assertTrue (std::find(keys.begin(), keys.end(), "prop4") != keys.end());
-
+	
 	assertTrue (pView->getString("prop1") == "foo");
 	assertTrue (pView->getString("prop3.string1") == "foo");
 	
@@ -66,7 +66,7 @@ void ConfigurationViewTest::testView()
 	assertTrue (keys.size() == 2);
 	assertTrue (std::find(keys.begin(), keys.end(), "string1") != keys.end());
 	assertTrue (std::find(keys.begin(), keys.end(), "string2") != keys.end());
-
+	
 	assertTrue (pView->getString("string1") == "foo");
 	assertTrue (pView->getString("string2") == "bar");
 

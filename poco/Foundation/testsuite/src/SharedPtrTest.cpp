@@ -9,8 +9,8 @@
 
 
 #include "SharedPtrTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/SharedPtr.h"
 #include "Poco/Exception.h"
 
@@ -24,7 +24,7 @@ namespace
 	class TestObject
 	{
 	public:
-		TestObject(const std::string& rData): _data(rData)
+		TestObject(const std::string& data): _data(data)
 		{
 			++_count;
 		}
@@ -69,7 +69,7 @@ namespace
 }
 
 
-SharedPtrTest::SharedPtrTest(const std::string& rName): CppUnit::TestCase(rName)
+SharedPtrTest::SharedPtrTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -83,7 +83,10 @@ void SharedPtrTest::testSharedPtr()
 {
 	SharedPtr<TestObject> ptr1;
 	assertNull(ptr1.get());
+	assertTrue (ptr1 == nullptr);
+
 	TestObject* pTO1 = new TestObject("one");
+
 	TestObject* pTO2 = new TestObject("two");
 	if (pTO2 < pTO1)
 	{
@@ -93,6 +96,8 @@ void SharedPtrTest::testSharedPtr()
 	}
 	assertTrue (pTO1 < pTO2);
 	ptr1 = pTO1;
+	assertTrue (ptr1 != nullptr);
+
 	assertTrue (ptr1.referenceCount() == 1);
 	SharedPtr<TestObject> ptr2 = pTO2;
 	SharedPtr<TestObject> ptr3 = ptr1;
@@ -155,26 +160,6 @@ void SharedPtrTest::testSharedPtr()
 		assertTrue (TestObject::count() == 1);
 	}
 	assertTrue (TestObject::count() == 0);
-
-	std::shared_ptr<TestObject> stdp(std::make_shared<TestObject>(""));
-	Poco::SharedPtr<TestObject> ptr5(stdp);
-	std::shared_ptr<TestObject> stdp2 = ptr5;
-
-	assertTrue (stdp == stdp2);
-
-	std::shared_ptr<TestObject> stdp3(std::make_shared<TestObject>(""));
-	TestObject* rptr = stdp3.get();
-	Poco::SharedPtr<TestObject> ptr6(std::move(stdp3));
-
-	assertTrue (!stdp3);
-	assertTrue (ptr6.get() == rptr);
-
-	std::shared_ptr<TestObject> stdp4(std::make_shared<TestObject>(""));
-	rptr = stdp4.get();
-	ptr6 = std::move(stdp4);
-
-	assertTrue (!stdp4);
-	assertTrue (ptr6.get() == rptr);
 }
 
 

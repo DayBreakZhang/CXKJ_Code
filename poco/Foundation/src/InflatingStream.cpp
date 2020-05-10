@@ -224,7 +224,7 @@ int InflatingStreamBuf::readFromDevice(char* buffer, std::streamsize length)
 int InflatingStreamBuf::writeToDevice(const char* buffer, std::streamsize length)
 {
 	if (length == 0 || !_pOstr) return 0;
-	
+
 	_zstr.next_in   = (unsigned char*) buffer;
 	_zstr.avail_in  = static_cast<unsigned>(length);
 	_zstr.next_out  = (unsigned char*) _buffer;
@@ -235,21 +235,21 @@ int InflatingStreamBuf::writeToDevice(const char* buffer, std::streamsize length
 		if (rc == Z_STREAM_END)
 		{
 			_pOstr->write(_buffer, INFLATE_BUFFER_SIZE - _zstr.avail_out);
-			if (!_pOstr->good()) throw IOException(zError(rc));
+			if (!_pOstr->good()) throw IOException("Failed writing inflated data to output stream");
 			break;
 		}
 		if (rc != Z_OK) throw IOException(zError(rc));
 		if (_zstr.avail_out == 0)
 		{
 			_pOstr->write(_buffer, INFLATE_BUFFER_SIZE);
-			if (!_pOstr->good()) throw IOException(zError(rc));
+			if (!_pOstr->good()) throw IOException("Failed writing inflated data to output stream");
 			_zstr.next_out  = (unsigned char*) _buffer;
 			_zstr.avail_out = INFLATE_BUFFER_SIZE;
 		}
 		if (_zstr.avail_in == 0)
 		{
 			_pOstr->write(_buffer, INFLATE_BUFFER_SIZE - _zstr.avail_out);
-			if (!_pOstr->good()) throw IOException(zError(rc));
+			if (!_pOstr->good()) throw IOException("Failed writing inflated data to output stream");
 			_zstr.next_out  = (unsigned char*) _buffer;
 			_zstr.avail_out = INFLATE_BUFFER_SIZE;
 			break;

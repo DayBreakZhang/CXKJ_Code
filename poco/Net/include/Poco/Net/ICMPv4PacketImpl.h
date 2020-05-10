@@ -132,7 +132,7 @@ public:
 	bool validReplyID(Poco::UInt8* buffer, int length) const;
 		/// Returns true if the extracted id is recognized
 		/// (i.e. equals the process id).
-		///	
+		///
 		/// Buffer includes IP header, ICMP header and data.
 
 	virtual std::string errorDescription(Poco::UInt8* buffer, int length, int& type, int& code);

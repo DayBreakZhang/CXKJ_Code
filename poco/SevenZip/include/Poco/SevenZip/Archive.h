@@ -33,7 +33,7 @@ class ArchiveImpl;
 
 
 class SevenZip_API Archive
-	/// This class represents a 7-Zip archive.
+	/// This class represents a 7-Zip archive. 
 	///
 	/// The Archive class can be used to enumerate entries in a
 	/// 7-Zip archive, and to extract files or directories from
@@ -64,7 +64,7 @@ public:
 
 	Archive(const std::string& path);
 		/// Creates an Archive object for the 7-Zip archive
-		/// with the given path.
+		/// with the given path. 
 		
 	~Archive();
 		/// Destroys the Archive.
@@ -93,7 +93,7 @@ public:
 		
 	std::string extract(const ArchiveEntry& entry, const std::string& destPath);
 		/// Extracts a specific entry to the given path.
-		///
+		/// 
 		/// Directories will be created as necessary. File attributes
 		/// will not be restored.
 		///

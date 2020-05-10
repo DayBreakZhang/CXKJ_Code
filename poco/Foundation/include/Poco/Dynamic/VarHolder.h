@@ -178,13 +178,23 @@ public:
 		/// Throws BadCastException. Must be overriden in a type
 		/// specialization in order to support the conversion.
 
-#ifndef POCO_LONG_IS_64_BIT
+#ifndef POCO_INT64_IS_LONG
 
 	void convert(long& val) const;
 		/// Calls convert(Int32).
 
 	void convert(unsigned long& val) const;
 		/// Calls convert(UInt32).
+
+#else
+
+	virtual void convert(long long& val) const;
+		/// Throws BadCastException. Must be overriden in a type
+		/// specialization in order to suport the conversion.
+
+	virtual void convert(unsigned long long & val) const;
+		/// Throws BadCastException. Must be overriden in a type
+		/// specialization in order to suport the conversion.
 
 #endif
 
@@ -326,7 +336,7 @@ protected:
 			checkUpperLimitFloat<F,T>(from);
 			checkLowerLimitFloat<F,T>(from);
 		}
-		
+
 		to = static_cast<T>(from);
 	}
 
@@ -401,47 +411,20 @@ protected:
 	}
 
 private:
-
-#ifdef _MSC_VER
-#pragma warning( push )
-#pragma warning( disable : 4127 )
-#pragma warning( disable : 4018 )
-#endif
-
-		template <typename F, typename T>
-		void POCO_UNUSED checkUpperLimit(const F& from) const
+	template <typename F, typename T>
+	void checkUpperLimit(const F& from) const
+	{
+		if ((sizeof(T) < sizeof(F)) &&
+			(from > static_cast<F>(std::numeric_limits<T>::max())))
 		{
-			// casting to type of smaller size AND
-			// 'from' is greater than 'T' max value
-			if ((sizeof(T) < sizeof(F)) &&
-				(from > static_cast<F>(std::numeric_limits<T>::max())))
-			{
-				throw RangeException("Value too large.");
-			}
-			// casting to type of equal/bigger size AND
-			// 'F' is signed AND
-			// 'T' is unsigned AND
-			// 'from' is negative
-			else if (std::numeric_limits<F>::is_signed &&
-					!std::numeric_limits<T>::is_signed && from < 0)
-			{
-				throw RangeException("Value too small.");
-			}
-			// casting to type of equal/bigger size AND
-			// 'F' is unsigned AND
-			// 'T' is signed AND
-			// 'from' is greater than 'T' max value
-			else if (!std::numeric_limits<F>::is_signed &&
-					  std::numeric_limits<T>::is_signed &&
-					  static_cast<Poco::UInt64>(from) > std::numeric_limits<T>::max())
-			{
-				throw RangeException("Value too large.");
-			}
+			throw RangeException("Value too large.");
 		}
-
-#ifdef _MSC_VER
-#pragma warning( pop )
-#endif
+		else
+		if (from > std::numeric_limits<T>::max())
+		{
+			throw RangeException("Value too large.");
+		}
+	}
 
 	template <typename F, typename T>
 	void checkUpperLimitFloat(const F& from) const
@@ -536,9 +519,7 @@ inline void VarHolder::convert(Timestamp& /*val*/) const
 	throw BadCastException("Can not convert to Timestamp");
 }
 
-
-#ifndef POCO_LONG_IS_64_BIT
-
+#ifndef POCO_INT64_IS_LONG
 
 inline void VarHolder::convert(long& val) const
 {
@@ -555,9 +536,20 @@ inline void VarHolder::convert(unsigned long& val) const
 	val = tmp;
 }
 
+#else
+
+inline void VarHolder::convert(long long& /*val*/) const
+{
+	throw BadCastException("Can not convert to long long");
+}
+
+
+inline void VarHolder::convert(unsigned long long& /*val*/) const
+{
+	throw BadCastException("Can not convert to unsigned long long");
+}
 
 #endif
-
 
 inline void VarHolder::convert(bool& /*val*/) const
 {
@@ -685,7 +677,7 @@ inline std::size_t VarHolder::size() const
 }
 
 
-template <typename T, class Enable>
+template <typename T>
 class VarHolderImpl: public VarHolder
 	/// Template based implementation of a VarHolder.
 	/// This class provides type storage for user-defined types
@@ -750,7 +742,7 @@ public:
 	~VarHolderImpl()
 	{
 	}
-	
+
 	const std::type_info& type() const
 	{
 		return typeid(Int8);
@@ -765,7 +757,7 @@ public:
 	{
 		val = _val;
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		val = _val;
@@ -785,7 +777,7 @@ public:
 	{
 		convertSignedToUnsigned(_val, val);
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		convertSignedToUnsigned(_val, val);
@@ -795,6 +787,20 @@ public:
 	{
 		convertSignedToUnsigned(_val, val);
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		val = _val;
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		convertSignedToUnsigned(_val, val);
+	}
+
+#endif
 
 	void convert(bool& val) const
 	{
@@ -831,7 +837,7 @@ public:
 	{
 		return cloneHolder(pVarHolder, _val);
 	}
-	
+
 	const Int8& value() const
 	{
 		return _val;
@@ -892,7 +898,7 @@ public:
 	~VarHolderImpl()
 	{
 	}
-	
+
 	const std::type_info& type() const
 	{
 		return typeid(Int16);
@@ -907,7 +913,7 @@ public:
 	{
 		val = _val;
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		val = _val;
@@ -927,7 +933,7 @@ public:
 	{
 		convertSignedToUnsigned(_val, val);
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		convertSignedToUnsigned(_val, val);
@@ -937,6 +943,20 @@ public:
 	{
 		convertSignedToUnsigned(_val, val);
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		val = _val;
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		convertSignedToUnsigned(_val, val);
+	}
+
+#endif
 
 	void convert(bool& val) const
 	{
@@ -1047,7 +1067,7 @@ public:
 	{
 		convertToSmaller(_val, val);
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		val = _val;
@@ -1067,7 +1087,7 @@ public:
 	{
 		convertSignedToUnsigned(_val, val);
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		convertSignedToUnsigned(_val, val);
@@ -1077,6 +1097,20 @@ public:
 	{
 		convertSignedToUnsigned(_val, val);
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		val = _val;
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		convertSignedToUnsigned(_val, val);
+	}
+
+#endif
 
 	void convert(bool& val) const
 	{
@@ -1185,7 +1219,7 @@ public:
 	{
 		convertToSmaller(_val, val);
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		convertToSmaller(_val, val);
@@ -1205,7 +1239,7 @@ public:
 	{
 		convertSignedToUnsigned(_val, val);
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		convertSignedToUnsigned(_val, val);
@@ -1215,6 +1249,20 @@ public:
 	{
 		convertSignedToUnsigned(_val, val);
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		val = _val;
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		convertSignedToUnsigned(_val, val);
+	}
+
+#endif
 
 	void convert(bool& val) const
 	{
@@ -1323,7 +1371,7 @@ public:
 	~VarHolderImpl()
 	{
 	}
-	
+
 	const std::type_info& type() const
 	{
 		return typeid(UInt8);
@@ -1338,7 +1386,7 @@ public:
 	{
 		convertUnsignedToSigned(_val, val);
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		val = static_cast<Int32>(_val);
@@ -1358,7 +1406,7 @@ public:
 	{
 		val = _val;
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		val = _val;
@@ -1368,6 +1416,20 @@ public:
 	{
 		val = _val;
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		val = static_cast<long long>(_val);
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		val = _val;
+	}
+
+#endif
 
 	void convert(bool& val) const
 	{
@@ -1476,7 +1538,7 @@ public:
 	{
 		convertUnsignedToSigned(_val, val);
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		convertUnsignedToSigned(_val, val);
@@ -1496,7 +1558,7 @@ public:
 	{
 		val = _val;
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		val = _val;
@@ -1506,6 +1568,20 @@ public:
 	{
 		val = _val;
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		val = static_cast<long long>(_val);
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		val = _val;
+	}
+
+#endif
 
 	void convert(bool& val) const
 	{
@@ -1614,7 +1690,7 @@ public:
 	{
 		convertUnsignedToSigned(_val, val);
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		convertUnsignedToSigned(_val, val);
@@ -1634,7 +1710,7 @@ public:
 	{
 		convertToSmallerUnsigned(_val, val);
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		val = _val;
@@ -1644,6 +1720,20 @@ public:
 	{
 		val = _val;
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		convertUnsignedToSigned(_val, val);
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		val = _val;
+	}
+
+#endif
 
 	void convert(bool& val) const
 	{
@@ -1752,7 +1842,7 @@ public:
 	{
 		convertUnsignedToSigned(_val, val);
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		convertUnsignedToSigned(_val, val);
@@ -1772,7 +1862,7 @@ public:
 	{
 		convertToSmallerUnsigned(_val, val);
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		convertToSmallerUnsigned(_val, val);
@@ -1782,6 +1872,20 @@ public:
 	{
 		val = _val;
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		convertUnsignedToSigned(_val, val);
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		val = _val;
+	}
+
+#endif
 
 	void convert(bool& val) const
 	{
@@ -1911,7 +2015,7 @@ public:
 	{
 		val = static_cast<Int16>(_val ? 1 : 0);
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		val = static_cast<Int32>(_val ? 1 : 0);
@@ -1931,7 +2035,7 @@ public:
 	{
 		val = static_cast<UInt16>(_val ? 1 : 0);
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		val = static_cast<UInt32>(_val ? 1 : 0);
@@ -1941,6 +2045,20 @@ public:
 	{
 		val = static_cast<UInt64>(_val ? 1 : 0);
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		val = static_cast<long long>(_val ? 1 : 0);
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		val = static_cast<unsigned long long>(_val ? 1 : 0);
+	}
+
+#endif
 
 	void convert(bool& val) const
 	{
@@ -2047,7 +2165,7 @@ public:
 	{
 		convertToSmaller(_val, val);
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		convertToSmaller(_val, val);
@@ -2067,7 +2185,7 @@ public:
 	{
 		convertSignedFloatToUnsigned(_val, val);
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		convertSignedFloatToUnsigned(_val, val);
@@ -2077,6 +2195,20 @@ public:
 	{
 		convertSignedFloatToUnsigned(_val, val);
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		convertToSmaller(_val, val);
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		convertSignedFloatToUnsigned(_val, val);
+	}
+
+#endif
 
 	void convert(bool& val) const
 	{
@@ -2186,7 +2318,7 @@ public:
 	{
 		convertToSmaller(_val, val);
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		convertToSmaller(_val, val);
@@ -2206,7 +2338,7 @@ public:
 	{
 		convertSignedFloatToUnsigned(_val, val);
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		convertSignedFloatToUnsigned(_val, val);
@@ -2216,6 +2348,20 @@ public:
 	{
 		convertSignedFloatToUnsigned(_val, val);
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		convertToSmaller(_val, val);
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		convertSignedFloatToUnsigned(_val, val);
+	}
+
+#endif
 
 	void convert(bool& val) const
 	{
@@ -2331,7 +2477,7 @@ public:
 	{
 		val = static_cast<UInt8>(_val);
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		val = static_cast<UInt8>(_val);
@@ -2351,7 +2497,7 @@ public:
 	{
 		val = static_cast<UInt8>(_val);
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		val = static_cast<UInt8>(_val);
@@ -2361,6 +2507,20 @@ public:
 	{
 		val = static_cast<UInt8>(_val);
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		val = static_cast<long long>(_val);
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		val = static_cast<unsigned long long>(_val);
+	}
+
+#endif
 
 	void convert(bool& val) const
 	{
@@ -2473,7 +2633,7 @@ public:
 		int v = NumberParser::parse(_val);
 		convertToSmaller(v, val);
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		val = NumberParser::parse(_val);
@@ -2495,7 +2655,7 @@ public:
 		unsigned int v = NumberParser::parseUnsigned(_val);
 		convertToSmallerUnsigned(v, val);
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		val = NumberParser::parseUnsigned(_val);
@@ -2505,6 +2665,20 @@ public:
 	{
 		val = NumberParser::parseUnsigned64(_val);
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		val = NumberParser::parse64(_val);
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		val = NumberParser::parseUnsigned64(_val);
+	}
+
+#endif
 
 	void convert(bool& val) const
 	{
@@ -2684,6 +2858,20 @@ public:
 		val = NumberParser::parseUnsigned64(toStdString());
 	}
 
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		val = NumberParser::parse64(toStdString());
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		val = NumberParser::parseUnsigned64(toStdString());
+	}
+
+#endif
+
 	void convert(bool& val) const
 	{
 		static const std::string VAL_FALSE("false");
@@ -2807,14 +2995,11 @@ private:
 };
 
 
-template <typename T>
-class VarHolderImpl<T,
-	typename std::enable_if<
-		 std::is_same<T, long       >::value &&
-		!std::is_same<T, Poco::Int64>::value &&
-		!std::is_same<T, Poco::Int32>::value
-	>::type
->: public VarHolder
+#ifndef POCO_INT64_IS_LONG
+
+
+template <>
+class VarHolderImpl<long>: public VarHolder
 {
 public:
 	VarHolderImpl(long val): _val(val)
@@ -2839,7 +3024,7 @@ public:
 	{
 		convertToSmaller(_val, val);
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		val = static_cast<Int32>(_val);
@@ -2859,7 +3044,7 @@ public:
 	{
 		convertSignedToUnsigned(_val, val);
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		convertSignedToUnsigned(_val, val);
@@ -2894,7 +3079,7 @@ public:
 
 	void convert(std::string& val) const
 	{
-		val = NumberFormatter::format(static_cast<Int64 >(_val));
+		val = NumberFormatter::format(_val);
 	}
 
 	VarHolder* clone(Placeholder<VarHolder>* pVarHolder = 0) const
@@ -2951,14 +3136,8 @@ private:
 };
 
 
-template <typename T>
-class VarHolderImpl<T,
-	typename std::enable_if<
-		 std::is_same<T, unsigned long>::value &&
-		!std::is_same<T, Poco::UInt64 >::value &&
-		!std::is_same<T, Poco::UInt32 >::value
-		>::type
->: public VarHolder
+template <>
+class VarHolderImpl<unsigned long>: public VarHolder
 {
 public:
 	VarHolderImpl(unsigned long val): _val(val)
@@ -2983,7 +3162,7 @@ public:
 	{
 		convertUnsignedToSigned(_val, val);
 	}
-	
+
 	void convert(Int32& val) const
 	{
 		convertUnsignedToSigned(_val, val);
@@ -3003,7 +3182,7 @@ public:
 	{
 		convertToSmallerUnsigned(_val, val);
 	}
-	
+
 	void convert(UInt32& val) const
 	{
 		convertToSmallerUnsigned(_val, val);
@@ -3038,7 +3217,7 @@ public:
 
 	void convert(std::string& val) const
 	{
-		val = NumberFormatter::format(static_cast<UInt64>(_val));
+		val = NumberFormatter::format(_val);
 	}
 
 	VarHolder* clone(Placeholder<VarHolder>* pVarHolder = 0) const
@@ -3095,8 +3274,310 @@ private:
 };
 
 
+#else // if defined (POCO_INT64_IS_LONG)
+
+
+template <>
+class VarHolderImpl<long long>: public VarHolder
+{
+public:
+	VarHolderImpl(long long val): _val(val)
+	{
+	}
+
+	~VarHolderImpl()
+	{
+	}
+
+	const std::type_info& type() const
+	{
+		return typeid(long long);
+	}
+
+	void convert(Int8& val) const
+	{
+		convertToSmaller(_val, val);
+	}
+
+	void convert(Int16& val) const
+	{
+		convertToSmaller(_val, val);
+	}
+
+	void convert(Int32& val) const
+	{
+		convertToSmaller(_val, val);
+	}
+
+	void convert(Int64& val) const
+	{
+		val = static_cast<Int64>(_val);
+	}
+
+	void convert(UInt8& val) const
+	{
+		convertSignedToUnsigned(_val, val);
+	}
+
+	void convert(UInt16& val) const
+	{
+		convertSignedToUnsigned(_val, val);
+	}
+
+	void convert(UInt32& val) const
+	{
+		convertSignedToUnsigned(_val, val);
+	}
+
+	void convert(UInt64& val) const
+	{
+		convertSignedToUnsigned(_val, val);
+	}
+
+	void convert(long long& val) const
+	{
+		val = _val;
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		convertSignedToUnsigned(_val, val);
+	}
+
+	void convert(bool& val) const
+	{
+		val = (_val != 0);
+	}
+
+	void convert(float& val) const
+	{
+		val = static_cast<float>(_val);
+	}
+
+	void convert(double& val) const
+	{
+		val = static_cast<double>(_val);
+	}
+
+	void convert(char& val) const
+	{
+		UInt8 tmp;
+		convert(tmp);
+		val = static_cast<char>(tmp);
+	}
+
+	void convert(std::string& val) const
+	{
+		val = NumberFormatter::format(_val);
+	}
+
+	VarHolder* clone(Placeholder<VarHolder>* pVarHolder = 0) const
+	{
+		return cloneHolder(pVarHolder, _val);
+	}
+
+	const long long& value() const
+	{
+		return _val;
+	}
+
+	bool isArray() const
+	{
+		return false;
+	}
+
+	bool isStruct() const
+	{
+		return false;
+	}
+
+	bool isInteger() const
+	{
+		return std::numeric_limits<long long>::is_integer;
+	}
+
+	bool isSigned() const
+	{
+		return std::numeric_limits<long long>::is_signed;
+	}
+
+	bool isNumeric() const
+	{
+		return std::numeric_limits<long long>::is_specialized;
+	}
+
+	bool isBoolean() const
+	{
+		return false;
+	}
+
+	bool isString() const
+	{
+		return false;
+	}
+
+private:
+	VarHolderImpl();
+	VarHolderImpl(const VarHolderImpl&);
+	VarHolderImpl& operator = (const VarHolderImpl&);
+
+	long long _val;
+};
+
+
+template <>
+class VarHolderImpl<unsigned long long>: public VarHolder
+{
+public:
+	VarHolderImpl(unsigned long long val): _val(val)
+	{
+	}
+
+	~VarHolderImpl()
+	{
+	}
+
+	const std::type_info& type() const
+	{
+		return typeid(unsigned long long);
+	}
+
+	void convert(Int8& val) const
+	{
+		convertUnsignedToSigned(_val, val);
+	}
+
+	void convert(Int16& val) const
+	{
+		convertUnsignedToSigned(_val, val);
+	}
+
+	void convert(Int32& val) const
+	{
+		convertUnsignedToSigned(_val, val);
+	}
+
+	void convert(Int64& val) const
+	{
+		convertUnsignedToSigned(_val, val);
+	}
+
+	void convert(UInt8& val) const
+	{
+		convertToSmallerUnsigned(_val, val);
+	}
+
+	void convert(UInt16& val) const
+	{
+		convertToSmallerUnsigned(_val, val);
+	}
+
+	void convert(UInt32& val) const
+	{
+		convertToSmallerUnsigned(_val, val);
+	}
+
+	void convert(UInt64& val) const
+	{
+		val = static_cast<UInt64>(_val);
+	}
+
+	void convert(long long& val) const
+	{
+		convertUnsignedToSigned(_val, val);
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		val = _val;
+	}
+
+	void convert(bool& val) const
+	{
+		val = (_val != 0);
+	}
+
+	void convert(float& val) const
+	{
+		val = static_cast<float>(_val);
+	}
+
+	void convert(double& val) const
+	{
+		val = static_cast<double>(_val);
+	}
+
+	void convert(char& val) const
+	{
+		UInt8 tmp;
+		convert(tmp);
+		val = static_cast<char>(tmp);
+	}
+
+	void convert(std::string& val) const
+	{
+		val = NumberFormatter::format(_val);
+	}
+
+	VarHolder* clone(Placeholder<VarHolder>* pVarHolder = 0) const
+	{
+		return cloneHolder(pVarHolder, _val);
+	}
+
+	const unsigned long long& value() const
+	{
+		return _val;
+	}
+
+	bool isArray() const
+	{
+		return false;
+	}
+
+	bool isStruct() const
+	{
+		return false;
+	}
+
+	bool isInteger() const
+	{
+		return std::numeric_limits<unsigned long long>::is_integer;
+	}
+
+	bool isSigned() const
+	{
+		return std::numeric_limits<unsigned long long>::is_signed;
+	}
+
+	bool isNumeric() const
+	{
+		return std::numeric_limits<unsigned long long>::is_specialized;
+	}
+
+	bool isBoolean() const
+	{
+		return false;
+	}
+
+	bool isString() const
+	{
+		return false;
+	}
+
+private:
+	VarHolderImpl();
+	VarHolderImpl(const VarHolderImpl&);
+	VarHolderImpl& operator = (const VarHolderImpl&);
+
+	unsigned long long _val;
+};
+
+
+#endif // POCO_INT64_IS_LONG
+
+
 template <typename T>
-class VarHolderImpl<std::vector<T> >: public VarHolder
+class VarHolderImpl<std::vector<T>>: public VarHolder
 {
 public:
 	VarHolderImpl(const std::vector<T>& val): _val(val)
@@ -3106,7 +3587,7 @@ public:
 	~VarHolderImpl()
 	{
 	}
-	
+
 	const std::type_info& type() const
 	{
 		return typeid(std::vector<T>);
@@ -3121,7 +3602,7 @@ public:
 	{
 		return cloneHolder(pVarHolder, _val);
 	}
-	
+
 	const std::vector<T>& value() const
 	{
 		return _val;
@@ -3161,7 +3642,7 @@ private:
 
 
 template <typename T>
-class VarHolderImpl<std::list<T> >: public VarHolder
+class VarHolderImpl<std::list<T>>: public VarHolder
 {
 public:
 	VarHolderImpl(const std::list<T>& val): _val(val)
@@ -3171,7 +3652,7 @@ public:
 	~VarHolderImpl()
 	{
 	}
-	
+
 	const std::type_info& type() const
 	{
 		return typeid(std::list<T>);
@@ -3186,7 +3667,7 @@ public:
 	{
 		return cloneHolder(pVarHolder, _val);
 	}
-	
+
 	const std::list<T>& value() const
 	{
 		return _val;
@@ -3236,7 +3717,7 @@ private:
 
 
 template <typename T>
-class VarHolderImpl<std::deque<T> >: public VarHolder
+class VarHolderImpl<std::deque<T>>: public VarHolder
 {
 public:
 	VarHolderImpl(const std::deque<T>& val): _val(val)
@@ -3246,7 +3727,7 @@ public:
 	~VarHolderImpl()
 	{
 	}
-	
+
 	const std::type_info& type() const
 	{
 		return typeid(std::deque<T>);
@@ -3261,7 +3742,7 @@ public:
 	{
 		return cloneHolder(pVarHolder, _val);
 	}
-	
+
 	const std::deque<T>& value() const
 	{
 		return _val;
@@ -3311,7 +3792,7 @@ public:
 	~VarHolderImpl()
 	{
 	}
-	
+
 	const std::type_info& type() const
 	{
 		return typeid(DateTime);
@@ -3326,7 +3807,7 @@ public:
 	{
 		throw BadCastException();
 	}
-	
+
 	void convert(Int32& /*val*/) const
 	{
 		throw BadCastException();
@@ -3341,6 +3822,20 @@ public:
 	{
 		val = _val.timestamp().epochMicroseconds();
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		val = _val.timestamp().epochMicroseconds();
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		val = _val.timestamp().epochMicroseconds();
+	}
+
+#endif
 
 	void convert(std::string& val) const
 	{
@@ -3366,7 +3861,7 @@ public:
 	{
 		return cloneHolder(pVarHolder, _val);
 	}
-	
+
 	const DateTime& value() const
 	{
 		return _val;
@@ -3442,7 +3937,7 @@ public:
 	~VarHolderImpl()
 	{
 	}
-	
+
 	const std::type_info& type() const
 	{
 		return typeid(LocalDateTime);
@@ -3457,6 +3952,20 @@ public:
 	{
 		val = _val.timestamp().epochMicroseconds();
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		val = _val.timestamp().epochMicroseconds();
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		val = _val.timestamp().epochMicroseconds();
+	}
+
+#endif
 
 	void convert(std::string& val) const
 	{
@@ -3482,7 +3991,7 @@ public:
 	{
 		return cloneHolder(pVarHolder, _val);
 	}
-	
+
 	const LocalDateTime& value() const
 	{
 		return _val;
@@ -3558,7 +4067,7 @@ public:
 	~VarHolderImpl()
 	{
 	}
-	
+
 	const std::type_info& type() const
 	{
 		return typeid(Timestamp);
@@ -3573,6 +4082,20 @@ public:
 	{
 		val = _val.epochMicroseconds();
 	}
+
+#ifdef POCO_INT64_IS_LONG
+
+	void convert(long long& val) const
+	{
+		val = _val.epochMicroseconds();
+	}
+
+	void convert(unsigned long long& val) const
+	{
+		val = _val.epochMicroseconds();
+	}
+
+#endif
 
 	void convert(std::string& val) const
 	{
@@ -3598,7 +4121,7 @@ public:
 	{
 		return cloneHolder(pVarHolder, _val);
 	}
-	
+
 	const Timestamp& value() const
 	{
 		return _val;

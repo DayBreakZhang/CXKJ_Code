@@ -52,8 +52,8 @@ class MongoDB_API Document
 	/// Represents a MongoDB (BSON) document.
 {
 public:
-	typedef SharedPtr<Document> Ptr;
-	typedef std::vector<Document::Ptr> Vector;
+	using Ptr = SharedPtr<Document>;
+	using Vector = std::vector<Document::Ptr>;
 
 	Document();
 		/// Creates an empty Document.

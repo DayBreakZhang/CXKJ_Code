@@ -80,9 +80,9 @@ void SplitterChannel::log(const Message& msg)
 {
 	FastMutex::ScopedLock lock(_mutex);
 
-	for (ChannelVec::iterator it = _channels.begin(); it != _channels.end(); ++it)
+	for (auto& p: _channels)
 	{
-		(*it)->log(msg);
+		p->log(msg);
 	}
 }
 
@@ -97,6 +97,7 @@ void SplitterChannel::close()
 int SplitterChannel::count() const
 {
 	FastMutex::ScopedLock lock(_mutex);
+	
 	return (int) _channels.size();
 }
 

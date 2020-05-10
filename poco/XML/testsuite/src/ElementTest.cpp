@@ -9,8 +9,8 @@
 
 
 #include "ElementTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/DOM/Document.h"
 #include "Poco/DOM/Element.h"
 #include "Poco/DOM/Attr.h"
@@ -669,7 +669,7 @@ void ElementTest::testNodeByPath()
 	pElem2->appendChild(pElem23);
 	pElem2->appendChild(pElem24);
 	pElem2->appendChild(pElem25);
-
+	
 	pElem3->appendChild(pElem31);
 
 	pRoot->appendChild(pElem1);

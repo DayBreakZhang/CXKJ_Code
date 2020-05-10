@@ -5,7 +5,7 @@
 // Package: Core
 // Module:  MemoryPool
 //
-// Definition of the MemoryPool and FastMemoryPool classes.
+// Definition of the MemoryPool class.
 //
 // Copyright (c) 2005-2006, Applied Informatics Software Engineering GmbH.
 // and Contributors.
@@ -19,13 +19,10 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/Alignment.h"
+#include "Poco/AtomicCounter.h"
 #include "Poco/Mutex.h"
-#include "Poco/NestedDiagnosticContext.h"
 #include <vector>
-#include <cstring>
 #include <cstddef>
-#include <iostream>
 
 
 namespace Poco {
@@ -46,71 +43,50 @@ class Foundation_API MemoryPool
 {
 public:
 	MemoryPool(std::size_t blockSize, int preAlloc = 0, int maxAlloc = 0);
-	/// Creates a MemoryPool for blocks with the given blockSize.
-	/// The number of blocks given in preAlloc are preallocated.
-
+		/// Creates a MemoryPool for blocks with the given blockSize.
+		/// The number of blocks given in preAlloc are preallocated.
+		
 	~MemoryPool();
 
 	void* get();
-	/// Returns a memory block. If there are no more blocks
-	/// in the pool, a new block will be allocated.
-	///
-	/// If maxAlloc blocks are already allocated, an
-	/// OutOfMemoryException is thrown.
-
+		/// Returns a memory block. If there are no more blocks
+		/// in the pool, a new block will be allocated.
+		///
+		/// If maxAlloc blocks are already allocated, an
+		/// OutOfMemoryException is thrown.
+		
 	void release(void* ptr);
-	/// Releases a memory block and returns it to the pool.
-
+		/// Releases a memory block and returns it to the pool.
+	
 	std::size_t blockSize() const;
-	/// Returns the block size.
-
+		/// Returns the block size.
+		
 	int allocated() const;
-	/// Returns the number of allocated blocks.
-
+		/// Returns the number of allocated blocks.
+		
 	int available() const;
-	/// Returns the number of available blocks in the pool.
+		/// Returns the number of available blocks in the pool.
 
 private:
 	MemoryPool();
 	MemoryPool(const MemoryPool&);
 	MemoryPool& operator = (const MemoryPool&);
-
+	
 	void clear();
-
+	
 	enum
 	{
 		BLOCK_RESERVE = 128
 	};
-
+	
 	typedef std::vector<char*> BlockVec;
-
+	
 	std::size_t _blockSize;
 	int         _maxAlloc;
 	int         _allocated;
 	BlockVec    _blocks;
 	FastMutex   _mutex;
 };
-
-
-//
-// inlines
-//
-inline std::size_t MemoryPool::blockSize() const
-{
-	return _blockSize;
-}
-
-
-inline int MemoryPool::allocated() const
-{
-	return _allocated;
-}
-
-
-inline int MemoryPool::available() const
-{
-	return (int) _blocks.size();
-}
 
 
 //
@@ -123,7 +99,7 @@ inline int MemoryPool::available() const
 #define POCO_FAST_MEMORY_POOL_PREALLOC 1000
 
 
-template <typename T, typename M = SpinlockMutex>
+template <typename T, typename M = FastMutex>
 class FastMemoryPool
 	/// FastMemoryPool is a class for pooling fixed-size blocks of memory.
 	///
@@ -199,11 +175,11 @@ class FastMemoryPool
 	/// when a block is returned to the pool, it is re-inserted in the
 	/// list. Pool will return held memory to the system at destruction,
 	/// and will not leak memory after destruction; this means that after
-	/// pool destruction, any memory that was taken from, but not returned
-	/// to the pool becomes invalid.
+	/// pool destruction, any memory that was taken, but not returned to
+	/// it becomes invalid.
 	///
-	/// FastMemoryPool is thread safe; it uses Poco::SpinlockMutex by
-	/// default, but other mutexes can be specified through te template
+	/// FastMemoryPool is thread safe; it uses Poco::FastMutex by
+	/// default, but other mutexes can be specified through the template
 	/// parameter, if needed. Poco::NullMutex can be specified as template
 	/// parameter to avoid locking and improve speed in single-threaded
 	/// scenarios.
@@ -259,7 +235,7 @@ private:
 			/// Note that this storage is properly aligned
 			/// for the datatypes it holds. It will not work
 			/// for arrays of types smaller than pointer size.
-			/// Furthermore, the pool itself will not work for
+			/// Furthermore, the pool  itself will not work for
 			/// a variable-size array of any type after it is
 			/// resized.
 		{
@@ -270,8 +246,6 @@ private:
 	private:
 		Block(const Block&);
 		Block& operator = (const Block&);
-		Block(Block&&);
-		Block& operator = (Block&&);
 	};
 
 public:
@@ -296,8 +270,8 @@ public:
 		///                     defaults to POCO_FAST_MEMORY_POOL_PREALLOC
 		///
 		///   - bucketPreAlloc specifies how much space for bucket pointers
-		///                    (buckets themselves are not prealocated) will be
-		///                    pre-alocated.
+		///                    (buckets themselves are not pre-allocated) will
+		///                    be pre-alocated.
 		///
 		///   - maxAlloc specifies maximum allowed total pool size in bytes.
 	{
@@ -309,7 +283,7 @@ public:
 
 	~FastMemoryPool()
 		/// Destroys the FastMemoryPool and releases all memory.
-		/// Any emory taken from, but not returned to, the pool
+		/// Any memory taken from, but not returned to, the pool
 		/// becomes invalid.
 	{
 		clear();
@@ -366,10 +340,8 @@ public:
 	}
 
 private:
-	FastMemoryPool(const FastMemoryPool&) = delete;
-	FastMemoryPool& operator = (const FastMemoryPool&) = delete;
-	FastMemoryPool(FastMemoryPool&&) = delete;
-	FastMemoryPool& operator = (FastMemoryPool&&) = delete;
+	FastMemoryPool(const FastMemoryPool&);
+	FastMemoryPool& operator = (const FastMemoryPool&);
 
 	void resize()
 		/// Creates new bucket and initializes it for internal use.
@@ -383,20 +355,23 @@ private:
 			if (_maxAlloc != 0 && newSize > _maxAlloc) throw std::bad_alloc();
 			_buckets.reserve(newSize);
 		}
-		_buckets.emplace_back(new Block[_blocksPerBucket]);
+		_buckets.push_back(new Block[_blocksPerBucket]);
 		_firstBlock = _buckets.back();
 		// terminate last block
 		_firstBlock[_blocksPerBucket-1]._memory.next = 0;
-		_available += _blocksPerBucket;
+		_available = _available.value() + static_cast<AtomicCounter::ValueType>(_blocksPerBucket);
 	}
 
 	void clear()
 	{
-		for (auto& block : _buckets) delete[] block;
+		typename BucketVec::iterator it = _buckets.begin();
+		typename BucketVec::iterator end = _buckets.end();
+		for (; it != end; ++it) delete[] *it;
 	}
 
-	typedef std::atomic<std::size_t> Counter;
+	typedef Poco::AtomicCounter Counter;
 
+	const
 	std::size_t _blocksPerBucket;
 	BucketVec   _buckets;
 	Block*      _firstBlock;
@@ -404,6 +379,27 @@ private:
 	Counter     _available;
 	mutable M   _mutex;
 };
+
+
+//
+// inlines
+//
+inline std::size_t MemoryPool::blockSize() const
+{
+	return _blockSize;
+}
+
+
+inline int MemoryPool::allocated() const
+{
+	return _allocated;
+}
+
+
+inline int MemoryPool::available() const
+{
+	return (int) _blocks.size();
+}
 
 
 } // namespace Poco

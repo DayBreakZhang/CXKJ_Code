@@ -22,6 +22,7 @@
 #include <stdlib.h> // builtins
 #endif
 
+
 namespace Poco {
 
 
@@ -100,9 +101,9 @@ private:
 	template<typename T>
 	static T flip(T value)
 	{
-		T           flip     = value;
+		T flip = value;
 		std::size_t halfSize = sizeof(T) / 2;
-		char*       flipP    = reinterpret_cast<char*>(&flip);
+		char* flipP = reinterpret_cast<char*>(&flip);
 
 		for (std::size_t i = 0; i < halfSize; i++)
 		{
@@ -118,7 +119,7 @@ private:
 		#if (POCO_MSVC_VERSION > 71)
 			#define POCO_HAVE_MSC_BYTESWAP 1
 		#endif
-	#elif defined(__clang__)
+	#elif defined(__clang__) 
 		#if __has_builtin(__builtin_bswap32)
 			#define POCO_HAVE_GCC_BYTESWAP 1
 		#endif

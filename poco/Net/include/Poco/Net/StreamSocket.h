@@ -68,7 +68,7 @@ public:
 		///
 		/// Releases the socket's SocketImpl and
 		/// attaches the SocketImpl from the other socket and
-		/// increments the reference count of the SocketImpl.	
+		/// increments the reference count of the SocketImpl.
 
 	void connect(const SocketAddress& address);
 		/// Initializes the socket and establishes a connection to
@@ -87,39 +87,16 @@ public:
 		/// the TCP server at the given address. Prior to opening the
 		/// connection the socket is set to nonblocking mode.
 
-	void bind(const SocketAddress& address, bool reuseAddress);
-		/// Bind a local address to the socket.
-		///
-		/// This is usually only done when establishing a server
-		/// socket.
-		///
-		/// TCP clients normally do not bind to a local address,
-		/// but in some special advanced cases it may be useful to have
-		/// this type of functionality.  (e.g. in multihoming situations
-		/// where the traffic will be sent through a particular interface;
-		/// or in computer clustered environments with active/standby
-		/// servers and it is desired to make the traffic from either
-		/// active host present the same source IP address).
-		///
-		/// Note:  Practical use of client source IP address binding
-		///        may require OS networking setup outside the scope of
-		///        the Poco library.
-		///
-		/// If reuseAddress is true, sets the SO_REUSEADDR
-		/// socket option.
-		///
-		/// TODO: implement IPv6 version
-
 	void shutdownReceive();
 		/// Shuts down the receiving part of the socket connection.
-		
+
 	void shutdownSend();
 		/// Shuts down the sending part of the socket connection.
-		
+
 	void shutdown();
 		/// Shuts down both the receiving and the sending part
 		/// of the socket connection.
-	
+
 	int sendBytes(const void* buffer, int length, int flags = 0);
 		/// Sends the contents of the given buffer through
 		/// the socket.
@@ -129,6 +106,9 @@ public:
 		///
 		/// Certain socket implementations may also return a negative
 		/// value denoting a certain condition.
+		///
+		/// The flags parameter can be used to pass system-defined flags
+		/// for send() like MSG_OOB.
 
 	int sendBytes(const SocketBufVec& buffer, int flags = 0);
 		/// Sends the contents of the given buffers through
@@ -136,6 +116,9 @@ public:
 		///
 		/// Returns the number of bytes sent, which may be
 		/// less than the number of bytes specified.
+		///
+		/// The flags parameter can be used to pass system-defined flags
+		/// for send() like MSG_OOB.
 
 	int sendBytes(Poco::FIFOBuffer& buffer);
 		/// Sends the contents of the given buffer through
@@ -149,6 +132,9 @@ public:
 		///
 		/// Certain socket implementations may also return a negative
 		/// value denoting a certain condition.
+		///
+		/// The flags parameter can be used to pass system-defined flags
+		/// for send() like MSG_OOB.
 
 	int receiveBytes(void* buffer, int length, int flags = 0);
 		/// Receives data from the socket and stores it
@@ -161,16 +147,25 @@ public:
 		/// Throws a TimeoutException if a receive timeout has
 		/// been set and nothing is received within that interval.
 		/// Throws a NetException (or a subclass) in case of other errors.
+		///
+		/// The flags parameter can be used to pass system-defined flags
+		/// for recv() like MSG_OOB, MSG_PEEK or MSG_WAITALL.
 
 	int receiveBytes(SocketBufVec& buffer, int flags = 0);
 		/// Receives data from the socket and stores it in buffers.
 		///
 		/// Returns the number of bytes received.
+		///
+		/// The flags parameter can be used to pass system-defined flags
+		/// for recv() like MSG_OOB, MSG_PEEK or MSG_WAITALL.
 
 	int receiveBytes(Poco::Buffer<char>& buffer, int flags = 0, const Poco::Timespan& timeout = 100000);
 		/// Receives data from the socket and stores it in buffers.
 		///
 		/// Returns the number of bytes received.
+		///
+		/// The flags parameter can be used to pass system-defined flags
+		/// for recv() like MSG_OOB, MSG_PEEK or MSG_WAITALL.
 
 	int receiveBytes(Poco::FIFOBuffer& buffer);
 		/// Receives data from the socket and stores it

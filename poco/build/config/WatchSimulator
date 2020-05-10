@@ -1,10 +1,8 @@
 #
-# $Id$
-#
 # WatchSimulator
 #
 # Build settings for WatchOS 2.0 Simulator
-#
+# 
 
 WATCHOS_SDK        = WatchSimulator
 POCO_TARGET_OSARCH = i386

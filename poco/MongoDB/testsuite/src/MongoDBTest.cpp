@@ -10,7 +10,6 @@
 
 #include "Poco/DateTime.h"
 #include "Poco/ObjectPool.h"
-#include "Poco/Environment.h"
 #include "Poco/MongoDB/InsertRequest.h"
 #include "Poco/MongoDB/QueryRequest.h"
 #include "Poco/MongoDB/DeleteRequest.h"
@@ -20,12 +19,11 @@
 #include "Poco/MongoDB/Cursor.h"
 #include "Poco/MongoDB/ObjectId.h"
 #include "Poco/MongoDB/Binary.h"
-#include "Poco/MongoDB/Array.h"
 #include "Poco/Net/NetException.h"
 #include "Poco/UUIDGenerator.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
 #include "MongoDBTest.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include <iostream>
 
 
@@ -33,21 +31,6 @@ using namespace Poco::MongoDB;
 
 
 Poco::MongoDB::Connection::Ptr MongoDBTest::_mongo;
-
-namespace
-{
-	std::string getHost()
-	{
-#if POCO_OS == POCO_OS_ANDROID
-		return "10.0.2.2";
-#else
-		if(Poco::Environment::has("MONGODB_HOST"))
-			return Poco::Environment::get("MONGODB_HOST");
-		else
-			return "127.0.0.1";
-#endif
-	}
-}
 
 
 MongoDBTest::MongoDBTest(const std::string& name):
@@ -89,12 +72,6 @@ void MongoDBTest::testInsertRequest()
 
 	player->add("unknown", NullValue());
 
-	Poco::MongoDB::Array::Ptr points = new Poco::MongoDB::Array();
-	points->add<Poco::Int32>("0", 0);
-	points->add<Poco::Int64>("1", 1);
-	points->add<double>("2", 2);
-	player->add("points", points);
-
 	Poco::MongoDB::InsertRequest request("team.players");
 	request.documents().push_back(player);
 	_mongo->sendRequest(request);
@@ -128,8 +105,6 @@ void MongoDBTest::testQueryRequest()
 			assertTrue (doc->isType<NullValue>("unknown"));
 			bool active = doc->get<bool>("active");
 			assertTrue (!active);
-			Poco::MongoDB::Array::Ptr points = doc->get<Poco::MongoDB::Array::Ptr>("points");
-			assertTrue (points->getInteger(0) == 0 && points->getInteger(1) == 1 && points->getInteger(2) == 2);
 
 			std::string id = doc->get("_id")->toString();
 		}
@@ -246,7 +221,7 @@ void MongoDBTest::testDeleteRequest()
 void MongoDBTest::testCursorRequest()
 {
 	Poco::MongoDB::Database db("team");
-	
+
 	Poco::SharedPtr<Poco::MongoDB::DeleteRequest> deleteRequest = db.createDeleteRequest("numbers");
 	_mongo->sendRequest(*deleteRequest);
 
@@ -316,7 +291,12 @@ void MongoDBTest::testBuildInfo()
 
 void MongoDBTest::testConnectionPool()
 {
-	std::string host = getHost();
+#if POCO_OS == POCO_OS_ANDROID
+		std::string host = "10.0.2.2";
+#else
+		std::string host = "127.0.0.1";
+#endif
+
 	Poco::Net::SocketAddress sa(host, 27017);
 	Poco::PoolableObjectFactory<Poco::MongoDB::Connection, Poco::MongoDB::Connection::Ptr> factory(sa);
 	Poco::ObjectPool<Poco::MongoDB::Connection, Poco::MongoDB::Connection::Ptr> pool(factory, 10, 15);
@@ -425,7 +405,13 @@ void MongoDBTest::testConnectURI()
 {
 	Poco::MongoDB::Connection conn;
 	Poco::MongoDB::Connection::SocketFactory sf;
-	std::string host = getHost();
+
+#if POCO_OS == POCO_OS_ANDROID
+		std::string host = "10.0.2.2";
+#else
+		std::string host = "127.0.0.1";
+#endif
+
 	conn.connect("mongodb://" + host, sf);
 	conn.disconnect();
 
@@ -468,7 +454,11 @@ void MongoDBTest::testConnectURI()
 
 CppUnit::Test* MongoDBTest::suite()
 {
-	std::string host = getHost();
+#if POCO_OS == POCO_OS_ANDROID
+		std::string host = "10.0.2.2";
+#else
+		std::string host = "127.0.0.1";
+#endif
 	try
 	{
 		_mongo = new Poco::MongoDB::Connection(host, 27017);

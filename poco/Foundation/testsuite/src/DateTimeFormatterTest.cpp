@@ -9,8 +9,8 @@
 
 
 #include "DateTimeFormatterTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/DateTimeFormatter.h"
 #include "Poco/DateTimeFormat.h"
 #include "Poco/DateTime.h"
@@ -23,8 +23,8 @@ using Poco::DateTimeFormat;
 using Poco::DateTimeFormatter;
 
 
-DateTimeFormatterTest::DateTimeFormatterTest(const std::string& rName)
-	: CppUnit::TestCase(rName)
+DateTimeFormatterTest::DateTimeFormatterTest(const std::string& name)
+	: CppUnit::TestCase(name)
 {
 	// Linker regresion SF #3288584
 	std::string message;

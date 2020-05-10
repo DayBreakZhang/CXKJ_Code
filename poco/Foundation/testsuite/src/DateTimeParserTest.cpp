@@ -9,8 +9,8 @@
 
 
 #include "DateTimeParserTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/DateTimeParser.h"
 #include "Poco/DateTimeFormat.h"
 #include "Poco/DateTime.h"
@@ -25,7 +25,7 @@ using Poco::Timestamp;
 using Poco::SyntaxException;
 
 
-DateTimeParserTest::DateTimeParserTest(const std::string& rName): CppUnit::TestCase(rName)
+DateTimeParserTest::DateTimeParserTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -46,7 +46,6 @@ void DateTimeParserTest::testISO8601()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12.30:00Z", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FORMAT, "2005-01-08T12:30:00+01:00", tzd);
 	assertTrue (dt.year() == 2005);
@@ -56,7 +55,6 @@ void DateTimeParserTest::testISO8601()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 3600);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-8T12:30:00+01:00", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FORMAT, "2005-01-08T12:30:00-01:00", tzd);
 	assertTrue (dt.year() == 2005);
@@ -66,7 +64,6 @@ void DateTimeParserTest::testISO8601()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == -3600);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-0812:30:00-01:00", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FORMAT, "2005-01-08T12:30:00", tzd);
 	assertTrue (dt.year() == 2005);
@@ -76,7 +73,6 @@ void DateTimeParserTest::testISO8601()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12:30:0", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FORMAT, "2005-01-08", tzd);
 	assertTrue (dt.year() == 2005);
@@ -86,7 +82,6 @@ void DateTimeParserTest::testISO8601()
 	assertTrue (dt.minute() == 0);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-8", tzd);
 }
 
 
@@ -103,7 +98,6 @@ void DateTimeParserTest::testISO8601Frac()
 	assertTrue (dt.millisecond() == 0);
 	assertTrue (dt.microsecond() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-1-08T12:30:00Z", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12:30:00+01:00", tzd);
 	assertTrue (dt.year() == 2005);
@@ -115,7 +109,6 @@ void DateTimeParserTest::testISO8601Frac()
 	assertTrue (dt.millisecond() == 0);
 	assertTrue (dt.microsecond() == 0);
 	assertTrue (tzd == 3600);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08Z12:30:00+01:00", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12:30:00-01:00", tzd);
 	assertTrue (dt.year() == 2005);
@@ -127,7 +120,6 @@ void DateTimeParserTest::testISO8601Frac()
 	assertTrue (dt.millisecond() == 0);
 	assertTrue (dt.microsecond() == 0);
 	assertTrue (tzd == -3600);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12:30:00-01.00", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12:30:00", tzd);
 	assertTrue (dt.year() == 2005);
@@ -139,7 +131,6 @@ void DateTimeParserTest::testISO8601Frac()
 	assertTrue (dt.millisecond() == 0);
 	assertTrue (dt.microsecond() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12;30:00", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08", tzd);
 	assertTrue (dt.year() == 2005);
@@ -151,7 +142,6 @@ void DateTimeParserTest::testISO8601Frac()
 	assertTrue (dt.millisecond() == 0);
 	assertTrue (dt.microsecond() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01+08", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12:30:00.1Z", tzd);
 	assertTrue (dt.year() == 2005);
@@ -163,7 +153,6 @@ void DateTimeParserTest::testISO8601Frac()
 	assertTrue (dt.millisecond() == 100);
 	assertTrue (dt.microsecond() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12:30:00.1J", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12:30:00.123+01:00", tzd);
 	assertTrue (dt.year() == 2005);
@@ -175,7 +164,6 @@ void DateTimeParserTest::testISO8601Frac()
 	assertTrue (dt.millisecond() == 123);
 	assertTrue (dt.microsecond() == 0);
 	assertTrue (tzd == 3600);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12:30:00.123*01:00", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12:30:00.12345-01:00", tzd);
 	assertTrue (dt.year() == 2005);
@@ -187,7 +175,6 @@ void DateTimeParserTest::testISO8601Frac()
 	assertTrue (dt.millisecond() == 123);
 	assertTrue (dt.microsecond() == 450);
 	assertTrue (tzd == -3600);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01+08T12:30:00.12345-01:00", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FRAC_FORMAT, "2010-09-23T16:17:01.2817002+02:00", tzd);
 	assertTrue (dt.year() == 2010);
@@ -199,7 +186,6 @@ void DateTimeParserTest::testISO8601Frac()
 	assertTrue (dt.millisecond() == 281);
 	assertTrue (dt.microsecond() == 700);
 	assertTrue (tzd == 7200);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "201009-23T16:17:01.2817002+02:00", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12:30:00", tzd);
 	assertTrue (dt.year() == 2005);
@@ -211,7 +197,6 @@ void DateTimeParserTest::testISO8601Frac()
 	assertTrue (dt.millisecond() == 0);
 	assertTrue (dt.microsecond() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12:30:0", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08T12:30:00.123456", tzd);
 	assertTrue (dt.year() == 2005);
@@ -223,7 +208,6 @@ void DateTimeParserTest::testISO8601Frac()
 	assertTrue (dt.millisecond() == 123);
 	assertTrue (dt.microsecond() == 456);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "005-01-08T12:30:00.123456", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-08", tzd);
 	assertTrue (dt.year() == 2005);
@@ -235,9 +219,6 @@ void DateTimeParserTest::testISO8601Frac()
 	assertTrue (dt.millisecond() == 0);
 	assertTrue (dt.microsecond() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "2005-01-0", tzd);
-
-	testBad(DateTimeFormat::ISO8601_FRAC_FORMAT, "jnghjgnbcfjb", tzd);
 }
 
 
@@ -252,7 +233,6 @@ void DateTimeParserTest::testRFC822()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::RFC822_FORMAT, "at, 8 Jan 05 12:30:00 GMT", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::RFC822_FORMAT, "Sat, 8 Jan 05 12:30:00 +0100", tzd);
 	assertTrue (dt.year() == 2005);
@@ -262,7 +242,6 @@ void DateTimeParserTest::testRFC822()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 3600);
-	testBad(DateTimeFormat::RFC822_FORMAT, "Sat, x Jan 05 12:30:00 +0100", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::RFC822_FORMAT, "Sat, 8 Jan 05 12:30:00 -0100", tzd);
 	assertTrue (dt.year() == 2005);
@@ -272,37 +251,33 @@ void DateTimeParserTest::testRFC822()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == -3600);
-	testBad(DateTimeFormat::RFC822_FORMAT, "Sat, 8 Jan 05 12:30:00 *0100", tzd);
 
-	dt = DateTimeParser::parse(DateTimeFormat::RFC822_FORMAT, "Tue, 18 Jan 05 12:30:00 CDT", tzd);
+	dt = DateTimeParser::parse(DateTimeFormat::RFC822_FORMAT, "Tue, 18 Jan 05 12:30:00 CET", tzd);
 	assertTrue (dt.year() == 2005);
 	assertTrue (dt.month() == 1);
 	assertTrue (dt.day() == 18);
 	assertTrue (dt.hour() == 12);
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
-	assertTrue (tzd == -18000);
-	testBad(DateTimeFormat::RFC822_FORMAT, "Tue, 18 Jan 05 12:30:00 abc", tzd);
+	assertTrue (tzd == 3600);
 
-	dt = DateTimeParser::parse(DateTimeFormat::RFC822_FORMAT, "Wed, 12 Sep 73 02:01:12 CST", tzd);
+	dt = DateTimeParser::parse(DateTimeFormat::RFC822_FORMAT, "Wed, 12 Sep 73 02:01:12 CEST", tzd);
 	assertTrue (dt.year() == 1973);
 	assertTrue (dt.month() == 9);
 	assertTrue (dt.day() == 12);
 	assertTrue (dt.hour() == 2);
 	assertTrue (dt.minute() == 1);
 	assertTrue (dt.second() == 12);
-	assertTrue (tzd == -21600);
-	testBad(DateTimeFormat::RFC822_FORMAT, "Wed, 12 Sep 73 02:01:2 CST", tzd);
+	assertTrue (tzd == 7200);
 
-	dt = DateTimeParser::parse(DateTimeFormat::RFC822_FORMAT, "12 Sep 73 02:01:12 EST", tzd);
+	dt = DateTimeParser::parse(DateTimeFormat::RFC822_FORMAT, "12 Sep 73 02:01:12 CEST", tzd);
 	assertTrue (dt.year() == 1973);
 	assertTrue (dt.month() == 9);
 	assertTrue (dt.day() == 12);
 	assertTrue (dt.hour() == 2);
 	assertTrue (dt.minute() == 1);
 	assertTrue (dt.second() == 12);
-	assertTrue (tzd == -18000);
-	testBad(DateTimeFormat::RFC822_FORMAT, "12 Sep 73 02.01:12 EST", tzd);
+	assertTrue (tzd == 7200);
 }
 
 
@@ -317,7 +292,6 @@ void DateTimeParserTest::testRFC1123()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::RFC1123_FORMAT, "Sat, 8 Jan 2005 12:30:00 GPX", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::RFC1123_FORMAT, "Sat, 8 Jan 2005 12:30:00 +0100", tzd);
 	assertTrue (dt.year() == 2005);
@@ -327,7 +301,6 @@ void DateTimeParserTest::testRFC1123()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 3600);
-	testBad(DateTimeFormat::RFC1123_FORMAT, "Sat, 8 Jan 2005 xy:30:00 +0100", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::RFC1123_FORMAT, "Sat, 8 Jan 2005 12:30:00 -0100", tzd);
 	assertTrue (dt.year() == 2005);
@@ -337,37 +310,24 @@ void DateTimeParserTest::testRFC1123()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == -3600);
-	testBad(DateTimeFormat::RFC1123_FORMAT, "Sat, 8 Jan 205 12:30:00 -0100", tzd);
 
-	dt = DateTimeParser::parse(DateTimeFormat::RFC1123_FORMAT, "Tue, 18 Jan 2005 12:30:00 CDT", tzd);
-	assertTrue (dt.year() == 2005);
-	assertTrue (dt.month() == 1);
-	assertTrue (dt.day() == 18);
-	assertTrue (dt.hour() == 12);
-	assertTrue (dt.minute() == 30);
-	assertTrue (dt.second() == 0);
-	assertTrue (tzd == -18000);
-	testBad(DateTimeFormat::RFC1123_FORMAT, "Hue, 18 Jan 2005 12:30:00 CDT", tzd);
+	dt = DateTimeParser::parse(DateTimeFormat::RFC1123_FORMAT, "Sun, 20 Jul 1969 16:17:30 EDT", tzd);
+	assertTrue (dt.year() == 1969);
+	assertTrue (dt.month() == 7);
+	assertTrue (dt.day() == 20);
+	assertTrue (dt.hour() == 16);
+	assertTrue (dt.minute() == 17);
+	assertTrue (dt.second() == 30);
+	assertTrue (tzd == -14400);
 
-	dt = DateTimeParser::parse(DateTimeFormat::RFC1123_FORMAT, "Wed, 12 Sep 1973 02:01:12 CST", tzd);
-	assertTrue (dt.year() == 1973);
-	assertTrue (dt.month() == 9);
-	assertTrue (dt.day() == 12);
-	assertTrue (dt.hour() == 2);
-	assertTrue (dt.minute() == 1);
-	assertTrue (dt.second() == 12);
-	assertTrue (tzd == -21600);
-	testBad(DateTimeFormat::RFC1123_FORMAT, "Wed, 12 Sp 1973 02:01:12 CST", tzd);
-
-	dt = DateTimeParser::parse(DateTimeFormat::RFC1123_FORMAT, "12 Sep 1973 02:01:12 EST", tzd);
-	assertTrue (dt.year() == 1973);
-	assertTrue (dt.month() == 9);
-	assertTrue (dt.day() == 12);
-	assertTrue (dt.hour() == 2);
-	assertTrue (dt.minute() == 1);
-	assertTrue (dt.second() == 12);
-	assertTrue (tzd == -18000);
-	testBad(DateTimeFormat::RFC1123_FORMAT, "12 Sep 193 02:01:12 EST", tzd);
+	dt = DateTimeParser::parse(DateTimeFormat::RFC1123_FORMAT, "Sun, 20 Jul 1969 16:17:30 GMT+01:00", tzd);
+	assertTrue (dt.year() == 1969);
+	assertTrue (dt.month() == 7);
+	assertTrue (dt.day() == 20);
+	assertTrue (dt.hour() == 16);
+	assertTrue (dt.minute() == 17);
+	assertTrue (dt.second() == 30);
+	assertTrue (tzd == 3600);
 }
 
 
@@ -382,7 +342,6 @@ void DateTimeParserTest::testHTTP()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::HTTP_FORMAT, "Sat, 08 Jn 2005 12:30:00 GMT", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::HTTP_FORMAT, "Sat, 08 Jan 2005 12:30:00 +0100", tzd);
 	assertTrue (dt.year() == 2005);
@@ -392,7 +351,6 @@ void DateTimeParserTest::testHTTP()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 3600);
-	testBad(DateTimeFormat::HTTP_FORMAT, "Sat, 08 Jan 2005 12:30:00 j0100", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::HTTP_FORMAT, "Sat, 08 Jan 2005 12:30:00 -0100", tzd);
 	assertTrue (dt.year() == 2005);
@@ -402,7 +360,6 @@ void DateTimeParserTest::testHTTP()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == -3600);
-	testBad(DateTimeFormat::HTTP_FORMAT, "Sat 08 Jan 2005 12:30:00 -0100", tzd);
 }
 
 
@@ -417,7 +374,6 @@ void DateTimeParserTest::testRFC850()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::RFC850_FORMAT, "Saturday, 8-Jan 05 12:30:00 GMT", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::RFC850_FORMAT, "Saturday, 8-Jan-05 12:30:00 +0100", tzd);
 	assertTrue (dt.year() == 2005);
@@ -427,7 +383,6 @@ void DateTimeParserTest::testRFC850()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 3600);
-	testBad(DateTimeFormat::RFC850_FORMAT, "Saturday, 8+Jan-05 12:30:00 +0100", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::RFC850_FORMAT, "Saturday, 8-Jan-05 12:30:00 -0100", tzd);
 	assertTrue (dt.year() == 2005);
@@ -437,17 +392,15 @@ void DateTimeParserTest::testRFC850()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == -3600);
-	testBad(DateTimeFormat::RFC850_FORMAT, "Saturday 8-Jan-05 12:30:00 -0100", tzd);
 	
-	dt = DateTimeParser::parse(DateTimeFormat::RFC850_FORMAT, "Wed, 12-Sep-73 02:01:12 CST", tzd);
+	dt = DateTimeParser::parse(DateTimeFormat::RFC850_FORMAT, "Wed, 12-Sep-73 02:01:12 CEST", tzd);
 	assertTrue (dt.year() == 1973);
 	assertTrue (dt.month() == 9);
 	assertTrue (dt.day() == 12);
 	assertTrue (dt.hour() == 2);
 	assertTrue (dt.minute() == 1);
 	assertTrue (dt.second() == 12);
-	assertTrue (tzd == -21600);
-	testBad(DateTimeFormat::RFC850_FORMAT, "Wed, 12-pep-73 02:01:12 CST", tzd);
+	assertTrue (tzd == 7200);
 }
 
 
@@ -462,7 +415,6 @@ void DateTimeParserTest::testRFC1036()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::RFC1036_FORMAT, "Saturday, 8 Jan 0512:30:00 GMT", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::RFC1036_FORMAT, "Saturday, 8 Jan 05 12:30:00 +0100", tzd);
 	assertTrue (dt.year() == 2005);
@@ -472,7 +424,6 @@ void DateTimeParserTest::testRFC1036()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 3600);
-	testBad(DateTimeFormat::RFC1036_FORMAT, "Saturday, 8 Jan 051 12:30:00 +0100", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::RFC1036_FORMAT, "Saturday, 8 Jan 05 12:30:00 -0100", tzd);
 	assertTrue (dt.year() == 2005);
@@ -482,7 +433,6 @@ void DateTimeParserTest::testRFC1036()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == -3600);
-	testBad(DateTimeFormat::RFC1036_FORMAT, "Saturday, 8 Jan 05 12:30:00 -0100x", tzd);
 }
 
 
@@ -497,7 +447,6 @@ void DateTimeParserTest::testASCTIME()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::ASCTIME_FORMAT, "Bat Jan  8 12:30:00 2005", tzd);
 }
 
 
@@ -512,7 +461,6 @@ void DateTimeParserTest::testSORTABLE()
 	assertTrue (dt.minute() == 30);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::SORTABLE_FORMAT, "2005-01-08 12:30;00", tzd);
 
 	dt = DateTimeParser::parse(DateTimeFormat::SORTABLE_FORMAT, "2005-01-08", tzd);
 	assertTrue (dt.year() == 2005);
@@ -522,7 +470,6 @@ void DateTimeParserTest::testSORTABLE()
 	assertTrue (dt.minute() == 0);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 0);
-	testBad(DateTimeFormat::SORTABLE_FORMAT, "2005+01-08", tzd);
 }
 
 
@@ -537,7 +484,7 @@ void DateTimeParserTest::testCustom()
 	assertTrue (dt.minute() == 0);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 0);
-
+	
 	dt = DateTimeParser::parse("%m/%d/%y", "01/18/05", tzd);
 	assertTrue (dt.year() == 2005);
 	assertTrue (dt.month() == 1);
@@ -546,7 +493,7 @@ void DateTimeParserTest::testCustom()
 	assertTrue (dt.minute() == 0);
 	assertTrue (dt.second() == 0);
 	assertTrue (tzd == 0);
-
+	
 	dt = DateTimeParser::parse("%h:%M %a", "12:30 am", tzd);
 	assertTrue (dt.hour() == 0);
 	assertTrue (dt.minute() == 30);
@@ -808,18 +755,6 @@ void DateTimeParserTest::testParseDayOfWeek()
 	catch (SyntaxException&)
 	{
 	}
-}
-
-
-void DateTimeParserTest::testBad(const std::string& fmt, const std::string& dateStr, int tzd)
-{
-	try
-	{
-		DateTime dt;
-		DateTimeParser::parse(fmt, dateStr, dt, tzd);
-		fail ("must fail");
-	}
-	catch(const Poco::Exception) { }
 }
 
 

@@ -27,7 +27,7 @@ WhitespaceFilter::WhitespaceFilter():
 }
 
 	
-WhitespaceFilter::WhitespaceFilter(XMLReader* pReader):
+WhitespaceFilter::WhitespaceFilter(XMLReader* pReader): 
 	XMLFilterImpl(pReader),
 	_pLexicalHandler(0),
 	_filter(true)
@@ -128,7 +128,7 @@ void WhitespaceFilter::characters(const XMLChar ch[], int start, int length)
 }
 
 
-void WhitespaceFilter::ignorableWhitespace(const XMLChar /*ch*/[], int /*start*/, int /*length*/)
+void WhitespaceFilter::ignorableWhitespace(const XMLChar ch[], int start, int length)
 {
 	// the handler name already says that this data can be ignored
 }

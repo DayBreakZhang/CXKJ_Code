@@ -21,7 +21,7 @@ namespace Poco {
 namespace MongoDB {
 
 
-ReplicaSet::ReplicaSet(const std::vector<Net::SocketAddress> &addresses):
+ReplicaSet::ReplicaSet(const std::vector<Net::SocketAddress> &addresses): 
 	_addresses(addresses)
 {
 }
@@ -82,7 +82,7 @@ Connection::Ptr ReplicaSet::isMaster(const Net::SocketAddress& address)
 		conn = 0;
 	}
 	
-	return 0;
+	return 0; 
 }
 
 

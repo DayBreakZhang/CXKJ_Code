@@ -22,8 +22,9 @@
 #include "Poco/DateTime.h"
 #include <set>
 #include <istream>
-#include <Poco/UnWindows.h>
+#if defined(POCO_OS_FAMILY_WINDOWS)
 #include <wincrypt.h>
+#endif
 
 
 namespace Poco {
@@ -63,21 +64,27 @@ public:
 
 	explicit X509Certificate(PCCERT_CONTEXT pCert);
 		/// Creates the X509Certificate from an existing
-		/// WinCrypt certificate. Ownership is taken of
+		/// WinCrypt certificate. Ownership is taken of 
 		/// the certificate.
 
 	X509Certificate(PCCERT_CONTEXT pCert, bool shared);
 		/// Creates the X509Certificate from an existing
-		/// WinCrypt certificate. Ownership is taken of
-		/// the certificate. If shared is true, the
+		/// WinCrypt certificate. Ownership is taken of 
+		/// the certificate. If shared is true, the 
 		/// certificate's reference count is incremented.
 
 	X509Certificate(const X509Certificate& cert);
 		/// Creates the certificate by copying another one.
 
+	X509Certificate(X509Certificate&& cert) noexcept;
+		/// Creates the certificate by moving another one.
+
 	X509Certificate& operator = (const X509Certificate& cert);
 		/// Assigns a certificate.
 
+	X509Certificate& operator = (X509Certificate&& cert) noexcept;
+		/// Move-assigns a certificate.
+ 
 	void swap(X509Certificate& cert);
 		/// Exchanges the certificate with another one.
 
@@ -85,7 +92,7 @@ public:
 		/// Destroys the X509Certificate.
 
 	const std::string& issuerName() const;
-		/// Returns the certificate issuer's distinguished name.
+		/// Returns the certificate issuer's distinguished name. 
 		
 	std::string issuerName(NID nid) const;
 		/// Extracts the information specified by the given
@@ -131,7 +138,7 @@ public:
 		/// For this check to be successful, the certificate must contain
 		/// a domain name that matches the domain name
 		/// of the host.
-		///
+		/// 
 		/// Returns true if verification succeeded, or false otherwise.
 		
 	static bool verify(const Poco::Net::X509Certificate& cert, const std::string& hostName);

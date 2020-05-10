@@ -9,8 +9,8 @@
 
 
 #include "NumberParserTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Exception.h"
 #include "Poco/Types.h"
 #include "Poco/Format.h"
@@ -31,14 +31,16 @@ using Poco::Int16;
 using Poco::UInt16;
 using Poco::Int32;
 using Poco::UInt32;
+#if defined(POCO_HAVE_INT64)
 using Poco::Int64;
 using Poco::UInt64;
+#endif
 using Poco::format;
 using Poco::decimalSeparator;
 using Poco::thousandSeparator;
 
 
-NumberParserTest::NumberParserTest(const std::string& rName): CppUnit::TestCase(rName)
+NumberParserTest::NumberParserTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -72,7 +74,6 @@ void NumberParserTest::testParse()
 	assertTrue (NumberParser::parseHex("12AB") == 0x12ab);
 	assertTrue (NumberParser::parseHex("0x12AB") == 0x12ab);
 	assertTrue (NumberParser::parseHex("0X12AB") == 0x12ab);
-	assertTrue (NumberParser::parseHex("0x99a") == 0x99a);
 	assertTrue (NumberParser::parseHex("00") == 0);
 	assertTrue (NumberParser::parseOct("123") == 0123);
 	assertTrue (NumberParser::parseOct("0123") == 0123);
@@ -181,9 +182,12 @@ void NumberParserTest::testLimits()
 	assertTrue (testUpperLimit<Int32>());
 	assertTrue (testLowerLimit<Int32>());
 	assertTrue (testUpperLimit<UInt32>());
+
+#if defined(POCO_HAVE_INT64)
 	assertTrue (testUpperLimit64<Int64>());
 	assertTrue (testLowerLimit64<Int64>());
 	assertTrue (testUpperLimit64<UInt64>());
+#endif
 }
 
 
@@ -253,14 +257,7 @@ void NumberParserTest::testParseError()
 		NumberParser::parseHex("23z");
 		failmsg("must throw SyntaxException");
 	} catch (SyntaxException&) { }
-
-	try
-	{
-		NumberParser::parseHex("xxx");
-		failmsg("must throw SyntaxException");
-	}
-	catch (SyntaxException&) {}
-
+	
 #if defined(POCO_HAVE_INT64)
 
 	try
@@ -286,7 +283,7 @@ void NumberParserTest::testParseError()
 		NumberParser::parseHex64("12345z");
 		failmsg("must throw SyntaxException");
 	} catch (SyntaxException&) { }
-
+	
 	try
 	{
 		NumberParser::parseHex64(format("123%c45", ts));

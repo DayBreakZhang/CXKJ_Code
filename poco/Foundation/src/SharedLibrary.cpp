@@ -22,8 +22,8 @@
 #include "SharedLibrary_VX.cpp"
 #elif defined(POCO_OS_FAMILY_UNIX)
 #include "SharedLibrary_UNIX.cpp"
-#elif defined(POCO_OS_FAMILY_WINDOWS)
-#include "SharedLibrary_WIN32.cpp"
+#elif defined(POCO_OS_FAMILY_WINDOWS) 
+#include "SharedLibrary_WIN32U.cpp"
 #endif
 
 
@@ -98,20 +98,16 @@ const std::string& SharedLibrary::getPath() const
 }
 
 
-std::string SharedLibrary::prefix()
-{
-	return prefixImpl();
-}
-
-
 std::string SharedLibrary::suffix()
 {
 	return suffixImpl();
 }
 
-std::string SharedLibrary::getOSName(const std::string& name)
+
+bool SharedLibrary::setSearchPath(const std::string& path)
 {
-	return prefix() + name + suffix();
+	return setSearchPathImpl(path);
 }
+
 
 } // namespace Poco

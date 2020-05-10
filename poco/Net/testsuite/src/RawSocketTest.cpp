@@ -9,8 +9,8 @@
 
 
 #include "RawSocketTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/RawSocket.h"
 #include "Poco/Net/RawSocketImpl.h"
 #include "Poco/Net/SocketAddress.h"
@@ -60,7 +60,7 @@ void RawSocketTest::testEchoIPv4()
 	assertTrue (5 == (n - shift));
 	assertTrue ("hello" == std::string((char*)ptr, 5));
 
-	rs.close();
+	rs.close(); 
 }
 
 

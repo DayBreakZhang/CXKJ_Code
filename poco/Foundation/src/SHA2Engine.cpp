@@ -19,10 +19,13 @@
 // SPDX-License-Identifier:	BSL-1.0
 //
 
+
 #include "Poco/SHA2Engine.h"
 #include <string.h>
 
+
 namespace Poco {
+
 
 typedef struct
 {
@@ -31,14 +34,18 @@ typedef struct
 		Poco::UInt32 total32[4];
 		Poco::UInt64 total64[2];
 	} total;
+
 	union
 	{
 		Poco::UInt32 state32[16];
 		Poco::UInt64 state64[8];
 	} state;
+
 	SHA2Engine::ALGORITHM size;
 	unsigned char buffer[128];
 } HASHCONTEXT;
+
+
 static const Poco::UInt32 K32[] =
 {
 	0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5,
@@ -58,11 +65,15 @@ static const Poco::UInt32 K32[] =
 	0x748F82EE, 0x78A5636F, 0x84C87814, 0x8CC70208,
 	0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2,
 };
+
+
 #if defined(_MSC_VER) || defined(__WATCOMC__)
 #define UL64(x) x##ui64
 #else
 #define UL64(x) x##ULL
 #endif
+
+
 static const Poco::UInt64 K64[80] =
 {
 	UL64(0x428A2F98D728AE22), UL64(0x7137449123EF65CD),
@@ -106,7 +117,11 @@ static const Poco::UInt64 K64[80] =
 	UL64(0x4CC5D4BECB3E42B6), UL64(0x597F299CFC657E2A),
 	UL64(0x5FCB6FAB3AD6FAEC), UL64(0x6C44198C4A475817)
 };
+
+
 static const unsigned char padding[128] = { 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+
 #define SHR32(x,n) ((x & 0xFFFFFFFF) >> n)
 #define SHR64(x,n) (x >> n)
 #define ROTR32(x,n) (SHR32(x,n) | (x << (32 - n)))
@@ -136,52 +151,6 @@ static const unsigned char padding[128] = { 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 	temp2 = S642(a) + F640(a,b,c);             \
 	d += temp1; h = temp1 + temp2;             \
 }
-#ifdef POCO_ARCH_BIG_ENDIAN
-#ifndef GET_UINT32
-#define GET_UINT32(n,b,i)                        \
-do {                                             \
-	(n) = ( (Poco::UInt32) (b)[(i)    ]       )  \
-		| ( (Poco::UInt32) (b)[(i) + 1] <<  8 )  \
-		| ( (Poco::UInt32) (b)[(i) + 2] << 16 )  \
-		| ( (Poco::UInt32) (b)[(i) + 3] << 24 ); \
-} while( 0 )
-#endif
-#ifndef PUT_UINT32
-#define PUT_UINT32(n,b,i)                         \
-do {                                              \
-	(b)[(i)    ] = (unsigned char) ( (n)       ); \
-	(b)[(i) + 1] = (unsigned char) ( (n) >>  8 ); \
-	(b)[(i) + 2] = (unsigned char) ( (n) >> 16 ); \
-	(b)[(i) + 3] = (unsigned char) ( (n) >> 24 ); \
-} while( 0 )
-#endif
-#ifndef GET_UINT64
-#define GET_UINT64(n,b,i)                        \
-{                                                \
-	(n) = ( (Poco::UInt64) (b)[(i)    ]       )  \
-		| ( (Poco::UInt64) (b)[(i) + 1] <<  8 )  \
-		| ( (Poco::UInt64) (b)[(i) + 2] << 16 )  \
-		| ( (Poco::UInt64) (b)[(i) + 3] << 24 )  \
-		| ( (Poco::UInt64) (b)[(i) + 4] << 32 )  \
-		| ( (Poco::UInt64) (b)[(i) + 5] << 40 )  \
-		| ( (Poco::UInt64) (b)[(i) + 6] << 48 )  \
-		| ( (Poco::UInt64) (b)[(i) + 7] << 56 ); \
-}
-#endif
-#ifndef PUT_UINT64
-#define PUT_UINT64(n,b,i)                         \
-{                                                 \
-	(b)[(i)    ] = (unsigned char) ( (n)       ); \
-	(b)[(i) + 1] = (unsigned char) ( (n) >>  8 ); \
-	(b)[(i) + 2] = (unsigned char) ( (n) >> 16 ); \
-	(b)[(i) + 3] = (unsigned char) ( (n) >> 24 ); \
-	(b)[(i) + 4] = (unsigned char) ( (n) >> 32 ); \
-	(b)[(i) + 5] = (unsigned char) ( (n) >> 40 ); \
-	(b)[(i) + 6] = (unsigned char) ( (n) >> 48 ); \
-	(b)[(i) + 7] = (unsigned char) ( (n) >> 56 ); \
-}
-#endif
-#else
 #ifndef GET_UINT32
 #define GET_UINT32(n,b,i)                        \
 do {                                             \
@@ -226,21 +195,23 @@ do {                                              \
 	(b)[(i) + 7] = (unsigned char) ( (n)       ); \
 }
 #endif
-#endif
 
-SHA2Engine::SHA2Engine(ALGORITHM algorithm)
-	: _context(NULL),
+
+SHA2Engine::SHA2Engine(ALGORITHM algorithm):
+	_context(NULL),
 	_algorithm(algorithm)
 {
 	_digest.reserve(digestLength());
 	reset();
 }
 
+
 SHA2Engine::~SHA2Engine()
 {
 	reset();
 	free(_context);
 }
+
 
 void _sha256_process(HASHCONTEXT* pContext, const unsigned char data[64])
 {
@@ -273,6 +244,7 @@ void _sha256_process(HASHCONTEXT* pContext, const unsigned char data[64])
 	for (i = 0; i < 8; i++) pContext->state.state32[i] += temp3[i];
 }
 
+
 void _sha512_process(HASHCONTEXT* pContext, const unsigned char data[128])
 {
 	int i;
@@ -294,6 +266,7 @@ void _sha512_process(HASHCONTEXT* pContext, const unsigned char data[128])
 	} while (i < 80);
 	for (i = 0; i < 8; i++) pContext->state.state64[i] += temp3[i];
 }
+
 
 void SHA2Engine::updateImpl(const void* buffer_, std::size_t count)
 {
@@ -347,10 +320,12 @@ void SHA2Engine::updateImpl(const void* buffer_, std::size_t count)
 	if (count > 0) memcpy((void *)(pContext->buffer + left), data, count);
 }
 
+
 std::size_t SHA2Engine::digestLength() const
 {
 	return (size_t)((int)_algorithm / 8);
 }
+
 
 void SHA2Engine::reset()
 {
@@ -403,6 +378,7 @@ void SHA2Engine::reset()
 		pContext->state.state64[7] = UL64(0x5BE0CD19137E2179);
 	}
 }
+
 
 const DigestEngine::Digest& SHA2Engine::digest()
 {
@@ -459,5 +435,6 @@ const DigestEngine::Digest& SHA2Engine::digest()
 	reset();
 	return _digest;
 }
+
 
 } // namespace Poco

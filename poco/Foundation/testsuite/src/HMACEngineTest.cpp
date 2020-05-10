@@ -9,8 +9,8 @@
 
 
 #include "HMACEngineTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/HMACEngine.h"
 #include "Poco/MD5Engine.h"
 
@@ -20,7 +20,7 @@ using Poco::MD5Engine;
 using Poco::DigestEngine;
 
 
-HMACEngineTest::HMACEngineTest(const std::string& rName): CppUnit::TestCase(rName)
+HMACEngineTest::HMACEngineTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -48,8 +48,8 @@ void HMACEngineTest::testHMAC()
 	digest = DigestEngine::digestToHex(hmac2.digest());
 	assertTrue (digest == "750c783e6ab0b503eaa86e310a5db738");
 	
-	key  = std::string(16, char(0xaa));
-	data = std::string(50, char(0xdd));
+	key  = std::string(16, std::string::value_type(0xaa));
+	data = std::string(50, std::string::value_type(0xdd));
 	HMACEngine<MD5Engine> hmac3(key);
 	hmac3.update(data);
 	digest = DigestEngine::digestToHex(hmac3.digest());

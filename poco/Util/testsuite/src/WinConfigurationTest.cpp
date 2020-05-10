@@ -9,8 +9,8 @@
 
 
 #include "WinConfigurationTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Util/WinRegistryConfiguration.h"
 #include "Poco/Util/WinRegistryKey.h"
 #include "Poco/Environment.h"
@@ -55,7 +55,7 @@ void WinConfigurationTest::testConfiguration()
 #if defined(POCO_HAVE_INT64)
 	pReg->setUInt64("name2", std::numeric_limits<UInt64>::max()); // overwrite should also change type
 	assertTrue (pReg->getUInt64("name2") == std::numeric_limits<UInt64>::max());
-	pReg->setInt64("name2", std::numeric_limits<Int64>::min());
+	pReg->setInt64("name2", std::numeric_limits<Int64>::min()); 
 	assertTrue (pReg->getInt64("name2") == std::numeric_limits<Int64>::min());
 
 	/// write real int64 value type
@@ -87,9 +87,7 @@ void WinConfigurationTest::testConfiguration()
 	assertTrue (pView->getString("sub.foo", "default") == "bar");
 
 	std::string value;
-#ifndef __MINGW32__
 	assertTrue (pReg->convertToRegFormat("A.B.C", value) == "A\\B");
-#endif
 	assertTrue (value == "C");
 
 	Poco::Util::AbstractConfiguration::Keys keys;

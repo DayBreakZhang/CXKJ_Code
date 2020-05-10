@@ -9,12 +9,11 @@
 
 
 #include "PatternFormatterTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/PatternFormatter.h"
 #include "Poco/Message.h"
 #include "Poco/DateTime.h"
-#include "Poco/Exception.h"
 
 
 using Poco::PatternFormatter;
@@ -22,7 +21,7 @@ using Poco::Message;
 using Poco::DateTime;
 
 
-PatternFormatterTest::PatternFormatterTest(const std::string& rName): CppUnit::TestCase(rName)
+PatternFormatterTest::PatternFormatterTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -92,21 +91,6 @@ void PatternFormatterTest::testPatternFormatter()
 	fmt.setProperty("pattern", "start %v[8] end");
 	fmt.format(msg, result);
 	assertTrue (result == "start stSource end");
-	
-	result.clear();
-	fmt.setProperty("pattern", "%p");
-	fmt.setProperty("priorityNames", "FAT, CRI, ERR, WRN, NTC, INF, DBG, TRC");
-	fmt.format(msg, result);
-	assertTrue (result == "ERR");
-	
-	try
-	{
-		fmt.setProperty("priorityNames", "FAT, CRI,");
-		fail("invalid value, must throw");
-	}
-	catch (Poco::SyntaxException&)
-	{
-	}
 }
 
 

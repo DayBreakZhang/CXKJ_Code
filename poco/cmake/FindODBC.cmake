@@ -17,7 +17,6 @@
 # Hints:
 # Set ``ODBC_ROOT_DIR`` to the root directory of an installation.
 #
-MESSAGE(STATUS "-----------------------------------")
 include(FindPackageHandleStandardArgs)
 
 find_package(PkgConfig QUIET)
@@ -76,7 +75,7 @@ find_library(ODBC_LIBRARY
 		/usr/local/iodbc/lib
 		"C:/Program Files/ODBC/lib"
 		"C:/ODBC/lib/debug"
-		"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.0A/x64/Lib"
+		"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.0A/Lib"
 		"${kit81_dir}/Lib/winv6.3/um"
 		"${kit_dir}/Lib/win8/um"
 	PATH_SUFIXES
@@ -108,7 +107,7 @@ foreach(_lib_name IN LISTS _odbc_required_libs_names)
 			/usr/local/iodbc/lib
 			"C:/Program Files/ODBC/lib"
 			"C:/ODBC/lib/debug"
-			"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.0A/x64/Lib"
+			"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.0A/Lib"
 		PATH_SUFFIXES
 			odbc
 	)

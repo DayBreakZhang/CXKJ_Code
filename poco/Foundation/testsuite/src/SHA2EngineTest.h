@@ -9,11 +9,14 @@
 // SPDX-License-Identifier:	BSL-1.0
 //
 
+
 #ifndef SHA2EngineTest_INCLUDED
 #define SHA2EngineTest_INCLUDED
 
+
 #include "Poco/Foundation.h"
-#include "Poco/CppUnit/TestCase.h"
+#include "CppUnit/TestCase.h"
+
 
 class SHA2EngineTest: public CppUnit::TestCase
 {
@@ -33,5 +36,6 @@ public:
 
 private:
 };
+
 
 #endif // SHA2EngineTest_INCLUDED

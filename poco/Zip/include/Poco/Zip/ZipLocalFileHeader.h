@@ -3,14 +3,14 @@
 //
 // Library: Zip
 // Package: Zip
-// Module:	ZipLocalFileHeader
+// Module:  ZipLocalFileHeader
 //
 // Definition of the ZipLocalFileHeader class.
 //
 // Copyright (c) 2007, Applied Informatics Software Engineering GmbH.
 // and Contributors.
 //
-// SPDX-License-Identifier: BSL-1.0
+// SPDX-License-Identifier:	BSL-1.0
 //
 
 
@@ -81,9 +81,11 @@ public:
 	ZipCommon::CompressionMethod getCompressionMethod() const;
 
 	ZipCommon::CompressionLevel getCompressionLevel() const;
-		/// Returns the compression level used. Only valid when the compression method is CM_DEFLATE
+	/// Returns the compression level used. Only valid when the compression method is CM_DEFLATE
 
 	bool isEncrypted() const;
+
+	bool hasSupportedCompressionMethod() const;
 
 	const Poco::DateTime& lastModifiedAt() const;
 
@@ -132,7 +134,7 @@ private:
 	void init(const Poco::Path& fileName, ZipCommon::CompressionMethod cm, ZipCommon::CompressionLevel cl);
 
 	Poco::UInt16 getFileNameLength() const;
-	
+
 	Poco::UInt16 getExtraFieldLength() const;
 
 	Poco::UInt32 getCRCFromHeader() const;
@@ -194,16 +196,16 @@ private:
 	};
 
 	bool		   _forceZip64;
-	char		   _rawHeader[FULLHEADER_SIZE];
+	char           _rawHeader[FULLHEADER_SIZE];
 	std::streamoff _startPos;
 	std::streamoff _endPos;
-	std::string	   _fileName;
+	std::string    _fileName;
 	Poco::DateTime _lastModifiedAt;
-	std::string	   _extraField;
+	std::string    _extraField;
 	Poco::UInt32   _crc32;
 	Poco::UInt64   _compressedSize;
 	Poco::UInt64   _uncompressedSize;
-	
+
 	friend class ZipStreamBuf;
 };
 
@@ -364,6 +366,13 @@ inline bool ZipLocalFileHeader::isEncrypted() const
 {
 	// bit 0 indicates encryption
 	return ((ZipUtil::get16BitValue(_rawHeader, GENERAL_PURPOSE_POS) & 0x0001) != 0);
+}
+
+
+inline bool ZipLocalFileHeader::hasSupportedCompressionMethod() const
+{
+	ZipCommon::CompressionMethod method = getCompressionMethod();
+	return method == ZipCommon::CM_DEFLATE || method == ZipCommon::CM_STORE;
 }
 
 

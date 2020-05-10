@@ -16,7 +16,7 @@
 
 
 #if defined(POCO_OS_FAMILY_WINDOWS)
-#include "DirectoryIterator_WIN32.cpp"
+#include "DirectoryIterator_WIN32U.cpp"
 #elif defined(POCO_OS_FAMILY_UNIX)
 #include "DirectoryIterator_UNIX.cpp"
 #endif
@@ -30,7 +30,7 @@ DirectoryIterator::DirectoryIterator(): _pImpl(0)
 }
 
 
-DirectoryIterator::DirectoryIterator(const std::string& pathString): _path(pathString), _pImpl(new DirectoryIteratorImpl(pathString))
+DirectoryIterator::DirectoryIterator(const std::string& path): _path(path), _pImpl(new DirectoryIteratorImpl(path))
 {
 	_path.makeDirectory();
 	_path.setFileName(_pImpl->get());
@@ -56,7 +56,7 @@ DirectoryIterator::DirectoryIterator(const File& file): _path(file.path()), _pIm
 }
 
 
-DirectoryIterator::DirectoryIterator(const Path& otherPath): _path(otherPath), _pImpl(new DirectoryIteratorImpl(otherPath.toString()))
+DirectoryIterator::DirectoryIterator(const Path& path): _path(path), _pImpl(new DirectoryIteratorImpl(path.toString()))
 {
 	_path.makeDirectory();
 	_path.setFileName(_pImpl->get());
@@ -72,13 +72,16 @@ DirectoryIterator::~DirectoryIterator()
 
 DirectoryIterator& DirectoryIterator::operator = (const DirectoryIterator& it)
 {
-	if (_pImpl) _pImpl->release();
-	_pImpl = it._pImpl;
-	if (_pImpl)
+	if (&it != this)
 	{
-		_pImpl->duplicate();
-		_path = it._path;
-		_file = _path;
+		if (_pImpl) _pImpl->release();
+		_pImpl = it._pImpl;
+		if (_pImpl)
+		{
+			_pImpl->duplicate();
+			_path = it._path;
+			_file = _path;
+		}
 	}
 	return *this;
 }
@@ -95,11 +98,11 @@ DirectoryIterator& DirectoryIterator::operator = (const File& file)
 }
 
 
-DirectoryIterator& DirectoryIterator::operator = (const Path& otherPath)
+DirectoryIterator& DirectoryIterator::operator = (const Path& path)
 {
 	if (_pImpl) _pImpl->release();
-	_pImpl = new DirectoryIteratorImpl(otherPath.toString());
-	_path = otherPath;
+	_pImpl = new DirectoryIteratorImpl(path.toString());
+	_path = path;
 	_path.makeDirectory();
 	_path.setFileName(_pImpl->get());
 	_file = _path;
@@ -107,11 +110,11 @@ DirectoryIterator& DirectoryIterator::operator = (const Path& otherPath)
 }
 
 
-DirectoryIterator& DirectoryIterator::operator = (const std::string& pathString)
+DirectoryIterator& DirectoryIterator::operator = (const std::string& path)
 {
 	if (_pImpl) _pImpl->release();
-	_pImpl = new DirectoryIteratorImpl(pathString);
-	_path.parseDirectory(pathString);
+	_pImpl = new DirectoryIteratorImpl(path);
+	_path.parseDirectory(path);
 	_path.setFileName(_pImpl->get());
 	_file = _path;
 	return *this;
@@ -129,7 +132,7 @@ DirectoryIterator& DirectoryIterator::operator ++ ()
 }
 
 
-DirectoryIterator DirectoryIterator::operator ++ (int /*dummy*/)
+DirectoryIterator DirectoryIterator::operator ++ (int dummy)
 {
 	if (_pImpl)
 	{

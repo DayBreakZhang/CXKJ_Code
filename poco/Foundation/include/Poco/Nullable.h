@@ -19,7 +19,6 @@
 
 
 #include "Poco/Foundation.h"
-#include "Poco/MemoryPool.h"
 #include "Poco/Exception.h"
 #include <algorithm>
 #include <iostream>
@@ -54,56 +53,93 @@ class Nullable
 	/// It is possible to assign a value to a Nullable, and
 	/// to reset a Nullable to contain a Null value by calling
 	/// clear().
+	///
+	/// For use with Nullable, the value type should support
+	/// default construction.
 {
 public:
-	Nullable(): _isNull(true)
+	Nullable():
 		/// Creates an empty Nullable.
+		_value(),
+		_isNull(true),
+		_null()
 	{
-		construct();
 	}
 
-	Nullable(const NullType&): _isNull(true)
+	Nullable(const NullType&):
 		/// Creates an empty Nullable.
+		_value(),
+		_isNull(true),
+		_null()
 	{
-		construct();
 	}
 
-	Nullable(const C& val): _isNull(true)
+	Nullable(const C& value):
 		/// Creates a Nullable with the given value.
+		_value(value),
+		_isNull(false),
+		_null()
 	{
-		construct(&val);
 	}
 
-	Nullable(const Nullable& other): _isNull(true)
-		/// Creates a Nullable by copying another one.
+	Nullable(C&& value):
+		/// Creates a Nullable by moving the given value.
+		_value(value),
+		_isNull(false),
+		_null()
 	{
-		construct(other);
+	}
+
+	Nullable(const Nullable& other):
+		/// Creates a Nullable by copying another one.
+		_value(other._value),
+		_isNull(other._isNull),
+		_null()
+	{
+	}
+
+	Nullable(Nullable&& other) noexcept:
+		/// Creates a Nullable by moving another one.
+		_value(std::move(other._value)),
+		_isNull(other._isNull),
+		_null()
+	{
+		other._isNull = true;
 	}
 
 	~Nullable()
 		/// Destroys the Nullable.
 	{
-		destruct();
 	}
 
-	Nullable& assign(const C& val)
+	Nullable& assign(const C& value)
 		/// Assigns a value to the Nullable.
 	{
-		construct(&val);
+		_value  = value;
+		_isNull = false;
+		return *this;
+	}
+
+	Nullable& assign(C&& value)
+		/// Assigns a value to the Nullable.
+	{
+		_value  = std::move(value);
+		_isNull = false;
 		return *this;
 	}
 
 	Nullable& assign(const Nullable& other)
 		/// Assigns another Nullable.
 	{
-		if (&other != this) construct(other);
+		Nullable tmp(other);
+		swap(tmp);
 		return *this;
 	}
 
 	Nullable& assign(NullType)
 		/// Sets value to null.
 	{
-		destruct();
+		_isNull = true;
 		return *this;
 	}
 
@@ -113,30 +149,51 @@ public:
 		return assign(value);
 	}
 
+	Nullable& operator = (C&& value)
+		/// Move-assigns a value to the Nullable.
+	{
+		return assign(std::move(value));
+	}
+
 	Nullable& operator = (const Nullable& other)
 		/// Assigns another Nullable.
 	{
 		return assign(other);
 	}
 
+	Nullable& operator = (Nullable&& other) noexcept
+		/// Moves another Nullable.
+	{
+		_isNull = other._isNull;
+		_value = std::move(other._value);
+		other._isNull = true;
+		return *this;
+	}
+
 	Nullable& operator = (NullType)
 		/// Assigns another Nullable.
 	{
-		destruct();
+		_isNull = true;
 		return *this;
+	}
+
+	void swap(Nullable& other)
+		/// Swaps this Nullable with other.
+	{
+		std::swap(_value, other._value);
+		std::swap(_isNull, other._isNull);
 	}
 
 	bool operator == (const Nullable<C>& other) const
 		/// Compares two Nullables for equality
 	{
-		return (_isNull && other._isNull) ||
-			(!_isNull && !other._isNull && value() == other.value());
+		return (_isNull && other._isNull) || (_isNull == other._isNull && _value == other._value);
 	}
 
-	bool operator == (const C& val) const
+	bool operator == (const C& value) const
 		/// Compares Nullable with value for equality
 	{
-		return (!_isNull && value() == val);
+		return (!_isNull && _value == value);
 	}
 
 	bool operator == (const NullType&) const
@@ -145,10 +202,10 @@ public:
 		return _isNull;
 	}
 
-	bool operator != (const C& val) const
+	bool operator != (const C& value) const
 		/// Compares Nullable with value for non equality
 	{
-		return !(*this == val);
+		return !(*this == value);
 	}
 
 	bool operator != (const Nullable<C>& other) const
@@ -165,28 +222,13 @@ public:
 
 	bool operator < (const Nullable<C>& other) const
 		/// Compares two Nullable objects. Return true if this object's
-		/// value is smaller than the other object's value.
+		/// value is smaler than the other object's value.
 		/// Null value is smaller than a non-null value.
 	{
 		if (_isNull && other._isNull) return false;
 
 		if (!_isNull && !other._isNull)
-			return (value() < other.value());
-
-		if (_isNull && !other._isNull) return true;
-
-		return false;
-	}
-
-	bool operator <= (const Nullable<C>& other) const
-		/// Compares two Nullable objects. Return true if this object's
-		/// value is smaller or equal than the other object's value.
-		/// Null value is smaller than a non-null value.
-	{
-		if (_isNull && other._isNull) return true;
-
-		if (!_isNull && !other._isNull)
-			return ((value() < other.value()) || (value() == other.value()));
+			return (_value < other._value);
 
 		if (_isNull && !other._isNull) return true;
 
@@ -201,25 +243,15 @@ public:
 		return !(*this == other) && !(*this < other);
 	}
 
-	bool operator >= (const Nullable<C>& other) const
-		/// Compares two Nullable objects. Return true if this object's
-		/// value is greater or equal than the other object's value.
-		/// A non-null value is greater than a null value.
-	{
-		return (*this > other) || (*this == other);
-	}
-
 	C& value()
 		/// Returns the Nullable's value.
 		///
 		/// Throws a NullValueException if the Nullable is empty.
 	{
 		if (!_isNull)
-		{
-			C* ptr = reinterpret_cast<C*>(_value.buffer);
-			return *ptr;
-		}
-		else throw NullValueException();
+			return _value;
+		else
+			throw NullValueException();
 	}
 
 	const C& value() const
@@ -228,20 +260,16 @@ public:
 		/// Throws a NullValueException if the Nullable is empty.
 	{
 		if (!_isNull)
-		{
-			const C* ptr = reinterpret_cast<const C*>(_value.buffer);
-			return *ptr;
-		}
-		else throw NullValueException();
+			return _value;
+		else
+			throw NullValueException();
 	}
 
 	const C& value(const C& deflt) const
 		/// Returns the Nullable's value, or the
 		/// given default value if the Nullable is empty.
 	{
-		if (_isNull) return deflt;
-		const C* pC = reinterpret_cast<const C*>(_value.buffer);
-		return *pC;
+		return _isNull ? deflt : _value;
 	}
 
 	operator C& ()
@@ -271,42 +299,11 @@ public:
 	void clear()
 		/// Clears the Nullable.
 	{
-		destruct();
+		_isNull = true;
 	}
 
 private:
-	void construct(const Nullable& val)
-	{
-		if (!val._isNull) construct(&val.value());
-		else destruct();
-	}
-
-	void construct(const C* pVal = 0)
-	{
-		destruct();
-		if (pVal)
-		{
-			new(_value.buffer) C(*pVal);
-			_isNull = false;
-		}
-	}
-
-	void destruct(bool /*init*/ = true)
-	{
-		if (!_isNull)
-		{
-			value().~C();
-			_isNull = true;
-		}
-	}
-
-	typedef typename std::aligned_storage<sizeof(C)>::type AlignerType;
-	union
-	{
-		char buffer[sizeof(C)];
-	private:
-		AlignerType aligner;
-	}        _value;
+	C        _value;
 	bool     _isNull;
 	NullType _null;
 };

@@ -5,25 +5,49 @@
       <Configuration>debug_shared</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="debug_shared|x64">
+      <Configuration>debug_shared</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="debug_static_md|Win32">
       <Configuration>debug_static_md</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="debug_static_md|x64">
+      <Configuration>debug_static_md</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="debug_static_mt|Win32">
       <Configuration>debug_static_mt</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="debug_static_mt|x64">
+      <Configuration>debug_static_mt</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="release_shared|Win32">
       <Configuration>release_shared</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="release_shared|x64">
+      <Configuration>release_shared</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="release_static_md|Win32">
       <Configuration>release_static_md</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="release_static_md|x64">
+      <Configuration>release_static_md</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="release_static_mt|Win32">
       <Configuration>release_static_mt</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="release_static_mt|x64">
+      <Configuration>release_static_mt</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -31,9 +55,15 @@
     <ProjectGuid>{B01196CC-B693-4548-8464-2FF60499E73F}</ProjectGuid>
     <RootNamespace>Foundation</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v140</PlatformToolset>
@@ -43,7 +73,17 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v140</PlatformToolset>
@@ -53,7 +93,17 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v140</PlatformToolset>
@@ -63,45 +113,84 @@
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'" Label="PropertySheets">
     <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'" Label="PropertySheets">
     <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'" Label="PropertySheets">
     <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'" Label="PropertySheets">
     <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'" Label="PropertySheets">
     <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'" Label="PropertySheets">
     <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+    <_ProjectFileVersion>14.0.25431.1</_ProjectFileVersion>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">PocoFoundationd</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">PocoFoundation64d</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">PocoFoundationmdd</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">PocoFoundationmdd</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">PocoFoundationmtd</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">PocoFoundationmtd</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">PocoFoundation</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">PocoFoundation64</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">PocoFoundationmd</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">PocoFoundationmd</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">PocoFoundationmt</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">PocoFoundationmt</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">
     <OutDir>..\bin\</OutDir>
     <IntDir>obj\Foundation\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\bin64\</OutDir>
+    <IntDir>obj64\Foundation\$(Configuration)\</IntDir>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">
     <OutDir>..\bin\</OutDir>
     <IntDir>obj\Foundation\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin64\</OutDir>
+    <IntDir>obj64\Foundation\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">
     <OutDir>..\lib\</OutDir>
@@ -119,13 +208,29 @@
     <OutDir>..\lib\</OutDir>
     <IntDir>obj\Foundation\$(Configuration)\</IntDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">
+    <OutDir>..\lib64\</OutDir>
+    <IntDir>obj64\Foundation\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">
+    <OutDir>..\lib64\</OutDir>
+    <IntDir>obj64\Foundation\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">
+    <OutDir>..\lib64\</OutDir>
+    <IntDir>obj64\Foundation\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">
+    <OutDir>..\lib64\</OutDir>
+    <IntDir>obj64\Foundation\$(Configuration)\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;Foundation_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>true</BufferSecurityCheck>
@@ -136,9 +241,10 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\bin\PocoFoundationd.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -147,6 +253,36 @@
       <SubSystem>Console</SubSystem>
       <ImportLibrary>..\lib\PocoFoundationd.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;Foundation_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\bin64\PocoFoundation64d.dll</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>..\bin64\PocoFoundation64d.pdb</ProgramDatabaseFile>
+      <AdditionalLibraryDirectories>..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
+      <ImportLibrary>..\lib64\PocoFoundationd.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">
@@ -168,9 +304,10 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat />
       <CompileAs>Default</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\bin\PocoFoundation.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -182,13 +319,48 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;Foundation_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\bin64\PocoFoundation64.dll</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ImportLibrary>..\lib64\PocoFoundation.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;POCO_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <BufferSecurityCheck>true</BufferSecurityCheck>
@@ -200,10 +372,35 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Lib>
       <OutputFile>..\lib\PocoFoundationmtd.lib</OutputFile>
       <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;POCO_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <ProgramDataBaseFileName>..\lib64\PocoFoundationmtd.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Lib>
+      <OutputFile>..\lib64\PocoFoundationmtd.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">
@@ -225,10 +422,38 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat />
       <CompileAs>Default</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Lib>
       <OutputFile>..\lib\PocoFoundationmt.lib</OutputFile>
       <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;POCO_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Lib>
+      <OutputFile>..\lib64\PocoFoundationmt.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">
@@ -237,7 +462,7 @@
       <AdditionalIncludeDirectories>.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;POCO_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>true</BufferSecurityCheck>
@@ -249,10 +474,35 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Lib>
       <OutputFile>..\lib\PocoFoundationmdd.lib</OutputFile>
       <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;POCO_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <ProgramDataBaseFileName>..\lib64\PocoFoundationmdd.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Lib>
+      <OutputFile>..\lib64\PocoFoundationmdd.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">
@@ -271,15 +521,47 @@
       <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader />
-      <ProgramDataBaseFileName>..\lib\PocoFoundationmd.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat />
       <CompileAs>Default</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Lib>
-      <AdditionalDependencies>ws2_32.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
       <OutputFile>..\lib\PocoFoundationmd.lib</OutputFile>
       <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <AdditionalIncludeDirectories>.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;POCO_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <OutputFile>..\lib64\PocoFoundationmd.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -300,16 +582,20 @@
     <ClCompile Include="src\Bugcheck.cpp" />
     <ClCompile Include="src\ByteOrder.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Channel.cpp" />
     <ClCompile Include="src\Checksum.cpp" />
-    <ClCompile Include="src\Checksum32.cpp" />
-    <ClCompile Include="src\Checksum64.cpp" />
     <ClCompile Include="src\Clock.cpp" />
     <ClCompile Include="src\compress.c" />
     <ClCompile Include="src\Condition.cpp" />
@@ -317,6 +603,8 @@
     <ClCompile Include="src\ConsoleChannel.cpp" />
     <ClCompile Include="src\CountingStream.cpp" />
     <ClCompile Include="src\crc32.c" />
+    <ClCompile Include="src\DataURIStream.cpp" />
+    <ClCompile Include="src\DataURIStreamFactory.cpp" />
     <ClCompile Include="src\DateTime.cpp" />
     <ClCompile Include="src\DateTimeFormat.cpp" />
     <ClCompile Include="src\DateTimeFormatter.cpp" />
@@ -330,37 +618,61 @@
     <ClCompile Include="src\DirectoryIteratorStrategy.cpp" />
     <ClCompile Include="src\DirectoryIterator_UNIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\DirectoryIterator_WIN32.cpp">
+    <ClCompile Include="src\DirectoryIterator_WIN32U.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\DirectoryWatcher.cpp" />
     <ClCompile Include="src\Environment.cpp" />
     <ClCompile Include="src\Environment_UNIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\Environment_WIN32.cpp">
+    <ClCompile Include="src\Environment_WIN32U.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Error.cpp" />
     <ClCompile Include="src\ErrorHandler.cpp" />
@@ -370,19 +682,31 @@
     <ClCompile Include="src\EventLogChannel.cpp" />
     <ClCompile Include="src\Event_POSIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Event_WIN32.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Exception.cpp" />
     <ClCompile Include="src\FIFOBufferStream.cpp" />
@@ -392,80 +716,133 @@
     <ClCompile Include="src\FileStreamFactory.cpp" />
     <ClCompile Include="src\FileStream_POSIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\FileStream_WIN32.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\File_UNIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\File_WIN32.cpp">
+    <ClCompile Include="src\File_WIN32U.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Format.cpp" />
     <ClCompile Include="src\Formatter.cpp" />
     <ClCompile Include="src\FormattingChannel.cpp" />
-    <ClCompile Include="src\Foundation.cpp" />
     <ClCompile Include="src\FPEnvironment.cpp" />
     <ClCompile Include="src\FPEnvironment_C99.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\FPEnvironment_DEC.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\FPEnvironment_DUMMY.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\FPEnvironment_SUN.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\FPEnvironment_WIN32.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Glob.cpp" />
     <ClCompile Include="src\Hash.cpp" />
@@ -486,19 +863,31 @@
     <ClCompile Include="src\LogFile.cpp" />
     <ClCompile Include="src\LogFile_STD.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\LogFile_WIN32.cpp">
+    <ClCompile Include="src\LogFile_WIN32U.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\LoggingFactory.cpp" />
@@ -513,53 +902,89 @@
     <ClCompile Include="src\Mutex.cpp" />
     <ClCompile Include="src\Mutex_POSIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Mutex_WIN32.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\NamedEvent.cpp" />
     <ClCompile Include="src\NamedEvent_UNIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\NamedEvent_WIN32.cpp">
+    <ClCompile Include="src\NamedEvent_WIN32U.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\NamedMutex.cpp" />
     <ClCompile Include="src\NamedMutex_UNIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\NamedMutex_WIN32.cpp">
+    <ClCompile Include="src\NamedMutex_WIN32U.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\NestedDiagnosticContext.cpp" />
     <ClCompile Include="src\Notification.cpp" />
@@ -573,19 +998,31 @@
     <ClCompile Include="src\Path.cpp" />
     <ClCompile Include="src\Path_UNIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\Path_WIN32.cpp">
+    <ClCompile Include="src\Path_WIN32U.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\PatternFormatter.cpp" />
     <ClCompile Include="src\pcre_byte_order.c" />
@@ -613,46 +1050,76 @@
     <ClCompile Include="src\PipeImpl.cpp" />
     <ClCompile Include="src\PipeImpl_DUMMY.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\PipeImpl_POSIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\PipeImpl_WIN32.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\PipeStream.cpp" />
     <ClCompile Include="src\PriorityNotificationQueue.cpp" />
     <ClCompile Include="src\Process.cpp" />
     <ClCompile Include="src\Process_UNIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\Process_WIN32.cpp">
+    <ClCompile Include="src\Process_WIN32U.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\PurgeStrategy.cpp" />
     <ClCompile Include="src\Random.cpp" />
@@ -664,98 +1131,162 @@
     <ClCompile Include="src\RWLock.cpp" />
     <ClCompile Include="src\RWLock_POSIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\RWLock_WIN32.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Semaphore.cpp" />
     <ClCompile Include="src\Semaphore_POSIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Semaphore_WIN32.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\SHA1Engine.cpp" />
     <ClCompile Include="src\SHA2Engine.cpp" />
-    <ClCompile Include="src\SHA3Engine.cpp" />
-    <ClCompile Include="src\BLAKE2Engine.cpp" />
     <ClCompile Include="src\SharedLibrary.cpp" />
     <ClCompile Include="src\SharedLibrary_HPUX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\SharedLibrary_UNIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\SharedLibrary_WIN32.cpp">
+    <ClCompile Include="src\SharedLibrary_WIN32U.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\SharedMemory.cpp" />
     <ClCompile Include="src\SharedMemory_DUMMY.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\SharedMemory_POSIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\SharedMemory_WIN32.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\SignalHandler.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\SimpleFileChannel.cpp" />
     <ClCompile Include="src\SortedDirectoryIterator.cpp" />
@@ -767,21 +1298,33 @@
     <ClCompile Include="src\StreamTokenizer.cpp" />
     <ClCompile Include="src\String.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\StringTokenizer.cpp" />
     <ClCompile Include="src\SynchronizedObject.cpp" />
     <ClCompile Include="src\SyslogChannel.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Task.cpp" />
     <ClCompile Include="src\TaskManager.cpp" />
@@ -798,19 +1341,31 @@
     <ClCompile Include="src\ThreadTarget.cpp" />
     <ClCompile Include="src\Thread_POSIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Thread_WIN32.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\TimedNotificationQueue.cpp" />
     <ClCompile Include="src\Timer.cpp" />
@@ -819,19 +1374,31 @@
     <ClCompile Include="src\Timezone.cpp" />
     <ClCompile Include="src\Timezone_UNIX.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Timezone_WIN32.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Token.cpp" />
     <ClCompile Include="src\trees.c" />
@@ -896,9 +1463,6 @@
     <ClInclude Include="include\Poco\ByteOrder.h" />
     <ClInclude Include="include\Poco\Channel.h" />
     <ClInclude Include="include\Poco\Checksum.h" />
-    <ClInclude Include="include\Poco\Checksum32.h" />
-    <ClInclude Include="include\Poco\Checksum64.h" />
-    <ClInclude Include="include\Poco\ChecksumImpl.h" />
     <ClInclude Include="include\Poco\ClassLibrary.h" />
     <ClInclude Include="include\Poco\ClassLoader.h" />
     <ClInclude Include="include\Poco\Clock.h" />
@@ -907,6 +1471,8 @@
     <ClInclude Include="include\Poco\Configurable.h" />
     <ClInclude Include="include\Poco\ConsoleChannel.h" />
     <ClInclude Include="include\Poco\CountingStream.h" />
+    <ClInclude Include="include\Poco\DataURIStream.h" />
+    <ClInclude Include="include\Poco\DataURIStreamFactory.h" />
     <ClInclude Include="include\Poco\DateTime.h" />
     <ClInclude Include="include\Poco\DateTimeFormat.h" />
     <ClInclude Include="include\Poco\DateTimeFormatter.h" />
@@ -920,7 +1486,7 @@
     <ClInclude Include="include\Poco\DirectoryIterator.h" />
     <ClInclude Include="include\Poco\DirectoryIteratorStrategy.h" />
     <ClInclude Include="include\Poco\DirectoryIterator_UNIX.h" />
-    <ClInclude Include="include\Poco\DirectoryIterator_WIN32.h" />
+    <ClInclude Include="include\Poco\DirectoryIterator_WIN32U.h" />
     <ClInclude Include="include\Poco\DirectoryWatcher.h" />
     <ClInclude Include="include\Poco\DynamicAny.h" />
     <ClInclude Include="include\Poco\DynamicAnyHolder.h" />
@@ -932,7 +1498,7 @@
     <ClInclude Include="include\Poco\Dynamic\VarIterator.h" />
     <ClInclude Include="include\Poco\Environment.h" />
     <ClInclude Include="include\Poco\Environment_UNIX.h" />
-    <ClInclude Include="include\Poco\Environment_WIN32.h" />
+    <ClInclude Include="include\Poco\Environment_WIN32U.h" />
     <ClInclude Include="include\Poco\Error.h" />
     <ClInclude Include="include\Poco\ErrorHandler.h" />
     <ClInclude Include="include\Poco\Event.h" />
@@ -957,7 +1523,7 @@
     <ClInclude Include="include\Poco\FileStream_POSIX.h" />
     <ClInclude Include="include\Poco\FileStream_WIN32.h" />
     <ClInclude Include="include\Poco\File_UNIX.h" />
-    <ClInclude Include="include\Poco\File_WIN32.h" />
+    <ClInclude Include="include\Poco\File_WIN32U.h" />
     <ClInclude Include="include\Poco\Format.h" />
     <ClInclude Include="include\Poco\Formatter.h" />
     <ClInclude Include="include\Poco\FormattingChannel.h" />
@@ -993,14 +1559,13 @@
     <ClInclude Include="include\Poco\LocalDateTime.h" />
     <ClInclude Include="include\Poco\LogFile.h" />
     <ClInclude Include="include\Poco\LogFile_STD.h" />
-    <ClInclude Include="include\Poco\LogFile_WIN32.h" />
+    <ClInclude Include="include\Poco\LogFile_WIN32U.h" />
     <ClInclude Include="include\Poco\Logger.h" />
     <ClInclude Include="include\Poco\LoggingFactory.h" />
     <ClInclude Include="include\Poco\LoggingRegistry.h" />
     <ClInclude Include="include\Poco\LogStream.h" />
     <ClInclude Include="include\Poco\LRUCache.h" />
     <ClInclude Include="include\Poco\LRUStrategy.h" />
-    <ClInclude Include="include\Poco\MakeUnique.h" />
     <ClInclude Include="include\Poco\Manifest.h" />
     <ClInclude Include="include\Poco\MD4Engine.h" />
     <ClInclude Include="include\Poco\MD5Engine.h" />
@@ -1014,10 +1579,10 @@
     <ClInclude Include="include\Poco\Mutex_WIN32.h" />
     <ClInclude Include="include\Poco\NamedEvent.h" />
     <ClInclude Include="include\Poco\NamedEvent_UNIX.h" />
-    <ClInclude Include="include\Poco\NamedEvent_WIN32.h" />
+    <ClInclude Include="include\Poco\NamedEvent_WIN32U.h" />
     <ClInclude Include="include\Poco\NamedMutex.h" />
     <ClInclude Include="include\Poco\NamedMutex_UNIX.h" />
-    <ClInclude Include="include\Poco\NamedMutex_WIN32.h" />
+    <ClInclude Include="include\Poco\NamedMutex_WIN32U.h" />
     <ClInclude Include="include\Poco\NamedTuple.h" />
     <ClInclude Include="include\Poco\NestedDiagnosticContext.h" />
     <ClInclude Include="include\Poco\NObserver.h" />
@@ -1034,9 +1599,11 @@
     <ClInclude Include="include\Poco\ObjectPool.h" />
     <ClInclude Include="include\Poco\Observer.h" />
     <ClInclude Include="include\Poco\Optional.h" />
+    <ClInclude Include="include\Poco\OrderedMap.h" />
+    <ClInclude Include="include\Poco\OrderedSet.h" />
     <ClInclude Include="include\Poco\Path.h" />
     <ClInclude Include="include\Poco\Path_UNIX.h" />
-    <ClInclude Include="include\Poco\Path_WIN32.h" />
+    <ClInclude Include="include\Poco\Path_WIN32U.h" />
     <ClInclude Include="include\Poco\PatternFormatter.h" />
     <ClInclude Include="include\Poco\PBKDF2Engine.h" />
     <ClInclude Include="include\Poco\Pipe.h" />
@@ -1056,7 +1623,7 @@
     <ClInclude Include="include\Poco\PriorityStrategy.h" />
     <ClInclude Include="include\Poco\Process.h" />
     <ClInclude Include="include\Poco\Process_UNIX.h" />
-    <ClInclude Include="include\Poco\Process_WIN32.h" />
+    <ClInclude Include="include\Poco\Process_WIN32U.h" />
     <ClInclude Include="include\Poco\PurgeStrategy.h" />
     <ClInclude Include="include\Poco\Random.h" />
     <ClInclude Include="include\Poco\RandomStream.h" />
@@ -1077,12 +1644,10 @@
     <ClInclude Include="include\Poco\Semaphore_WIN32.h" />
     <ClInclude Include="include\Poco\SHA1Engine.h" />
     <ClInclude Include="include\Poco\SHA2Engine.h" />
-    <ClInclude Include="include\Poco\SHA3Engine.h" />
-    <ClInclude Include="include\Poco\BLAKE2Engine.h" />
     <ClInclude Include="include\Poco\SharedLibrary.h" />
     <ClInclude Include="include\Poco\SharedLibrary_HPUX.h" />
     <ClInclude Include="include\Poco\SharedLibrary_UNIX.h" />
-    <ClInclude Include="include\Poco\SharedLibrary_WIN32.h" />
+    <ClInclude Include="include\Poco\SharedLibrary_WIN32U.h" />
     <ClInclude Include="include\Poco\SharedMemory.h" />
     <ClInclude Include="include\Poco\SharedMemory_DUMMY.h" />
     <ClInclude Include="include\Poco\SharedMemory_POSIX.h" />
@@ -1175,32 +1740,56 @@
     <CustomBuild Include="src\pocomsg.mc">
       <Command Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">mc -h "%(RootDir)%(Directory)." -r "%(RootDir)%(Directory)." "%(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">mc -h "%(RootDir)%(Directory)." -r "%(RootDir)%(Directory)." "%(FullPath)
+</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">%(RootDir)%(Directory)\pocomsg.rc;%(RootDir)%(Directory)\pocomsg.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">%(RootDir)%(Directory)\pocomsg.rc;%(RootDir)%(Directory)\pocomsg.h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">mc -h "%(RootDir)%(Directory)." -r "%(RootDir)%(Directory)." "%(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">mc -h "%(RootDir)%(Directory)." -r "%(RootDir)%(Directory)." "%(FullPath)
+</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">%(RootDir)%(Directory)\pocomsg.rc;%(RootDir)%(Directory)\pocomsg.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">%(RootDir)%(Directory)\pocomsg.rc;%(RootDir)%(Directory)\pocomsg.h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">mc -h "%(RootDir)%(Directory)." -r "%(RootDir)%(Directory)." "%(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">mc -h "%(RootDir)%(Directory)." -r "%(RootDir)%(Directory)." "%(FullPath)
+</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">%(RootDir)%(Directory)\pocomsg.rc;%(RootDir)%(Directory)\pocomsg.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">%(RootDir)%(Directory)\pocomsg.rc;%(RootDir)%(Directory)\pocomsg.h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">mc -h "%(RootDir)%(Directory)." -r "%(RootDir)%(Directory)." "%(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">mc -h "%(RootDir)%(Directory)." -r "%(RootDir)%(Directory)." "%(FullPath)
+</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">%(RootDir)%(Directory)\pocomsg.rc;%(RootDir)%(Directory)\pocomsg.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">%(RootDir)%(Directory)\pocomsg.rc;%(RootDir)%(Directory)\pocomsg.h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">mc -h "%(RootDir)%(Directory)." -r "%(RootDir)%(Directory)." "%(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">mc -h "%(RootDir)%(Directory)." -r "%(RootDir)%(Directory)." "%(FullPath)
+</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">%(RootDir)%(Directory)\pocomsg.rc;%(RootDir)%(Directory)\pocomsg.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">%(RootDir)%(Directory)\pocomsg.rc;%(RootDir)%(Directory)\pocomsg.h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">mc -h "%(RootDir)%(Directory)." -r "%(RootDir)%(Directory)." "%(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">mc -h "%(RootDir)%(Directory)." -r "%(RootDir)%(Directory)." "%(FullPath)
+</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">%(RootDir)%(Directory)\pocomsg.rc;%(RootDir)%(Directory)\pocomsg.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">%(RootDir)%(Directory)\pocomsg.rc;%(RootDir)%(Directory)\pocomsg.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\DLLVersion.rc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_shared|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_shared|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_md|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='release_static_mt|x64'">true</ExcludedFromBuild>
     </ResourceCompile>
     <ResourceCompile Include="src\pocomsg.rc" />
   </ItemGroup>

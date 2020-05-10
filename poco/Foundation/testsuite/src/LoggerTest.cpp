@@ -9,8 +9,8 @@
 
 
 #include "LoggerTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Logger.h"
 #include "Poco/AutoPtr.h"
 #include "TestChannel.h"
@@ -22,7 +22,7 @@ using Poco::Message;
 using Poco::AutoPtr;
 
 
-LoggerTest::LoggerTest(const std::string& rName): CppUnit::TestCase(rName)
+LoggerTest::LoggerTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -54,8 +54,8 @@ void LoggerTest::testLogger()
 	root.warning("Warning message");
 	assertTrue (pChannel->list().size() == 2);
 	root.debug("Debug message");
-	assert (pChannel->list().size() == 2);
-
+	assertTrue (pChannel->list().size() == 2);
+	
 	Logger& logger1 = Logger::get("Logger1");
 	Logger& logger2 = Logger::get("Logger2");
 	Logger& logger11 = Logger::get("Logger1.Logger1");
@@ -162,6 +162,7 @@ void LoggerTest::testLogger()
 	catch(Poco::InvalidArgumentException&)
 	{
 	}
+
 }
 
 

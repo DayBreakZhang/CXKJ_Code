@@ -9,8 +9,8 @@
 
 
 #include "VarTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Exception.h"
 #include "Poco/Dynamic/Var.h"
 #include "Poco/Bugcheck.h"
@@ -98,12 +98,18 @@ void VarTest::testInt8()
 	a1.convert(s11);
 	a1.convert(s12);
 	a1.convert(s13);
-	Int64 s14;
-	UInt64 s15;
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 32);
 	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
 	assertTrue (s1 == "32");
 	assertTrue (s2 == 32);
 	assertTrue (s3 == 32);
@@ -127,21 +133,11 @@ void VarTest::testInt8()
 
 	try
 	{
-		Int16 value2; value2 = a1.extract<Int16>();
+		Int16 POCO_UNUSED value2; value2 = a1.extract<Int16>();
 		fail("bad cast - must throw");
 	}
-	catch (Poco::BadCastException&) { }
-
-	try
+	catch (Poco::BadCastException&)
 	{
-		Poco::UInt8 usrc = 200;
-		a1 = usrc;
-		src = a1;
-		fail("out of range - must throw");
-	}
-	catch (Poco::RangeException&)
-	{
-		a1 = src;
 	}
 
 	Var a3 = a1 + 1;
@@ -196,13 +192,18 @@ void VarTest::testInt16()
 	a1.convert(s11);
 	a1.convert(s12);
 	a1.convert(s13);
-
-	Int64 s14;
-	UInt64 s15;
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 32);
 	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
 	assertTrue (s1 == "32");
 	assertTrue (s2 == 32);
 	assertTrue (s3 == 32);
@@ -226,7 +227,7 @@ void VarTest::testInt16()
 
 	try
 	{
-		Int32 value2; value2 = a1.extract<Int32>();
+		Int32 POCO_UNUSED value2; value2 = a1.extract<Int32>();
 		fail("bad cast - must throw");
 	}
 	catch (Poco::BadCastException&)
@@ -285,13 +286,18 @@ void VarTest::testInt32()
 	a1.convert(s11);
 	a1.convert(s12);
 	a1.convert(s13);
-
-	Int64 s14;
-	UInt64 s15;
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 32);
 	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
 	assertTrue (s1 == "32");
 	assertTrue (s2 == 32);
 	assertTrue (s3 == 32);
@@ -315,7 +321,7 @@ void VarTest::testInt32()
 
 	try
 	{
-		Int16 value2; value2 = a1.extract<Int16>();
+		Int16 POCO_UNUSED value2; value2 = a1.extract<Int16>();
 		fail("bad cast - must throw");
 	}
 	catch (Poco::BadCastException&)
@@ -374,13 +380,18 @@ void VarTest::testInt64()
 	a1.convert(s11);
 	a1.convert(s12);
 	a1.convert(s13);
-
-	Int64 s14;
-	UInt64 s15;
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 32);
 	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
 	assertTrue (s1 == "32");
 	assertTrue (s2 == 32);
 	assertTrue (s3 == 32);
@@ -404,7 +415,7 @@ void VarTest::testInt64()
 
 	try
 	{
-		Int16 value2; value2 = a1.extract<Int16>();
+		Int16 POCO_UNUSED value2; value2 = a1.extract<Int16>();
 		fail("bad cast - must throw");
 	}
 	catch (Poco::BadCastException&)
@@ -463,13 +474,18 @@ void VarTest::testUInt8()
 	a1.convert(s11);
 	a1.convert(s12);
 	a1.convert(s13);
-
-	Int64 s14;
-	UInt64 s15;
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 32);
 	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
 	assertTrue (s1 == "32");
 	assertTrue (s2 == 32);
 	assertTrue (s3 == 32);
@@ -493,7 +509,7 @@ void VarTest::testUInt8()
 
 	try
 	{
-		Int16 value2; value2 = a1.extract<Int16>();
+		Int16 POCO_UNUSED value2; value2 = a1.extract<Int16>();
 		fail("bad cast - must throw");
 	}
 	catch (Poco::BadCastException&)
@@ -552,12 +568,18 @@ void VarTest::testUInt16()
 	a1.convert(s11);
 	a1.convert(s12);
 	a1.convert(s13);
-	Int64 s14;
-	UInt64 s15;
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 32);
 	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
 	assertTrue (s1 == "32");
 	assertTrue (s2 == 32);
 	assertTrue (s3 == 32);
@@ -581,7 +603,7 @@ void VarTest::testUInt16()
 
 	try
 	{
-		Int16 value2; value2 = a1.extract<Int16>();
+		Int16 POCO_UNUSED value2; value2 = a1.extract<Int16>();
 		fail("bad cast - must throw");
 	}
 	catch (Poco::BadCastException&)
@@ -640,12 +662,18 @@ void VarTest::testUInt32()
 	a1.convert(s11);
 	a1.convert(s12);
 	a1.convert(s13);
-	Int64 s14;
-	UInt64 s15;
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 32);
 	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
 	assertTrue (s1 == "32");
 	assertTrue (s2 == 32);
 	assertTrue (s3 == 32);
@@ -669,7 +697,7 @@ void VarTest::testUInt32()
 
 	try
 	{
-		Int16 value2; value2 = a1.extract<Int16>();
+		Int16 POCO_UNUSED value2; value2 = a1.extract<Int16>();
 		fail("bad cast - must throw");
 	}
 	catch (Poco::BadCastException&)
@@ -728,12 +756,18 @@ void VarTest::testUInt64()
 	a1.convert(s11);
 	a1.convert(s12);
 	a1.convert(s13);
-	Int64 s14;
-	UInt64 s15;
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 32);
 	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
 	assertTrue (s1 == "32");
 	assertTrue (s2 == 32);
 	assertTrue (s3 == 32);
@@ -757,7 +791,7 @@ void VarTest::testUInt64()
 
 	try
 	{
-		Int16 value2; value2 = a1.extract<Int16>();
+		Int16 POCO_UNUSED value2; value2 = a1.extract<Int16>();
 		fail("bad cast - must throw");
 	}
 	catch (Poco::BadCastException&)
@@ -816,12 +850,18 @@ void VarTest::testBool()
 	a1.convert(s11);
 	a1.convert(s12);
 	a1.convert(s13);
-	Int64 s14;
-	UInt64 s15;
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 1);
 	assertTrue (s15 == 1);
+	assertTrue (s16 == 1);
+	assertTrue (s17 == 1);
 	assertTrue (s1 == "true");
 	assertTrue (s2 == 1);
 	assertTrue (s3 == 1);
@@ -845,7 +885,7 @@ void VarTest::testBool()
 
 	try
 	{
-		Int16 value2; value2 = a1.extract<Int16>();
+		Int16 POCO_UNUSED value2; value2 = a1.extract<Int16>();
 		fail("bad cast - must throw");
 	}
 	catch (Poco::BadCastException&)
@@ -887,12 +927,18 @@ void VarTest::testChar()
 	a1.convert(s11);
 	a1.convert(s12);
 	a1.convert(s13);
-	Int64 s14;
-	UInt64 s15;
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 32);
 	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
 	assertTrue (s1 == " ");
 	assertTrue (s2 == 32);
 	assertTrue (s3 == 32);
@@ -916,7 +962,7 @@ void VarTest::testChar()
 
 	try
 	{
-		Int16 value2; value2 = a1.extract<Int16>();
+		Int16 POCO_UNUSED value2; value2 = a1.extract<Int16>();
 		fail("bad cast - must throw");
 	}
 	catch (Poco::BadCastException&)
@@ -928,7 +974,7 @@ void VarTest::testChar()
 void VarTest::testFloat()
 {
 	Var any("0");
-	float f = any;
+	float POCO_UNUSED f = any;
 
 	float src = 32.0f;
 	Var a1 = src;
@@ -961,12 +1007,18 @@ void VarTest::testFloat()
 	a1.convert(s11);
 	a1.convert(s12);
 	a1.convert(s13);
-	Int64 s14;
-	UInt64 s15;
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 32);
 	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
 	assertTrue (s1 == "32");
 	assertTrue (s2 == 32);
 	assertTrue (s3 == 32);
@@ -990,7 +1042,7 @@ void VarTest::testFloat()
 
 	try
 	{
-		Int16 value2; value2 = a1.extract<Int16>();
+		Int16 POCO_UNUSED value2; value2 = a1.extract<Int16>();
 		fail("bad cast - must throw");
 	}
 	catch (Poco::BadCastException&)
@@ -1020,7 +1072,7 @@ void VarTest::testDouble()
 {
 	double d = 0;
 	Var v(d);
-	float f = v;
+	float POCO_UNUSED f = v;
 
 	double src = 32.0;
 	Var a1 = src;
@@ -1053,12 +1105,18 @@ void VarTest::testDouble()
 	a1.convert(s11);
 	a1.convert(s12);
 	a1.convert(s13);
-	Int64 s14;
-	UInt64 s15;
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 32);
 	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
 	assertTrue (s1 == "32");
 	assertTrue (s2 == 32);
 	assertTrue (s3 == 32);
@@ -1082,7 +1140,7 @@ void VarTest::testDouble()
 
 	try
 	{
-		Int16 value2; value2 = a1.extract<Int16>();
+		Int16 POCO_UNUSED value2; value2 = a1.extract<Int16>();
 		fail("bad cast - must throw");
 	}
 	catch (Poco::BadCastException&)
@@ -1141,12 +1199,18 @@ void VarTest::testString()
 	a1.convert(s11);
 	a1.convert(s12);
 	a1.convert(s13);
-	Int64 s14;
-	UInt64 s15;
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 32);
 	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
 	assertTrue (s1 == "32");
 	assertTrue (s2 == 32);
 	assertTrue (s3 == 32);
@@ -1166,7 +1230,7 @@ void VarTest::testString()
 
 	try
 	{
-		Int16 value2; value2 = a1.extract<Int16>();
+		Int16 POCO_UNUSED value2; value2 = a1.extract<Int16>();
 		fail("bad cast - must throw");
 	}
 	catch (Poco::BadCastException&)
@@ -1195,7 +1259,6 @@ void VarTest::testString()
 
 void VarTest::testLong()
 {
-#ifndef POCO_LONG_IS_64_BIT
 	long src = 32;
 	Var a1 = src;
 
@@ -1229,10 +1292,16 @@ void VarTest::testLong()
 	a1.convert(s13);
 	long s14;
 	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 32);
 	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
 	assertTrue (s1 == "32");
 	assertTrue (s2 == 32);
 	assertTrue (s3 == 32);
@@ -1256,7 +1325,7 @@ void VarTest::testLong()
 
 	try
 	{
-		Int16 value2; value2 = a1.extract<Int16>();
+		Int16 POCO_UNUSED value2; value2 = a1.extract<Int16>();
 		fail("bad cast - must throw");
 	}
 	catch (Poco::BadCastException&)
@@ -1279,13 +1348,11 @@ void VarTest::testLong()
 	assertTrue (a3 == 32);
 	a3 *= 2;
 	assertTrue (a3 == 64);
-#endif // POCO_LONG_IS_64_BIT
 }
 
 
 void VarTest::testULong()
 {
-#ifndef POCO_LONG_IS_64_BIT
 	unsigned long src = 32;
 	Var a1 = src;
 
@@ -1319,10 +1386,16 @@ void VarTest::testULong()
 	a1.convert(s13);
 	long s14;
 	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
 	a1.convert(s14);
 	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
 	assertTrue (s14 == 32);
 	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
 	assertTrue (s1 == "32");
 	assertTrue (s2 == 32);
 	assertTrue (s3 == 32);
@@ -1342,6 +1415,99 @@ void VarTest::testULong()
 	assertTrue (s1 == t2);
 
 	unsigned long value = a1.extract<unsigned long>();
+	assertTrue (value == 32);
+
+	try
+	{
+		Int16 POCO_UNUSED value2; value2 = a1.extract<Int16>();
+		fail("bad cast - must throw");
+	}
+	catch (Poco::BadCastException&)
+	{
+	}
+
+	Var a3 = a1 + 1;
+	assertTrue (a3 == 33);
+	a3 = a1 - 1;
+	assertTrue (a3 == 31);
+	a3 += 1;
+	assertTrue (a3 == 32);
+	a3 -= 1;
+	assertTrue (a3 == 31);
+	a3 = a1 / 2;
+	assertTrue (a3 == 16);
+	a3 = a1 * 2;
+	assertTrue (a3 == 64);
+	a3 /= 2;
+	assertTrue (a3 == 32);
+	a3 *= 2;
+	assertTrue (a3 == 64);
+}
+
+void VarTest::testLongLong()
+{
+	long long src = 32;
+	Var a1 = src;
+
+	assertTrue (a1.type() == typeid(long long));
+
+	std::string s1;
+	Poco::Int8 s2;
+	Poco::Int16 s3;
+	Poco::Int32 s4;
+	Poco::Int64 s5;
+	Poco::UInt8 s6;
+	Poco::UInt16 s7;
+	Poco::UInt32 s8;
+	Poco::UInt64 s9;
+	float s10;
+	double s11;
+	bool s12;
+	char s13;
+	a1.convert(s1);
+	a1.convert(s2);
+	a1.convert(s3);
+	a1.convert(s4);
+	a1.convert(s5);
+	a1.convert(s6);
+	a1.convert(s7);
+	a1.convert(s8);
+	a1.convert(s9);
+	a1.convert(s10);
+	a1.convert(s11);
+	a1.convert(s12);
+	a1.convert(s13);
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
+	a1.convert(s14);
+	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
+	assertTrue (s14 == 32);
+	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
+	assertTrue (s1 == "32");
+	assertTrue (s2 == 32);
+	assertTrue (s3 == 32);
+	assertTrue (s4 == 32);
+	assertTrue (s5 == 32);
+	assertTrue (s6 == 32);
+	assertTrue (s7 == 32);
+	assertTrue (s8 == 32);
+	assertTrue (s9 == 32);
+	assertTrue (s10 == 32.0f);
+	assertTrue (s11 == 32.0);
+	assertTrue (s12);
+	assertTrue (s13 == ' ');
+	Var a2(a1);
+	std::string t2;
+	a2.convert(t2);
+	assertTrue (s1 == t2);
+
+	long long value = a1.extract<long long>();
 	assertTrue (value == 32);
 
 	try
@@ -1369,7 +1535,100 @@ void VarTest::testULong()
 	assertTrue (a3 == 32);
 	a3 *= 2;
 	assertTrue (a3 == 64);
-#endif // POCO_LONG_IS_64_BIT
+}
+
+
+void VarTest::testULongLong()
+{
+	unsigned long long src = 32;
+	Var a1 = src;
+
+	assertTrue (a1.type() == typeid(unsigned long long));
+
+	std::string s1;
+	Poco::Int8 s2;
+	Poco::Int16 s3;
+	Poco::Int32 s4;
+	Poco::Int64 s5;
+	Poco::UInt8 s6;
+	Poco::UInt16 s7;
+	Poco::UInt32 s8;
+	Poco::UInt64 s9;
+	float s10;
+	double s11;
+	bool s12;
+	char s13;
+	a1.convert(s1);
+	a1.convert(s2);
+	a1.convert(s3);
+	a1.convert(s4);
+	a1.convert(s5);
+	a1.convert(s6);
+	a1.convert(s7);
+	a1.convert(s8);
+	a1.convert(s9);
+	a1.convert(s10);
+	a1.convert(s11);
+	a1.convert(s12);
+	a1.convert(s13);
+	long s14;
+	unsigned long s15;
+	long long s16;
+	unsigned long long s17;
+	a1.convert(s14);
+	a1.convert(s15);
+	a1.convert(s16);
+	a1.convert(s17);
+	assertTrue (s14 == 32);
+	assertTrue (s15 == 32);
+	assertTrue (s16 == 32);
+	assertTrue (s17 == 32);
+	assertTrue (s1 == "32");
+	assertTrue (s2 == 32);
+	assertTrue (s3 == 32);
+	assertTrue (s4 == 32);
+	assertTrue (s5 == 32);
+	assertTrue (s6 == 32);
+	assertTrue (s7 == 32);
+	assertTrue (s8 == 32);
+	assertTrue (s9 == 32);
+	assertTrue (s10 == 32.0f);
+	assertTrue (s11 == 32.0);
+	assertTrue (s12);
+	assertTrue (s13 == ' ');
+	Var a2(a1);
+	std::string t2;
+	a2.convert(t2);
+	assertTrue (s1 == t2);
+
+	unsigned long long value = a1.extract<unsigned long long>();
+	assertTrue (value == 32);
+
+	try
+	{
+		Int16 value2; value2 = a1.extract<Int16>();
+		fail("bad cast - must throw");
+	}
+	catch (Poco::BadCastException&)
+	{
+	}
+
+	Var a3 = a1 + 1;
+	assertTrue (a3 == 33);
+	a3 = a1 - 1;
+	assertTrue (a3 == 31);
+	a3 += 1;
+	assertTrue (a3 == 32);
+	a3 -= 1;
+	assertTrue (a3 == 31);
+	a3 = a1 / 2;
+	assertTrue (a3 == 16);
+	a3 = a1 * 2;
+	assertTrue (a3 == 64);
+	a3 /= 2;
+	assertTrue (a3 == 32);
+	a3 *= 2;
+	assertTrue (a3 == 64);
 }
 
 
@@ -1388,7 +1647,7 @@ void VarTest::testUDT()
 
 	try
 	{
-		float f = da1;
+		float POCO_UNUSED f = da1;
 		fail ("must fail");
 	}
 	catch (BadCastException&) { }
@@ -1453,8 +1712,6 @@ void VarTest::testComparisonOperators()
 	assertTrue (any1 >= 0);
 	assertTrue (0 <= any1);
 
-#if !defined(POCO_LONG_IS_64_BIT)
-
 	any1 = 1L;
 	assertTrue (any1 == any2);
 	assertTrue (any1 == 1L);
@@ -1477,8 +1734,6 @@ void VarTest::testComparisonOperators()
 	assertTrue (1L <= any1);
 	assertTrue (any1 >= 0);
 	assertTrue (0 <= any1);
-
-#endif // !defined(POCO_LONG_IS_64_BIT)
 
 	any1 = 0x31;
 	assertTrue (any1 == '1');
@@ -1733,12 +1988,12 @@ void VarTest::testLimitsFloat()
 	{
 		double iMin = -1 * std::numeric_limits<float>::max();
 		Var da = iMin * 10;
-		try { float f; f = da; fail("must fail"); }
+		try { float POCO_UNUSED f; f = da; fail("must fail"); }
 		catch (RangeException&) {}
 
 		double iMax = std::numeric_limits<float>::max();
 		da = iMax * 10;
-		try { float f; f = da; fail("must fail"); }
+		try { float POCO_UNUSED f; f = da; fail("must fail"); }
 		catch (RangeException&) {}
 	}
 }
@@ -1777,9 +2032,11 @@ void VarTest::testIsStruct()
 	char s13('c');
 	long s14(232323);
 	unsigned long s15(21233232u);
-	std::vector<Var> s16;
-	Struct<std::string> s17;
-	Struct<int> s18;
+	long long s16(-23823838);
+	unsigned long s17(2328328382u);
+	std::vector<Var> s18;
+	Struct<std::string> s19;
+	Struct<int> s20;
 
 	Var d1(s1);
 	Var d2(s2);
@@ -1799,6 +2056,8 @@ void VarTest::testIsStruct()
 	Var d16(s16);
 	Var d17(s17);
 	Var d18(s18);
+	Var d19(s19);
+	Var d20(s20);
 
 	assertTrue (!d1.isStruct());
 	assertTrue (!d2.isStruct());
@@ -1816,8 +2075,10 @@ void VarTest::testIsStruct()
 	assertTrue (!d14.isStruct());
 	assertTrue (!d15.isStruct());
 	assertTrue (!d16.isStruct());
-	assertTrue (d17.isStruct());
-	assertTrue (d18.isStruct());
+	assertTrue (!d17.isStruct());
+	assertTrue (!d18.isStruct());
+	assertTrue (d19.isStruct());
+	assertTrue (d20.isStruct());
 }
 
 
@@ -1836,10 +2097,12 @@ void VarTest::testIsArray()
 	double s11(13.555);
 	bool s12(true);
 	char s13('c');
-	Int64 s14(232323);
-	UInt64 s15(21233232u);
-	std::vector<Var> s16;
-	DynamicStruct s17;
+	long s14(232323);
+	unsigned long s15(21233232u);
+	long long s16(-23823838);
+	unsigned long long s17(2328328382u);
+	std::vector<Var> s18;
+	DynamicStruct s19;
 
 	Var d0;
 	Var d1(s1);
@@ -1859,6 +2122,8 @@ void VarTest::testIsArray()
 	Var d15(s15);
 	Var d16(s16);
 	Var d17(s17);
+	Var d18(s18);
+	Var d19(s19);
 
 	assertTrue (!d0.isArray());
 	assertTrue (!d1.isArray());
@@ -1876,8 +2141,10 @@ void VarTest::testIsArray()
 	assertTrue (!d13.isArray());
 	assertTrue (!d14.isArray());
 	assertTrue (!d15.isArray());
-	assertTrue (d16.isArray());
+	assertTrue (!d16.isArray());
 	assertTrue (!d17.isArray());
+	assertTrue (d18.isArray());
+	assertTrue (!d19.isArray());
 }
 
 
@@ -1898,10 +2165,12 @@ void VarTest::testArrayIdxOperator()
 	char s13('c');
 	long s14(232323);
 	unsigned long s15(21233232u);
-	std::vector<Var> s16;
-	s16.push_back(s1);
-	s16.push_back(s2);
-	DynamicStruct s17;
+	long long s16(-23823838);
+	unsigned long long s17(2328328382u);
+	std::vector<Var> s18;
+	s18.push_back(s1);
+	s18.push_back(s2);
+	DynamicStruct s19;
 
 	Var d1(s1);
 	Var d2(s2);
@@ -1920,6 +2189,8 @@ void VarTest::testArrayIdxOperator()
 	Var d15(s15);
 	Var d16(s16);
 	Var d17(s17);
+	Var d18(s18);
+	Var d19(s19);
 
 	testGetIdxMustThrow(d1, 0);
 	testGetIdxNoThrow(d2, 0);
@@ -1936,8 +2207,10 @@ void VarTest::testArrayIdxOperator()
 	testGetIdxNoThrow(d13, 0);
 	testGetIdxNoThrow(d14, 0);
 	testGetIdxNoThrow(d15, 0);
-	testGetIdx(d16, 0, s1);
-	testGetIdx(d16, 1, s2);
+	testGetIdxNoThrow(d16, 0);
+	testGetIdxNoThrow(d17, 0);
+	testGetIdx(d18, 0, s1);
+	testGetIdx(d18, 1, s2);
 
 	testGetIdxMustThrow(d1, 1);
 	testGetIdxMustThrow(d2, 1);
@@ -1954,7 +2227,9 @@ void VarTest::testArrayIdxOperator()
 	testGetIdxMustThrow(d13, 1);
 	testGetIdxMustThrow(d14, 1);
 	testGetIdxMustThrow(d15, 1);
+	testGetIdxMustThrow(d16, 1);
 	testGetIdxMustThrow(d17, 1);
+	testGetIdxMustThrow(d19, 1);
 }
 
 
@@ -1982,7 +2257,6 @@ void VarTest::testDynamicStructBasics()
 
 void VarTest::testOrderedDynamicStructBasics()
 {
-#ifdef POCO_ENABLE_CPP11
 	OrderedDynamicStruct aStruct;
 	assertTrue(aStruct.empty());
 	assertTrue(aStruct.size() == 0);
@@ -2004,7 +2278,6 @@ void VarTest::testOrderedDynamicStructBasics()
 	assertTrue(*(aStruct.members().begin()) == "Last Name");
 	aStruct.clear();
 	assertTrue(aStruct.size() == 0);
-#endif // POCO_ENABLE_CPP11
 }
 
 
@@ -2044,7 +2317,6 @@ void VarTest::testDynamicStructString()
 
 void VarTest::testOrderedDynamicStructString()
 {
-#ifdef POCO_ENABLE_CPP11
 	OrderedDynamicStruct aStruct;
 	aStruct["First Name"] = "Junior";
 	aStruct["Last Name"] = "POCO";
@@ -2077,7 +2349,6 @@ void VarTest::testOrderedDynamicStructString()
 	assertTrue(m2["1"] == 1);
 	assertTrue(m2["2"] == 2);
 	assertTrue(m2["3"] == 3);
-#endif // POCO_ENABLE_CPP11
 }
 
 
@@ -2118,7 +2389,6 @@ void VarTest::testDynamicStructInt()
 
 void VarTest::testOrderedDynamicStructInt()
 {
-#ifdef POCO_ENABLE_CPP11
 	typedef Struct<int, OrderedMap<int, Var>, OrderedSet<int> > OrderedStruct;
 	OrderedStruct aStruct;
 	aStruct[0] = "POCO";
@@ -2153,7 +2423,6 @@ void VarTest::testOrderedDynamicStructInt()
 	assertTrue(m2[1] == "2");
 	assertTrue(m2[2] == "1");
 	assertTrue(m2[3] == "3");
-#endif // POCO_ENABLE_CPP11
 }
 
 
@@ -2248,7 +2517,6 @@ void VarTest::testStructToString()
 
 void VarTest::testOrderedStructToString()
 {
-#ifdef POCO_ENABLE_CPP11
 	OrderedDynamicStruct aStruct;
 	aStruct["First Name"] = "Junior";
 	aStruct["Last Name"] = "POCO";
@@ -2258,7 +2526,6 @@ void VarTest::testOrderedStructToString()
 	std::string expected = "{ \"First Name\" : \"Junior\", \"Last Name\" : \"POCO\", \"Age\" : 1 }";
 	assertTrue(res == expected);
 	assertTrue(aStruct.toString() == res);
-#endif // POCO_ENABLE_CPP11
 }
 
 
@@ -2355,6 +2622,10 @@ void VarTest::testJSONDeserializeString()
 	tst = "{ \"a\" : \"1\", \"b\" : \"2\"\n}";
 	a = Var::parse(tst);
 	assertTrue (a.toString() == "{ \"a\" : \"1\", \"b\" : \"2\" }");
+
+	tst = "{ \"message\" : \"escape\\b\\f\\n\\r\\t\", \"path\" : \"\\/dev\\/null\" }";
+	a = Var::parse(tst);
+	assertTrue(a.toString() == "{ \"message\" : \"escape\\b\\f\\n\\r\\t\", \"path\" : \"\\/dev\\/null\" }");
 }
 
 
@@ -2675,22 +2946,25 @@ void VarTest::testEmpty()
 	testEmptyComparisons<Poco::Int32>();
 	testEmptyComparisons<Poco::UInt64>();
 	testEmptyComparisons<Poco::Int64>();
-#ifndef POCO_LONG_IS_64_BIT
+#ifdef POCO_LONG_IS_64_BIT
 	testEmptyComparisons<unsigned long>();
 	testEmptyComparisons<long>();
+#else
+	testEmptyComparisons<unsigned long long>();
+	testEmptyComparisons<long long>();
 #endif
 	testEmptyComparisons<float>();
 	testEmptyComparisons<double>();
 
 	try
 	{
-		int i = da;
+		int POCO_UNUSED i = da;
 		fail ("must fail");
 	} catch (InvalidAccessException&) { }
 
 	try
 	{
-		int i = da.extract<int>();
+		int POCO_UNUSED i = da.extract<int>();
 		fail ("must fail");
 	} catch (InvalidAccessException&) { }
 }
@@ -2789,6 +3063,8 @@ CppUnit::Test* VarTest::suite()
 	CppUnit_addTest(pSuite, VarTest, testDouble);
 	CppUnit_addTest(pSuite, VarTest, testLong);
 	CppUnit_addTest(pSuite, VarTest, testULong);
+	CppUnit_addTest(pSuite, VarTest, testLongLong);
+	CppUnit_addTest(pSuite, VarTest, testULongLong);
 	CppUnit_addTest(pSuite, VarTest, testString);
 	CppUnit_addTest(pSuite, VarTest, testUDT);
 	CppUnit_addTest(pSuite, VarTest, testConversionOperator);

@@ -31,7 +31,7 @@ class MongoDB_API RegularExpression
 	/// Represents a regular expression in BSON format.
 {
 public:
-	typedef SharedPtr<RegularExpression> Ptr;
+	using Ptr = SharedPtr<RegularExpression>;
 
 	RegularExpression();
 		/// Creates an empty RegularExpression.
@@ -97,7 +97,7 @@ struct ElementTraits<RegularExpression::Ptr>
 {
 	enum { TypeId = 0x0B };
 
-	static std::string toString(const RegularExpression::Ptr& /*value*/, int /*indent*/ = 0)
+	static std::string toString(const RegularExpression::Ptr& value, int indent = 0)
 	{
 		//TODO
 		return "RE: not implemented yet";

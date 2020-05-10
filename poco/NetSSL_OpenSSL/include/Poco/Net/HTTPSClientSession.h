@@ -133,9 +133,9 @@ public:
 		/// The certificate is available after the first request has been sent.
 		
 	Session::Ptr sslSession();
-		/// Returns the SSL Session object for the current
+		/// Returns the SSL Session object for the current 
 		/// connection, if session caching has been enabled for
-		/// the HTTPSClientSession's Context. A null pointer is
+		/// the HTTPSClientSession's Context. A null pointer is 
 		/// returned otherwise.
 		///
 		/// The Session object can be obtained after the first request has
@@ -146,15 +146,11 @@ public:
 
 protected:
 	void connect(const SocketAddress& address);
-	void connect(const SocketAddress& targetAddress, const SocketAddress& sourceAddress);
 	std::string proxyRequestPrefix() const;
 	void proxyAuthenticate(HTTPRequest& request);
 	int read(char* buffer, std::streamsize length);
 
 private:
-	void connectToTargetPre();
-	void connectToTargetPost();
-	void connectToProxy();
 	HTTPSClientSession(const HTTPSClientSession&);
 	HTTPSClientSession& operator = (const HTTPSClientSession&);
 	

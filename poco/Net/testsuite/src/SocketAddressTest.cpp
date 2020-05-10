@@ -9,8 +9,8 @@
 
 
 #include "SocketAddressTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/SocketAddress.h"
 #include "Poco/Net/NetException.h"
 
@@ -68,9 +68,9 @@ void SocketAddressTest::testSocketAddress()
 	}
 
 	SocketAddress sa4("pocoproject.org", 80);
-	assertTrue (sa4.host().toString() == "104.130.199.50");
+	assertTrue (sa4.host().toString() == "54.93.62.90");
 	assertTrue (sa4.port() == 80);
-	
+
 	try
 	{
 		SocketAddress sa5("192.168.2.260", 80);
@@ -117,12 +117,12 @@ void SocketAddressTest::testSocketAddress()
 	catch (InvalidArgumentException&)
 	{
 	}
-	
+
 	SocketAddress sa10("www6.pocoproject.org", 80);
-	assertTrue (sa10.host().toString() == "104.130.199.50" || sa10.host().toString() == "[2001:4801:7828:101:be76:4eff:fe10:1455]");
-	
+	assertTrue (sa10.host().toString() == "54.93.62.90" || sa10.host().toString() == "[2001:4801:7828:101:be76:4eff:fe10:1455]");
+
 	SocketAddress sa11(SocketAddress::IPv4, "www6.pocoproject.org", 80);
-	assertTrue (sa11.host().toString() == "104.130.199.50");
+	assertTrue (sa11.host().toString() == "54.93.62.90");
 
 #ifdef POCO_HAVE_IPv6
 	try
@@ -159,14 +159,14 @@ void SocketAddressTest::testSocketAddress6()
 	assertTrue (sa1.af() == AF_INET6);
 	assertTrue (sa1.family() == SocketAddress::IPv6);
 	assertTrue (sa1.host().toString() == "fe80::e6ce:8fff:fe4a:edd0");
-	assertTrue (sa1.port() == 100);	
+	assertTrue (sa1.port() == 100);
 	assertTrue (sa1.toString() == "[fe80::e6ce:8fff:fe4a:edd0]:100");
 
 	SocketAddress sa2("[FE80::E6CE:8FFF:FE4A:EDD0]:100");
 	assertTrue (sa2.af() == AF_INET6);
 	assertTrue (sa2.family() == SocketAddress::IPv6);
 	assertTrue (sa2.host().toString() == "fe80::e6ce:8fff:fe4a:edd0");
-	assertTrue (sa2.port() == 100);	
+	assertTrue (sa2.port() == 100);
 	assertTrue (sa2.toString() == "[fe80::e6ce:8fff:fe4a:edd0]:100");
 #endif
 }
@@ -179,11 +179,11 @@ void SocketAddressTest::testSocketAddressUnixLocal()
 	assertTrue (sa1.af() == AF_UNIX);
 	assertTrue (sa1.family() == SocketAddress::UNIX_LOCAL);
 	assertTrue (sa1.toString() == "/tmp/sock1");
-	
+
 	SocketAddress sa2(SocketAddress::UNIX_LOCAL, "/tmp/sock2");
 	assertTrue (sa1 != sa2);
 	assertTrue (sa1 < sa2);
-	
+
 	SocketAddress sa3(SocketAddress::UNIX_LOCAL, "/tmp/sock1");
 	assertTrue (sa1 == sa3);
 	assertTrue (!(sa1 < sa3));
@@ -191,42 +191,6 @@ void SocketAddressTest::testSocketAddressUnixLocal()
 	SocketAddress sa4("/tmp/sock1");
 	assertTrue (sa1 == sa4);
 	assertTrue (sa4.toString() == "/tmp/sock1");
-#endif
-}
-
-
-void SocketAddressTest::testSocketAddressLinuxAbstract()
-{
-#if POCO_OS == POCO_OS_LINUX || POCO_OS == POCO_OS_ANDROID
-	std::string path("sock1.pocoproject.org");
-	path.insert(0, 1, '\0');
-	SocketAddress sa1(SocketAddress::UNIX_LOCAL, path);
-	assertTrue(sa1.af() == AF_UNIX);
-	assertTrue(sa1.family() == SocketAddress::UNIX_LOCAL);
-	assertTrue(sa1.toString() == path);
-
-	std::string path2("sock2.pocoproject.org");
-	path2.insert(0, 1, '\0');
-
-	SocketAddress sa2(SocketAddress::UNIX_LOCAL, path2);
-	assertTrue(sa1 != sa2);
-	assertTrue(sa1 < sa2);
-
-	SocketAddress sa3(SocketAddress::UNIX_LOCAL, path);
-	assertTrue(sa1 == sa3);
-	assertTrue(!(sa1 < sa3));
-
-	SocketAddress sa4(path);
-	assertTrue(sa1 == sa4);
-	assertTrue(sa4.toString() == path);
-
-	SocketAddress sa5(sa1);
-	assertTrue(sa1 == sa5);
-	assertTrue(sa1.length() == sa5.length());
-	
-	sa5 = sa1;
-	assertTrue(sa1 == sa5);
-	assertTrue(sa1.length() == sa5.length());
 #endif
 }
 
@@ -249,7 +213,6 @@ CppUnit::Test* SocketAddressTest::suite()
 	CppUnit_addTest(pSuite, SocketAddressTest, testSocketRelationals);
 	CppUnit_addTest(pSuite, SocketAddressTest, testSocketAddress6);
 	CppUnit_addTest(pSuite, SocketAddressTest, testSocketAddressUnixLocal);
-	CppUnit_addTest(pSuite, SocketAddressTest, testSocketAddressLinuxAbstract);
 
 	return pSuite;
 }

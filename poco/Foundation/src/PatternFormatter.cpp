@@ -40,9 +40,9 @@ PatternFormatter::PatternFormatter():
 }
 
 
-PatternFormatter::PatternFormatter(const std::string& rFormat):
+PatternFormatter::PatternFormatter(const std::string& format):
 	_localTime(false),
-	_pattern(rFormat)
+	_pattern(format)
 {
 	parsePriorityNames();
 	parsePattern();
@@ -64,20 +64,19 @@ void PatternFormatter::format(const Message& msg, std::string& text)
 		timestamp += Timezone::dst()*Timestamp::resolution();
 	}
 	DateTime dateTime = timestamp;
-	for (std::vector<PatternAction>::iterator ip = _patternActions.begin(); ip != _patternActions.end(); ++ip)
+	for (auto& pa:_patternActions)
 	{
-		text.append(ip->prepend);
-		switch (ip->key)
+		text.append(pa.prepend);
+		switch (pa.key)
 		{
 		case 's': text.append(msg.getSource()); break;
 		case 't': text.append(msg.getText()); break;
 		case 'l': NumberFormatter::append(text, (int) msg.getPriority()); break;
 		case 'p': text.append(getPriorityName((int) msg.getPriority())); break;
 		case 'q': text += getPriorityName((int) msg.getPriority()).at(0); break;
-		case 'P': NumberFormatter::append(text, static_cast<Poco::Int64>(msg.getPid())); break;
-		case 'I': NumberFormatter::append(text, static_cast<Poco::Int64>(msg.getTid())); break;
+		case 'P': NumberFormatter::append(text, msg.getPid()); break;
 		case 'T': text.append(msg.getThread()); break;
-		case 'O': NumberFormatter::append(text, msg.getOsTid()); break;
+		case 'I': NumberFormatter::append(text, msg.getTid()); break;
 		case 'N': text.append(Environment::nodeName()); break;
 		case 'U': text.append(msg.getSourceFile() ? msg.getSourceFile() : ""); break;
 		case 'u': NumberFormatter::append(text, msg.getSourceLine()); break;
@@ -104,19 +103,19 @@ void PatternFormatter::format(const Message& msg, std::string& text)
 		case 'F': NumberFormatter::append0(text, dateTime.millisecond()*1000 + dateTime.microsecond(), 6); break;
 		case 'z': text.append(DateTimeFormatter::tzdISO(localTime ? Timezone::tzd() : DateTimeFormatter::UTC)); break;
 		case 'Z': text.append(DateTimeFormatter::tzdRFC(localTime ? Timezone::tzd() : DateTimeFormatter::UTC)); break;
-		case 'E': NumberFormatter::append(text, static_cast<Poco::Int64>(msg.getTime().epochTime())); break;
+		case 'E': NumberFormatter::append(text, msg.getTime().epochTime()); break;
 		case 'v':
-			if (ip->length > msg.getSource().length())	//append spaces
-				text.append(msg.getSource()).append(ip->length - msg.getSource().length(), ' ');
-			else if (ip->length && ip->length < msg.getSource().length()) // crop
-				text.append(msg.getSource(), msg.getSource().length()-ip->length, ip->length);
+			if (pa.length > msg.getSource().length())	//append spaces
+				text.append(msg.getSource()).append(pa.length - msg.getSource().length(), ' ');
+			else if (pa.length && pa.length < msg.getSource().length()) // crop
+				text.append(msg.getSource(), msg.getSource().length()-pa.length, pa.length);
 			else
 				text.append(msg.getSource());
 			break;
 		case 'x':
 			try
 			{
-				text.append(msg[ip->property]);
+				text.append(msg[pa.property]);
 			}
 			catch (...)
 			{
@@ -211,7 +210,7 @@ void PatternFormatter::setProperty(const std::string& name, const std::string& v
 		_priorityNames = value;
 		parsePriorityNames();
 	}
-	else
+	else 
 	{
 		Formatter::setProperty(name, value);
 	}
@@ -233,7 +232,7 @@ std::string PatternFormatter::getProperty(const std::string& name) const
 
 namespace
 {
-	static std::string priorities[] =
+	static std::string priorities[] = 
 	{
 		"",
 		"Fatal",
@@ -272,7 +271,7 @@ void PatternFormatter::parsePriorityNames()
 const std::string& PatternFormatter::getPriorityName(int prio)
 {
 	poco_assert (1 <= prio && prio <= 8);	
-	return _priorities[prio];
+	return priorities[prio];
 }
 
 

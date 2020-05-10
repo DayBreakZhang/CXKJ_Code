@@ -171,10 +171,12 @@ void UTF8::removeBOM(std::string& str)
 	}
 }
 
+
 std::string UTF8::escape(const std::string &s, bool strictJSON)
 {
 	return escape(s.begin(), s.end(), strictJSON);
 }
+
 
 std::string UTF8::escape(const std::string::const_iterator& begin, const std::string::const_iterator& end, bool strictJSON)
 {
@@ -238,10 +240,12 @@ std::string UTF8::escape(const std::string::const_iterator& begin, const std::st
 	return result;
 }
 
+
 std::string UTF8::unescape(const std::string &s)
 {
 	return unescape(s.begin(), s.end());
 }
+
 
 std::string UTF8::unescape(const std::string::const_iterator& begin, const std::string::const_iterator& end)
 {
@@ -260,45 +264,77 @@ std::string UTF8::unescape(const std::string::const_iterator& begin, const std::
 				//Invalid sequence!
 			}
 
-			if (*it == 'n')
+			switch (*it)
+			{
+			case 'U':
+			{
+				char digs[9];
+				std::memset(digs, 0, 9);
+				unsigned int dno = 0;
+
+				it++;
+				while (it != end && Ascii::isHexDigit(*it) && dno < 8)
+				{
+					digs[dno++] = *it++;
+				}
+				if (dno > 0)
+				{
+					ch = std::strtol(digs, NULL, 16);
+				}
+				break;
+			}
+			case '\\':
+			{
+				ch = '\\';
+				it++;
+				break;
+			}
+			case 'n':
 			{
 				ch = '\n';
 				it++;
+				break;
 			}
-			else if (*it == 't')
+			case 't':
 			{
 				ch = '\t';
 				it++;
+				break;
 			}
-			else if (*it == 'r')
+			case 'r':
 			{
 				ch = '\r';
 				it++;
+				break;
 			}
-			else if (*it == 'b')
+			case 'b':
 			{
 				ch = '\b';
 				it++;
+				break;
 			}
-			else if (*it == 'f')
+			case 'f':
 			{
 				ch = '\f';
 				it++;
+				break;
 			}
-			else if (*it == 'v')
+			case 'v':
 			{
 				ch = '\v';
 				it++;
+				break;
 			}
-			else if (*it == 'a')
+			case 'a':
 			{
 				ch = '\a';
 				it++;
+				break;
 			}
-			else if (*it == 'u')
+			case 'u':
 			{
 				char digs[5];
-				memset(digs, 0, 5);
+				std::memset(digs, 0, 5);
 				unsigned int dno = 0;
 
 				it++;
@@ -306,7 +342,7 @@ std::string UTF8::unescape(const std::string::const_iterator& begin, const std::
 				while (it != end && Ascii::isHexDigit(*it) && dno < 4) digs[dno++] = *it++;
 				if (dno > 0)
 				{
-					ch = strtol(digs, NULL, 16);
+					ch = std::strtol(digs, NULL, 16);
 				}
 
 				if( ch >= 0xD800 && ch <= 0xDBFF )
@@ -329,44 +365,36 @@ std::string UTF8::unescape(const std::string::const_iterator& begin, const std::
 					}
 
 					// UTF-16 surrogate pair. Go fetch other half
-					memset(digs, 0, 5);
+					std::memset(digs, 0, 5);
 					dno = 0;
 					while (it != end && Ascii::isHexDigit(*it) && dno < 4) digs[dno++] = *it++;
 					if (dno > 0)
 					{
-						Poco::UInt32 temp = strtol(digs, NULL, 16);
+						Poco::UInt32 temp = std::strtol(digs, NULL, 16);
 						if( temp >= 0xDC00 && temp <= 0xDFFF )
 						{
 							ch = ( ( ( ch - 0xD800 ) << 10 ) | ( temp - 0xDC00 ) ) + 0x10000;
 						}
 					}
 				}
+				break;
 			}
-			else if (*it == 'U')
+			default:
 			{
-				char digs[9];
-				memset(digs, 0, 9);
-				unsigned int dno = 0;
-
-				it++;
-				while (it != end && Ascii::isHexDigit(*it) && dno < 8)
-				{
-					digs[dno++] = *it++;
-				}
-				if (dno > 0)
-				{
-					ch = strtol(digs, NULL, 16);
-				}
+				//Invalid sequence!
+				break;
 			}
+			}//end switch
 		}
 
-		unsigned char utf8Code[4];
+		unsigned char utf8[4];
 		UTF8Encoding encoding;
-		int sz = encoding.convert(ch, utf8Code, 4);
-		result.append((char*)utf8Code, sz);
+		int sz = encoding.convert(ch, utf8, 4);
+		result.append((char*) utf8, sz);
 	}
 
 	return result;
 }
+
 
 } // namespace Poco

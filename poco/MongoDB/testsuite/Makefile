@@ -1,8 +1,6 @@
 #
 # Makefile
 #
-# $Id$
-#
 # Makefile for Poco MongoDB testsuite
 #
 
@@ -12,6 +10,6 @@ objects = Driver MongoDBTest MongoDBTestSuite
 
 target         = testrunner
 target_version = 1
-target_libs    = PocoMongoDB PocoFoundation PocoNet PocoCppUnit
+target_libs    = PocoMongoDB PocoFoundation PocoNet CppUnit
 
 include $(POCO_BASE)/build/rules/exec

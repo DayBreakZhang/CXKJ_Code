@@ -9,8 +9,8 @@
 
 
 #include "LoggingFactoryTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/LoggingFactory.h"
 #include "Poco/Instantiator.h"
 #include "Poco/Channel.h"
@@ -65,7 +65,7 @@ namespace
 }
 
 
-LoggingFactoryTest::LoggingFactoryTest(const std::string& rName): CppUnit::TestCase(rName)
+LoggingFactoryTest::LoggingFactoryTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 

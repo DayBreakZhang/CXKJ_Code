@@ -241,13 +241,6 @@ Timer::Timer(Poco::Thread::Priority priority)
 }
 
 
-Timer::Timer(int prio, int policy)
-{
-	_thread.setOSPriority(prio, policy);
-	_thread.start(*this);
-}
-
-
 Timer::~Timer()
 {
 	try

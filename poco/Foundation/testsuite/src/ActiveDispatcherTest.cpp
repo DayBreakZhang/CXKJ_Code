@@ -9,8 +9,8 @@
 
 
 #include "ActiveDispatcherTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/ActiveDispatcher.h"
 #include "Poco/ActiveMethod.h"
 #include "Poco/Thread.h"
@@ -88,7 +88,7 @@ namespace
 }
 
 
-ActiveDispatcherTest::ActiveDispatcherTest(const std::string& rName): CppUnit::TestCase(rName)
+ActiveDispatcherTest::ActiveDispatcherTest(const std::string& name): CppUnit::TestCase(name)
 {
 }
 
@@ -154,7 +154,7 @@ void ActiveDispatcherTest::testFailure()
 	assertTrue (result.available());
 	assertTrue (result.failed());
 	std::string msg = result.error();
-	assertTrue (msg.find("n == 100") != std::string::npos);
+	assertTrue (msg == "n == 100");
 }
 
 

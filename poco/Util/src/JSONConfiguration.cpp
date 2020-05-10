@@ -165,7 +165,7 @@ JSON::Object::Ptr JSONConfiguration::findStart(const std::string& key, std::stri
 						parentArray->add(newArray);
 					}
 
-					for(int j = 0; j <= *it - 1; ++j)
+					for(int i = 0; i <= *it - 1; ++i)
 					{
 						Poco::DynamicAny nullValue;
 						newArray->add(nullValue);

@@ -78,7 +78,7 @@ void LayeredConfiguration::add(AbstractConfiguration::Ptr pConfig, const std::st
 	item.priority  = priority;
 	item.writeable = writeable;
 	item.label     = label;
-
+	
 	ConfigList::iterator it = _configs.begin();
 	while (it != _configs.end() && it->priority < priority) ++it;
 	_configs.insert(it, item);
@@ -100,9 +100,9 @@ void LayeredConfiguration::removeConfiguration(AbstractConfiguration::Ptr pConfi
 
 AbstractConfiguration::Ptr LayeredConfiguration::find(const std::string& label) const
 {
-	for (ConfigList::const_iterator it = _configs.begin(); it != _configs.end(); ++it)
+	for (const auto& conf: _configs)
 	{
-		if (it->label == label) return it->pConfig;
+		if (conf.label == label) return conf.pConfig;
 	}
 	return 0;
 }
@@ -110,9 +110,9 @@ AbstractConfiguration::Ptr LayeredConfiguration::find(const std::string& label) 
 
 bool LayeredConfiguration::getRaw(const std::string& key, std::string& value) const
 {
-	for (ConfigList::const_iterator it = _configs.begin(); it != _configs.end(); ++it)
+	for (const auto& conf: _configs)
 	{
-		if (it->pConfig->getRaw(key, value)) return true;
+		if (conf.pConfig->getRaw(key, value)) return true;
 	}
 	return false;
 }
@@ -120,11 +120,12 @@ bool LayeredConfiguration::getRaw(const std::string& key, std::string& value) co
 
 void LayeredConfiguration::setRaw(const std::string& key, const std::string& value)
 {
-	for (ConfigList::iterator it = _configs.begin(); it != _configs.end(); ++it)
+	for (auto& conf: _configs)
 	{
-		if (it->writeable)
+		if (conf.writeable)
 		{
-			it->pConfig->setRaw(key, value); return;
+			conf.pConfig->setRaw(key, value); 
+			return;
 		}
 	}
 	throw RuntimeException("No writeable configuration object to store the property", key);
@@ -133,17 +134,17 @@ void LayeredConfiguration::setRaw(const std::string& key, const std::string& val
 
 void LayeredConfiguration::enumerate(const std::string& key, Keys& range) const
 {
-	std::set<std::string> keySet;
-	for (ConfigList::const_iterator itc = _configs.begin(); itc != _configs.end(); ++itc)
+	std::set<std::string> keys;
+	for (const auto& conf: _configs)
 	{
 		Keys partRange;
-		itc->pConfig->enumerate(key, partRange);
-		for (Keys::const_iterator itr = partRange.begin(); itr != partRange.end(); ++itr)
+		conf.pConfig->enumerate(key, partRange);
+		for (const auto& k: partRange)
 		{
-			if (keySet.find(*itr) == keySet.end())
+			if (keys.find(k) == keys.end())
 			{
-				range.push_back(*itr);
-				keySet.insert(*itr);
+				range.push_back(k);
+				keys.insert(k);
 			}
 		}
 	}
@@ -152,11 +153,11 @@ void LayeredConfiguration::enumerate(const std::string& key, Keys& range) const
 
 void LayeredConfiguration::removeRaw(const std::string& key)
 {
-	for (ConfigList::iterator it = _configs.begin(); it != _configs.end(); ++it)
+	for (auto& conf: _configs)
 	{
-		if (it->writeable)
+		if (conf.writeable)
 		{
-			it->pConfig->remove(key);
+			conf.pConfig->remove(key);
 			return;
 		}
 	}

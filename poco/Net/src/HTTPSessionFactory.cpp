@@ -42,9 +42,9 @@ HTTPSessionFactory::HTTPSessionFactory(const std::string& proxyHost, Poco::UInt1
 
 HTTPSessionFactory::~HTTPSessionFactory()
 {
-	for (Instantiators::iterator it = _instantiators.begin(); it != _instantiators.end(); ++it)
+	for (auto& p: _instantiators)
 	{
-		delete it->second.pIn;
+		delete p.second.pIn;
 	}
 }
 
@@ -55,7 +55,7 @@ void HTTPSessionFactory::registerProtocol(const std::string& protocol, HTTPSessi
 
 	FastMutex::ScopedLock lock(_mutex);
 	std::pair<Instantiators::iterator, bool> tmp = _instantiators.insert(make_pair(protocol, InstantiatorInfo(pSessionInstantiator)));
-	if (!tmp.second)
+	if (!tmp.second) 
 	{
 		++tmp.first->second.cnt;
 		delete pSessionInstantiator;

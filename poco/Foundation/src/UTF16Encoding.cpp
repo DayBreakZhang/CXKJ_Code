@@ -54,13 +54,13 @@ UTF16Encoding::UTF16Encoding(ByteOrderType byteOrder)
 	setByteOrder(byteOrder);
 }
 
-	
+
 UTF16Encoding::UTF16Encoding(int byteOrderMark)
 {
 	setByteOrder(byteOrderMark);
 }
 
-	
+
 UTF16Encoding::~UTF16Encoding()
 {
 }
@@ -75,7 +75,7 @@ UTF16Encoding::ByteOrderType UTF16Encoding::getByteOrder() const
 #endif
 }
 
-	
+
 void UTF16Encoding::setByteOrder(ByteOrderType byteOrder)
 {
 #if defined(POCO_ARCH_BIG_ENDIAN)
@@ -85,7 +85,7 @@ void UTF16Encoding::setByteOrder(ByteOrderType byteOrder)
 #endif
 }
 
-	
+
 void UTF16Encoding::setByteOrder(int byteOrderMark)
 {
 	_flipBytes = byteOrderMark != 0xFEFF;
@@ -124,7 +124,7 @@ int UTF16Encoding::convert(const unsigned char* bytes) const
 
 	if (_flipBytes)
 	{
-		ByteOrder::flipBytes(uc);
+		uc = ByteOrder::flipBytes(uc);
 	}
 
 	if (uc >= 0xd800 && uc < 0xdc00)
@@ -136,7 +136,7 @@ int UTF16Encoding::convert(const unsigned char* bytes) const
 
 		if (_flipBytes)
 		{
-			ByteOrder::flipBytes(uc2);
+			uc2 = ByteOrder::flipBytes(uc2);
 		}
 		if (uc2 >= 0xdc00 && uc2 < 0xe000)
 		{
@@ -202,7 +202,9 @@ int UTF16Encoding::queryConvert(const unsigned char* bytes, int length) const
 		*p++ = *bytes++;
 		*p++ = *bytes++;
 		if (_flipBytes)
-			ByteOrder::flipBytes(uc);
+		{
+			uc = ByteOrder::flipBytes(uc);
+		}
 		if (uc >= 0xd800 && uc < 0xdc00)
 		{
 			if (length >= 4)
@@ -212,7 +214,9 @@ int UTF16Encoding::queryConvert(const unsigned char* bytes, int length) const
 				*p++ = *bytes++;
 				*p++ = *bytes++;
 				if (_flipBytes)
-					ByteOrder::flipBytes(uc2);
+				{
+					uc2 = ByteOrder::flipBytes(uc2);
+				}
 				if (uc2 >= 0xdc00 && uc < 0xe000)
 				{
 					ret = ((uc & 0x3ff) << 10) + (uc2 & 0x3ff) + 0x10000;

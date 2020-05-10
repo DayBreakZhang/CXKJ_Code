@@ -14,7 +14,7 @@
 #define XMLTestSuite_INCLUDED
 
 
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestSuite.h"
 
 
 class XMLTestSuite

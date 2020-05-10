@@ -29,7 +29,7 @@ class Foundation_API SyslogChannel: public Channel
 	/// This Unix-only channel works with the Unix syslog service.
 {
 public:
-	typedef AutoPtr<SyslogChannel> Ptr;
+	using Ptr = AutoPtr<SyslogChannel>;
 
 	enum Option
 	{

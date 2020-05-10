@@ -217,9 +217,9 @@ std::string DNS::hostName()
 
 bool DNS::isIDN(const std::string& hostname)
 {
-	for (std::string::const_iterator it = hostname.begin(); it != hostname.end(); ++it)
+	for (auto ch: hostname)
 	{
-		if (static_cast<unsigned char>(*it) >= 0x80) return true;
+		if (static_cast<unsigned char>(ch) >= 0x80) return true;
 	}
 	return false;
 }
@@ -460,7 +460,7 @@ enum
 
 static char encode_digit(punycode_uint d, int flag)
 {
-	return static_cast<char>(d + 22 + 75 * (d < 26) - ((flag != 0) << 5));
+	return d + 22 + 75 * (d < 26) - ((flag != 0) << 5);
 	/*  0..25 map to ASCII a..z or A..Z */
 	/* 26..35 map to ASCII 0..9         */
 }
@@ -478,7 +478,7 @@ static unsigned decode_digit(int cp)
 /*** Platform-specific constants ***/
 
 /* maxint is the maximum value of a punycode_uint variable: */
-static const punycode_uint maxint = punycode_uint (-1);
+static const punycode_uint maxint = -1;
 /* Because maxint is unsigned, -1 becomes the maximum value. */
 
 /*** Bias adaptation function ***/

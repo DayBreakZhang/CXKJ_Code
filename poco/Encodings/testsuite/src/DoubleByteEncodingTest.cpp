@@ -9,8 +9,8 @@
 
 
 #include "DoubleByteEncodingTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/ISO8859_4Encoding.h"
 #include "Poco/Windows950Encoding.h"
 

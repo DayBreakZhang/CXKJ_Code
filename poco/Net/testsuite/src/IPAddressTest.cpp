@@ -9,8 +9,8 @@
 
 
 #include "IPAddressTest.h"
-#include "Poco/CppUnit/TestCaller.h"
-#include "Poco/CppUnit/TestSuite.h"
+#include "CppUnit/TestCaller.h"
+#include "CppUnit/TestSuite.h"
 #include "Poco/Net/IPAddress.h"
 #include "Poco/Net/NetException.h"
 
@@ -437,7 +437,7 @@ void IPAddressTest::testMCClassification6()
 	assertTrue (!ip1.isSiteLocal());
 	assertTrue (ip1.isWellKnownMC());
 	assertTrue (!ip1.isNodeLocalMC());
-	assertTrue (ip1.isLinkLocalMC());
+	assertTrue (ip1.isLinkLocalMC()); 
 	assertTrue (!ip1.isSiteLocalMC());
 	assertTrue (!ip1.isOrgLocalMC());
 	assertTrue (!ip1.isGlobalMC());
@@ -455,7 +455,7 @@ void IPAddressTest::testMCClassification6()
 	assertTrue (!ip2.isLinkLocalMC());
 	assertTrue (!ip2.isSiteLocalMC());
 	assertTrue (!ip2.isOrgLocalMC());
-	assertTrue (!ip2.isGlobalMC());
+	assertTrue (!ip2.isGlobalMC()); 
 
 	IPAddress ip3("ff05:0:0:0:0:0:0:FB"); // site local unicast
 	assertTrue (!ip3.isWildcard());
@@ -497,7 +497,7 @@ void IPAddressTest::testMCClassification6()
 	assertTrue (!ip5.isSiteLocal());
 	assertTrue (!ip5.isWellKnownMC());
 	assertTrue (!ip5.isNodeLocalMC());
-	assertTrue (!ip5.isLinkLocalMC());
+	assertTrue (!ip5.isLinkLocalMC()); 
 	assertTrue (!ip5.isSiteLocalMC());
 	assertTrue (!ip5.isOrgLocalMC());
 	assertTrue (ip5.isGlobalMC());

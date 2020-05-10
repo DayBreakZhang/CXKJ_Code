@@ -13,17 +13,25 @@
 
 
 #include "Poco/Mutex.h"
-#if (POCO_OS == POCO_OS_CYGWIN || POCO_OS == POCO_OS_ANDROID)
-#include "Mutex_POSIX.cpp"
+
+
+#if defined(POCO_OS_FAMILY_WINDOWS)
+#if defined(_WIN32_WCE)
+#include "Mutex_WINCE.cpp"
 #else
-#include "Mutex_STD.cpp"
+#include "Mutex_WIN32.cpp"
+#endif
+#elif defined(POCO_VXWORKS)
+#include "Mutex_VX.cpp"
+#else
+#include "Mutex_POSIX.cpp"
 #endif
 
 
 namespace Poco {
 
 
-Mutex::Mutex(MutexType type): MutexImpl((MutexTypeImpl) type)
+Mutex::Mutex()
 {
 }
 
@@ -43,6 +51,8 @@ FastMutex::~FastMutex()
 }
 
 
+#ifdef POCO_HAVE_STD_ATOMICS
+
 SpinlockMutex::SpinlockMutex()
 {
 }
@@ -51,6 +61,8 @@ SpinlockMutex::SpinlockMutex()
 SpinlockMutex::~SpinlockMutex()
 {
 }
+
+#endif // POCO_HAVE_STD_ATOMICS
 
 
 } // namespace Poco
