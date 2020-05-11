@@ -3,6 +3,7 @@ file(GLOB SRCS_G "src//RCF/RCF.cpp")
 CXKJ_SOURCES_AUTO( SRCS ${SRCS_G})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/CXKJ)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/boost19/include)
 
 add_library(Rcff ${SRCS} )
 add_library(CXKJ::Rcff ALIAS Rcff)
@@ -13,6 +14,7 @@ target_include_directories(Rcff
         $<INSTALL_INTERFACE:include>
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/boost19/lib)
 IF(MSVC)
 if (CXKJ_ENABLE_RCFF_OPENSSL)
    ADD_DEFINITIONS( -DRCF_USE_OPENSSL)
